@@ -1,0 +1,7 @@
+# add files you wish to ignore here
+node_modules/
+src/assets/
+.vscode/
+.husky/
+.git/
+

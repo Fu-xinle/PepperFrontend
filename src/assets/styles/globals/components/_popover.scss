@@ -1,0 +1,12 @@
+.popover {
+  animation-duration: 0.3s;
+  animation-name: zoomIn;
+  animation-timing-function: ease-in-out;
+  border: 0;
+  box-shadow: 0 4px 20px 1px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.08);
+  .arrow {
+    &::before {
+      border-color: rgba(0, 0, 0, 0);
+    }
+  }
+}

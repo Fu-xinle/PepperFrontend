@@ -1,0 +1,39 @@
+/* You can add global styles to this file, and also import other style files */
+.loading {
+  padding-left: 36px;
+}
+
+.swal2-container > div {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.3rem;
+  background-color: #fff;
+  background-clip: padding-box;
+  outline: 0;
+}
+
+.swal2-container.countdown .swal2-actions {
+  display: none;
+}
+
+.swal2-container.countdown .swal2-html-container {
+  font-weight: 400;
+  font-size: 13px;
+}
+
+.form-control[readonly] {
+  background-color: #f8f9fa;
+}
+
+.btn-iconmind > i {
+  vertical-align: bottom;
+}
+
+.ag-status-bar-custom {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.ag-status-bar-custom ul {
+  margin-bottom: 0;
+}

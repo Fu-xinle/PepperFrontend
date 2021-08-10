@@ -1,0 +1,65 @@
+// *************************************glob模式*******************************
+//      *	        匹配除了斜杠(/)之外的所有字符。 Windows上是斜杠(/)和反斜杠(\)
+//      **	        匹配零个或多个目录及子目录。不包含 . 以及 .. 开头的。
+//       ?	        匹配任意单个字符。
+//     [seq]	    匹配 seq 中的其中一个字符。
+//     [!seq]	    匹配不在 seq 中的任意一个字符。
+//       \	        转义符。
+//       !          排除符。
+// ?(pattern_list)	匹配零个或一个在 pattern_list 中的字符串。
+// *(pattern_list)	匹配零个或多个在 pattern_list 中的字符串。
+// +(pattern_list)	匹配一个或多个在 pattern_list 中的字符串。
+// @(pattern_list)	匹配至少一个在 pattern_list 中的字符串。
+// !(pattern_list)	匹配不在 pattern_list 中的字符串.
+//------------------------------------------------------------------------------
+{
+    "typescript.tsdk": "./node_modules/typescript/lib",
+    // 配置glob模式以排除文件和文件夹,搜索中排除
+    "search.exclude": {
+        "**/node_modules":true,
+        "**/document": true,
+        "**/.git": true,
+        "LICENSE": true,
+        ".gitignore": true,
+        "README.md": true,
+    },
+    // 配置glob模式以排除文件和文件夹,排除在左侧显示树列表中
+    "files.exclude": {
+        "**/node_modules":true,
+        "**/document": true,
+        "**/.git": true,
+        "LICENSE": true,
+        ".gitignore": true,
+        "README.md": true,
+    },
+    // 配置glob模式从文件监视中排除。 
+    // 模式在绝对路径上匹配（即前缀为 ** 或完整路径以正确匹配）。
+    // 更改此设置需要重新启动。
+    "files.watcherExclude": {
+        "**/.git/*/**": true,
+        "**/node_modules/*/**": true,
+        "**/dist/*/**": true,
+        "**/coverage/*/**": true,
+        "**/document": true,
+        "LICENSE": true,
+        ".gitignore": true,
+        "README.md": true,
+    },
+    
+    "git.ignoreLimitWarning": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        // For ESLint
+        "source.fixAll.eslint": true,
+        // For Stylelint
+        "source.fixAll.stylelint": true
+    },
+    // 注释
+    "better-comments.multilineComments": true,
+    // JSON文件VSCode不能写入注释;jsonc格式即JSON with Comments,可写入注释
+    // *eslint、stylint、prettierrc等配置文件jsonc格式，注释不支持，因此使用".js"格式
+    "files.associations": {
+        "*.json": "jsonc",
+      },
+}

@@ -1,0 +1,143 @@
+@import 'colors';
+@import 'mixins/mixins';
+@import 'palette';
+
+@import 'animations';
+@import 'typography';
+@import 'height-width';
+@import 'box-shadow';
+@import 'layouts/layouts';
+@import 'components/components';
+@import 'views/views';
+
+html {
+  font-size: 16px;
+}
+body {
+  background: $background;
+  letter-spacing: 0.3px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  // overflow-y: scroll;
+}
+
+[tabindex='-1']:focus {
+  outline: none;
+}
+hr {
+  border: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  height: 0;
+  margin-bottom: 2rem;
+  margin-top: 2rem;
+}
+
+select,
+button,
+textarea,
+input {
+  vertical-align: baseline;
+}
+div {
+  box-sizing: border-box;
+}
+html,
+body {
+  &[dir='rtl'],
+  &[dir='ltr'] {
+    unicode-bidi: embed;
+  }
+}
+bdo[dir='rtl'] {
+  direction: rtl;
+  unicode-bidi: bidi-override;
+}
+bdo[dir='ltr'] {
+  direction: ltr;
+  unicode-bidi: bidi-override;
+}
+
+img {
+  max-width: 100%;
+}
+a,
+a:focus,
+a:hover {
+  text-decoration: none;
+}
+blockquote {
+  border-left: 2px solid $gray-200;
+  font-size: 1.01625rem;
+  margin-bottom: 1rem;
+  padding-left: 1rem;
+}
+.close:not(:disabled):not(.disabled):hover,
+.close:not(:disabled):not(.disabled):focus {
+  outline: none;
+}
+.o-hidden {
+  overflow: hidden;
+}
+.separator-breadcrumb {
+  margin-bottom: 2rem;
+}
+@for $i from 1 through 5 {
+  .line-height-#{$i} {
+    line-height: #{$i};
+  }
+}
+.app-inro-circle {
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: calc(50% - 150px);
+  .big-bubble {
+    align-items: center;
+    background: $primary;
+    display: flex;
+    height: 280px;
+    justify-content: center;
+    margin: 0 auto 20px;
+    text-align: center;
+    width: 280px;
+    i {
+      color: #fff;
+      font-size: 108px;
+    }
+  }
+}
+
+.loadscreen {
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: calc(50% - 100px);
+  width: 100%;
+  .logo {
+    display: inline-block !important;
+    height: 80px;
+    width: 80px;
+  }
+}
+
+@media (max-width: 576px) {
+  .app-inro-circle {
+    .big-bubble {
+      height: 220px;
+      width: 220px;
+    }
+  }
+}
+
+/* [dir='rtl'] {
+  .rtl-ps-none {
+    .ps__rail-x,
+    .ps__rail-y {
+      display: none;
+    }
+  }
+} */

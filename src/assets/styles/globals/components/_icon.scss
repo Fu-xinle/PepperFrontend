@@ -1,0 +1,13 @@
+.icon-regular {
+  font-size: 18px;
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+.link-icon {
+  align-items: center;
+  color: $foreground;
+  display: flex;
+  flex-direction: row;
+  i {
+    margin: 0 8px;
+  }
+}

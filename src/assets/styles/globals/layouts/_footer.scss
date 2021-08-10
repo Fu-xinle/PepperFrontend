@@ -1,0 +1,16 @@
+.app-footer {
+  background: $gray-100;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+
+  /*  margin-top: 2rem;
+  padding: 1.25rem; */
+  .footer-bottom {
+    width: 100%;
+    .logo {
+      height: auto;
+      margin: 4px;
+      width: 3rem;
+    }
+  }
+}

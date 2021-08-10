@@ -1,0 +1,39 @@
+//
+ngb-datepicker.datepicker-popup .ngb-dp-week-number,
+ngb-datepicker.datepicker-popup .ngb-dp-weekday {
+  font-style: initial;
+}
+
+ngb-datepicker.datepicker-popup .ngb-dp-weekdays,
+ngb-datepicker.datepicker-popup .ngb-dp-header {
+  background-color: rgba($primary, 0.1);
+}
+
+ngb-datepicker.datepicker-popup .btn-light:hover {
+  background-color: rgba($primary, 0.1);
+  border-color: rgba($primary, 0.1);
+}
+
+ngb-datepicker.datepicker-popup .btn-light:not(:disabled):not(.disabled):active,
+ngb-datepicker.datepicker-popup .show > .btn-light.dropdown-toggle {
+  background-color: rgba($primary, 0.1);
+  border-color: rgba($primary, 0.1);
+}
+
+ngb-datepicker.datepicker-popup .btn-light.bg-primary.text-white,
+ngb-datepicker.datepicker-popup .btn-light:focus {
+  border-radius: 32px !important;
+}
+
+ngb-datepicker.datepicker-popup .ngb-dp-today .btn-light,
+ngb-datepicker.datepicker-popup .ngb-dp-today .btn-light:not(:disabled):not(.disabled):focus,
+ngb-datepicker.datepicker-popup .ngb-dp-today .btn-light:not(:disabled):not(.disabled).active,
+ngb-datepicker.datepicker-popup .ngb-dp-today .show > .btn-light.dropdown-toggle {
+  background-color: rgba($warning, 0.3);
+  border-color: rgba($warning, 0.3);
+  border-radius: 32px !important;
+}
+
+ngb-datepicker.datepicker-popup .ngb-dp-day {
+  outline-width: 0;
+}

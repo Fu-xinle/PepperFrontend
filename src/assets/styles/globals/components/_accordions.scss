@@ -1,0 +1,14 @@
+[role='tab'] {
+  .btn {
+    text-align: left;
+    width: 100%;
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
+  }
+}
+
+.accordion > .card {
+  overflow: hidden;
+}

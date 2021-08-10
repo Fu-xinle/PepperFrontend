@@ -1,0 +1,52 @@
+.breadcrumb {
+  align-items: center;
+  background: transparent;
+  margin: 0 0 1.25rem;
+  padding: 0;
+  h1 {
+    font-size: 1.5rem;
+    line-height: 1;
+    margin: 0;
+    padding-right: 0.5rem;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    li {
+      color: $gray-600;
+      display: inline-block;
+      line-height: 1;
+      padding: 0 0.5rem;
+      position: relative;
+      vertical-align: bottom;
+      &::after {
+        background: $gray-600;
+        border-radius: 5px;
+        content: '';
+        height: 16px;
+        position: absolute;
+        right: 0;
+        top: -1px;
+        width: 1px;
+      }
+      &:last-child {
+        &::after {
+          display: none;
+        }
+      }
+      a {
+        color: $heading;
+      }
+    }
+  }
+}
+
+[dir='rtl'] {
+  .breadcrumb {
+    h1 {
+      padding-left: 0.5rem;
+      padding-right: 0;
+    }
+  }
+}

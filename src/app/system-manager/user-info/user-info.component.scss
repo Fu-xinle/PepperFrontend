@@ -1,0 +1,13 @@
+// comment
+input.value-invalid {
+  border: 1px solid #d22346;
+  box-shadow: 0 0 0 0.2rem rgb(210 35 70 / 50%);
+}
+
+.image-cropper-fix-size {
+  min-width: 300px;
+  max-width: 600px;
+  min-height: 200px;
+  max-height: 400px;
+  border: 2px dotted #dee2e6;
+}

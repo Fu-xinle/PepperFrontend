@@ -1,0 +1,116 @@
+.customizer {
+  position: fixed;
+  right: -380px;
+  top: 100px;
+  transition: 0.3s all ease-in-out;
+  width: 380px;
+  z-index: 9999;
+  &.open {
+    right: 0;
+  }
+  .handle {
+    background: $primary;
+    border-bottom-left-radius: 4px;
+    border-top-left-radius: 4px;
+    box-shadow: -3px 0 4px rgba(0, 0, 0, 0.06);
+    color: $white;
+    cursor: pointer;
+    display: flex;
+    font-size: 20px;
+    left: -36px;
+    padding: 10px 8px;
+    position: absolute;
+    top: 8px;
+    transition: 0.3s all ease-in-out;
+    &:hover {
+      background: $primary;
+      color: $white;
+    }
+  }
+  .customizer-body {
+    background: $background;
+    border-bottom-left-radius: 10px;
+    // padding: 1rem;
+    border-top-left-radius: 10px;
+    box-shadow: 0 4px 20px 1px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.08);
+    max-height: calc(100vh - 140px);
+    overflow-x: visible;
+    overflow-y: scroll;
+    .layouts {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0 -8px;
+      .layout-box {
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 8px;
+        box-shadow: 0 4px 20px 1px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.03);
+        cursor: pointer;
+        margin: 0 8px;
+        overflow: hidden;
+        position: relative;
+        width: calc(50% - 16px);
+        img {
+          width: 180px;
+        }
+        i {
+          background: #639;
+          border-radius: 0 0 0 6px;
+          color: #fff;
+          display: none;
+          font-size: 18px;
+          height: 24px;
+          line-height: 24px;
+          position: absolute;
+          right: 0;
+          text-align: center;
+          top: 0;
+          width: 32px;
+        }
+        &.active {
+          border: 1px solid $primary;
+          i {
+            display: inline-block;
+          }
+        }
+      }
+    }
+    .colors {
+      display: flex;
+      flex-wrap: wrap;
+      .color {
+        border-radius: 50%;
+        box-shadow: 0 4px 20px 1px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.03);
+        cursor: pointer;
+        display: inline-block;
+        height: 36px;
+        margin: 8px;
+        text-align: center;
+        width: 36px;
+        &.purple {
+          background: #639;
+        }
+        &.blue {
+          background: #2f47c2;
+        }
+        i {
+          color: #fff;
+          display: none;
+          font-size: 18px;
+          line-height: 36px;
+        }
+        &.active {
+          i {
+            display: unset;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .customizer {
+    right: -280px;
+    width: 280px;
+  }
+}

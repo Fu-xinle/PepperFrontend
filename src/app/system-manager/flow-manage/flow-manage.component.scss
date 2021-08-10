@@ -1,0 +1,10 @@
+//
+.full-height-container {
+  height: calc(100vh - 220px);
+  min-height: unset;
+}
+
+input.search-input {
+  display: inline-block;
+  width: 300px;
+}

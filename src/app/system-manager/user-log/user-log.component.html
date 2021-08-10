@@ -1,0 +1,24 @@
+<div class="pb-2 toolbar">
+  <input class="form-control form-control-rounded search-input" name="quickFilterText" placeholder="搜索" type="text" />
+  <!--高级搜索弹出对话框的模式，共用组件-->
+</div>
+<div class="card full-height-container">
+  <ag-grid-angular
+    style="height: 100%; width: 100%"
+    class="ag-theme-material"
+    [suppressContextMenu]="true"
+    (gridReady)="onGridReady($event)"
+    [rowModelType]="'serverSide'"
+    [serverSideStoreType]="'partial'"
+    [cacheBlockSize]="100"
+    [maxBlocksInCache]="20"
+    [columnDefs]="columnDefs"
+    [quickFilterText]="quickFilterText"
+    [frameworkComponents]="frameworkComponents"
+    [loadingCellRenderer]="loadingOverlayComponent"
+    [loadingCellRendererParams]="loadingOverlayComponentParams"
+    [noRowsOverlayComponent]="noRowsOverlayComponent"
+    [noRowsOverlayComponentParams]="noRowsOverlayComponentParams"
+  >
+  </ag-grid-angular>
+</div>

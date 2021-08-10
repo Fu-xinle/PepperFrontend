@@ -1,0 +1,65 @@
+// comments
+input.value-invalid {
+  border: 1px solid #d22346;
+  box-shadow: 0 0 0 0.2rem rgb(210 35 70 / 50%);
+}
+
+.btn-icon-text {
+  background: rgba(238, 238, 238, 0.8);
+}
+
+.btn-outline-primary > i > svg {
+  fill: #639;
+}
+
+.btn-outline-primary:hover {
+  border-color: #639;
+  background-color: #639;
+  color: #fff;
+
+  i > svg {
+    fill: #fff;
+  }
+}
+
+.btn-outline-danger > i > svg {
+  fill: #d22346;
+}
+
+.btn-outline-danger:hover {
+  border-color: #d22346;
+  background-color: #d22346;
+  color: #fff;
+
+  i > svg {
+    fill: #fff;
+  }
+}
+
+.btn-outline-info > i > svg {
+  fill: #263db5;
+}
+
+.btn-outline-info:hover {
+  border-color: #263db5;
+  background-color: #263db5;
+  color: #fff;
+
+  i > svg {
+    fill: #fff;
+  }
+}
+
+.btn-outline-success > i > svg {
+  fill: #4caf50;
+}
+
+.btn-outline-success:hover {
+  border-color: #4caf50;
+  background-color: #4caf50;
+  color: #fff;
+
+  i > svg {
+    fill: #fff;
+  }
+}

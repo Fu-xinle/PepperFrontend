@@ -1,0 +1,42 @@
+.sidebar-container {
+  min-height: 400px;
+  overflow: hidden;
+  position: relative;
+  .sidebar-content {
+    height: 100%;
+    position: relative;
+    transition: all 0.3s ease-in;
+    &::after {
+      content: '';
+      height: 100%;
+      left: 0;
+      position: absolute;
+      right: 0;
+      width: 100%;
+    }
+  }
+  .sidebar {
+    background: $background;
+    position: absolute;
+    top: 0;
+    transition: all 0.3s ease-in;
+    .sidebar-close {
+      cursor: pointer;
+      display: none;
+      position: absolute;
+      right: 4px;
+      top: 4px;
+      z-index: 999;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .sidebar-container {
+    .sidebar {
+      .sidebar-close {
+        display: block;
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+    "recommendations": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-ceintl.vscode-language-pack-zh-hans",
+        "aaron-bond.better-comments",
+        "vscode-icons-team.vscode-icons",
+        "msjsdiag.debugger-for-chrome",
+        "stevencl.adddoccomments",
+        "stylelint.vscode-stylelint",
+        "xabikos.javascriptsnippets",
+        "eamodio.gitlens"
+    ],
+}
