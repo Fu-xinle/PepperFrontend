@@ -1,0 +1,48 @@
+<div class="pb-2 toolbar">
+  <input
+    class="form-control form-control-rounded search-input"
+    (ngModelChange)="keySearcchValue$.next(keySearcchValue)"
+    [(ngModel)]="keySearcchValue"
+    name="key-searcch"
+    autocomplete="off"
+    placeholder="搜索"
+    type="text"
+  />
+  <!--高级搜索弹出对话框的模式，共用组件-->
+</div>
+<!---rowModelType:'clientSide', 'infinite', 'serverSide'，'viewport'
+  'clientSide':默认，一次获取所有数据、网格可以处理大量数据（100k+行）。即使从服务器返回了数千行，网格也只会呈现屏幕上可见的内容.
+  'infinite':用户向下滚动时加载更多数据
+  'serverSide':在'infinite'基础上，从服务器一次一个块地带回数据列表。当用户滚动时，网格会要求更多的行。
+             比 Infinite 更多的功能，并且将允许行分组、聚合、延迟加载组以及数据的切片和切块。
+  'viewport'：希望服务器准确了解用户正在查看的内容，当有大量更改的数据并希望在服务器端数据更改时将更新推送到客户端时，这是最好的。
+             准确了解用户正在查看的内容意味着您只需将更新推送给相关用户。所有行模型都可以接收更新，
+             但只有 Viewport 行模型向服务器提供用户当前在屏幕上看到的行的信息，而无需滚动。
+-->
+<!--serverSideStoreType:'full', 'partial'
+  'full':一次性加载所有行
+  'partial':通过将数据分成块并在用户滚动时使用无限滚动来加载块来管理非常大量的数据。。
+           cacheBlockSize:存储中每个块有多少行，即一次从服务器返回多少行。
+           maxBlocksInCache:在存储中保留多少块。 默认为无限制，因此保留每个请求的块。 如果您有内存问题，请使用此选项，
+                            并且在达到限制时将清除最近最少查看的块。 网格还将确保它具有显示当前可见内容所需的所有块，以防此属性设置为低值
+-->
+<div class="card full-height-container">
+  <ag-grid-angular
+    style="height: 100%; width: 100%"
+    class="ag-theme-material"
+    [suppressContextMenu]="true"
+    [suppressCellSelection]="true"
+    (gridReady)="onGridReady($event)"
+    [rowModelType]="'serverSide'"
+    [serverSideStoreType]="'partial'"
+    [cacheBlockSize]="100"
+    [maxBlocksInCache]="20"
+    [columnDefs]="columnDefs"
+    [frameworkComponents]="frameworkComponents"
+    [loadingCellRenderer]="loadingOverlayComponent"
+    [loadingCellRendererParams]="loadingOverlayComponentParams"
+    [noRowsOverlayComponent]="noRowsOverlayComponent"
+    [noRowsOverlayComponentParams]="noRowsOverlayComponentParams"
+  >
+  </ag-grid-angular>
+</div>

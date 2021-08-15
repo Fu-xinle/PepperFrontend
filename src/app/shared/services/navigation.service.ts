@@ -2,41 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
 
-export interface IMenuItem {
-  id?: string;
-  title?: string;
-  description?: string;
-  type: string; // Possible values: link/dropDown/extLink
-  name?: string; // Used as display text for item and title for separator type
-  state?: string; // Router state
-  icon?: string; // Material icon name
-  tooltip?: string; // Tooltip text
-  disabled?: boolean; // If true, item will not be appeared in sidenav.
-  sub?: IChildItem[]; // Dropdown items
-  badges?: IBadge[];
-  active?: boolean;
-}
-export interface IChildItem {
-  id?: string;
-  parentId?: string;
-  type?: string;
-  name: string; // Display text
-  state?: string; // Router state
-  icon?: string;
-  sub?: IChildItem[];
-  active?: boolean;
-}
-
-interface IBadge {
-  color: string; // primary/accent/warn/hex color codes(#fff000)
-  value: string; // Display text
-}
-
-interface ISidebarState {
-  sidenavOpen?: boolean;
-  childnavOpen?: boolean;
-}
-
+import { IMenuItem, ISidebarState } from '../interface/shared-layout.interface';
 @Injectable({
   providedIn: 'root',
 })
@@ -45,8 +11,8 @@ export class NavigationService {
     sidenavOpen: true,
     childnavOpen: false,
   };
-  selectedItem!: IMenuItem;
-  defaultMenu: IMenuItem[] = [
+  public selectedItem!: IMenuItem;
+  public defaultMenu: IMenuItem[] = [
     {
       name: '主页',
       description: '网站主页.',
@@ -78,12 +44,6 @@ export class NavigationService {
           state: '/full/home/home-chat',
           type: 'link',
         },
-        {
-          icon: 'icon-Box-withFolders',
-          name: '文件管理',
-          state: '/full/technology-research/web-crawler',
-          type: 'link',
-        },
       ],
     },
     {
@@ -95,38 +55,42 @@ export class NavigationService {
         {
           icon: 'icon-Key',
           name: '用户-角色-权限',
-          state: '/full/system-manager/authorize',
-          type: 'link',
-        },
-        {
-          icon: 'icon-ID-Card',
-          name: '用户信息',
-          state: '/full/system-manager/user-info',
-          type: 'link',
-        },
-        {
-          icon: 'icon-File-Refresh',
-          name: '用户日志',
-          state: '/full/system-manager/user-log',
-          type: 'link',
+          state: '/full/system-manage/authorize',
+          type: 'dropDown',
+          sub: [
+            {
+              icon: 'icon-ID-Card',
+              name: '用户信息',
+              state: '/full/system-manage/user-info',
+              type: 'link',
+            },
+            {
+              icon: 'icon-File-Refresh',
+              name: '用户日志',
+              state: '/full/system-manage/user-log',
+              type: 'link',
+            },
+          ],
         },
         {
           icon: 'icon-Speach-BubbleComic2',
-          name: '算法模型',
-          state: '/full/system-manager/algorithm-manage',
-          type: 'link',
-        },
-        {
-          icon: 'icon-Network-Window',
-          name: '流程管理',
-          state: '/full/system-manager/flow-manage',
-          type: 'link',
-        },
-        {
-          icon: 'icon-Notepad',
-          name: '表单管理',
-          state: '/full/system-manager/form-manage',
-          type: 'link',
+          name: '地理处理模型',
+          state: '/full/system-manage/geoprocessing-model-manage',
+          type: 'dropDown',
+          sub: [
+            {
+              icon: 'icon-Network-Window',
+              name: '流程管理',
+              state: '/full/system-manage/flow-manage',
+              type: 'link',
+            },
+            {
+              icon: 'icon-Notepad',
+              name: '表单管理',
+              state: '/full/system-manage/form-manage',
+              type: 'link',
+            },
+          ],
         },
       ],
     },
@@ -136,12 +100,12 @@ export class NavigationService {
       type: 'dropDown',
       icon: 'icon-Big-Data',
       sub: [
-        {
+        /*  {
           icon: 'icon-Geo2-plus',
           name: '空间分析',
           state: '/full/technology-research/spatial-analysis',
           type: 'link',
-        },
+        }, */
         {
           icon: 'icon-File-Search',
           name: '全文检索',
@@ -162,27 +126,44 @@ export class NavigationService {
         },
       ],
     },
+    {
+      name: '其它',
+      description: '大数据算法、空间分析算法.',
+      icon: 'icon-Big-Data',
+      state: '/full/technology-research/spatial-analysis',
+      type: 'link',
+    },
+    {
+      name: '百度',
+      description: '大数据算法、空间分析算法.',
+      icon: 'icon-Big-Data',
+      state: 'https://www.baidu.com/',
+      type: 'extLink',
+    },
   ];
 
-  // sets iconMenu as default;
-  menuItems = new BehaviorSubject<IMenuItem[]>(this.defaultMenu);
-  // navigation component has subscribed to this Observable
-  menuItems$ = this.menuItems.asObservable();
-
-  // You can customize this method to supply different menu for
-  // different user type.
-  // publishNavigationChange(menuType: string) {
-  //   switch (userType) {
-  //     case 'admin':
-  //       this.menuItems.next(this.adminMenu);
-  //       break;
-  //     case 'user':
-  //       this.menuItems.next(this.userMenu);
-  //       break;
-  //     default:
-  //       this.menuItems.next(this.defaultMenu);
-  //   }
-  // }
+  /**利用Observable,在其它组件动态切换不同的导航栏 */
+  public menuItems = new BehaviorSubject<IMenuItem[]>(this.defaultMenu);
+  public menuItems$ = this.menuItems.asObservable();
 
   constructor() {}
+
+  /**
+   *不同平台使用不同的主题,切换平台类型,依据用户权限过滤显示的导航菜单
+   *
+   * @param {string} platformType  Parameter 平台类型名称
+   */
+  publishNavigationChange(platformType: string) {
+    switch (platformType) {
+      case 'admin':
+        this.menuItems.next(this.defaultMenu);
+        break;
+      case 'user':
+        this.menuItems.next(this.defaultMenu);
+        break;
+      default:
+        this.menuItems.next(this.defaultMenu);
+    }
+    /** //!依据用户权限过滤显示的导航菜单 预留 */
+  }
 }

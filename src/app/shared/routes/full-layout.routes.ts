@@ -9,8 +9,8 @@ export const FULL_ROUTES: Routes = [
     canLoad: [AuthGuard],
   },
   {
-    path: 'system-manager',
-    loadChildren: () => import('../../system-manager/system-manager.module').then(m => m.SystemManagerModule),
+    path: 'system-manage',
+    loadChildren: () => import('../../system-manage/system-manage.module').then(m => m.SystemManageModule),
     canLoad: [AuthGuard],
   },
   {

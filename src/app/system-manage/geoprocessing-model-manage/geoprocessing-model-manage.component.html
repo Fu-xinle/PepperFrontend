@@ -1,0 +1,167 @@
+<div class="pb-2 toolbar">
+  <input
+    class="form-control form-control-rounded search-input"
+    (ngModelChange)="keySearcchValue$.next(keySearcchValue)"
+    [(ngModel)]="keySearcchValue"
+    name="key-searcch"
+    autocomplete="off"
+    placeholder="搜索"
+    type="text"
+  />
+  <button class="btn btn-primary float-right btn-iconmind btn-rounded" (click)="createGeoprocessingModel()">
+    <i class="icon-Add text-17 mr-2"></i>新建地理处理摸型
+  </button>
+</div>
+<div class="card full-height-container">
+  <ag-grid-angular
+    style="height: 100%; width: 100%"
+    class="ag-theme-material"
+    [rowData]="geoprocessingModelData"
+    [suppressContextMenu]="true"
+    [columnDefs]="columnDefs"
+    [context]="context"
+    [quickFilterText]="quickFilterText"
+    [frameworkComponents]="frameworkComponents"
+    [loadingOverlayComponent]="loadingOverlayComponent"
+    [loadingOverlayComponentParams]="loadingOverlayComponentParams"
+    [noRowsOverlayComponent]="noRowsOverlayComponent"
+    [noRowsOverlayComponentParams]="noRowsOverlayComponentParams"
+    (gridReady)="onGridReady($event)"
+  >
+  </ag-grid-angular>
+</div>
+
+<ng-template #createGeoprocessingModelContent let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="modal-title">创建新地理处理摸型</h5>
+    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.dismiss('关闭')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="createGeoprocessingModelGroup" class="ml-4 mr-4">
+      <div class="form-group">
+        <label for="name">名称</label>
+        <input
+          id="name"
+          class="form-control form-control-rounded"
+          [ngClass]="{ 'value-invalid': createGeoprocessingModelNotification.nameMessageShow }"
+          formControlName="name"
+          type="text"
+          autocomplete="off"
+        />
+        <p *ngIf="createGeoprocessingModelNotification.nameMessageShow" class="pt-1 mb-0">
+          <span class="text-danger">{{ createGeoprocessingModelNotification.nameMessage }}</span>
+        </p>
+      </div>
+      <div class="form-group">
+        <label for="description">描述</label>
+        <textarea
+          id="description"
+          class="form-control form-control-rounded"
+          [ngClass]="{ 'value-invalid': createGeoprocessingModelNotification.descriptionMessageShow }"
+          formControlName="description"
+          rows="3"
+        ></textarea>
+        <p *ngIf="createGeoprocessingModelNotification.descriptionMessageShow" class="pt-1 mb-0">
+          <span class="text-danger">{{ createGeoprocessingModelNotification.descriptionMessage }}</span>
+        </p>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary btn-rounded" (click)="modal.dismiss('取消')">取 消</button>
+    <app-btn-loading
+      [btnClass]="'btn-primary btn-rounded'"
+      (click)="createGeoprocessingModelSave(modal)"
+      [type]="'button'"
+      [loadingText]="createGeoprocessingModelLoadingText"
+      [loading]="createGeoprocessingModelLoading"
+    >
+      保 存
+    </app-btn-loading>
+  </div>
+</ng-template>
+
+<ng-template #editGeoprocessingModelContent let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="modal-title">编辑地理处理摸型信息</h5>
+    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.dismiss('关闭')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="editGeoprocessingModelGroup" class="ml-4 mr-4">
+      <div class="form-group">
+        <label for="name">名称</label>
+        <input
+          id="name"
+          class="form-control form-control-rounded"
+          [ngClass]="{ 'value-invalid': editGeoprocessingModelNotification.nameMessageShow }"
+          formControlName="name"
+          type="text"
+          autocomplete="off"
+        />
+        <p *ngIf="editGeoprocessingModelNotification.nameMessageShow" class="pt-1 mb-0">
+          <span class="text-danger">{{ editGeoprocessingModelNotification.nameMessage }}</span>
+        </p>
+      </div>
+      <div class="form-group">
+        <label for="description">描述</label>
+        <textarea
+          id="description"
+          class="form-control form-control-rounded"
+          [ngClass]="{ 'value-invalid': editGeoprocessingModelNotification.descriptionMessageShow }"
+          formControlName="description"
+          rows="3"
+        ></textarea>
+        <p *ngIf="editGeoprocessingModelNotification.descriptionMessageShow" class="pt-1 mb-0">
+          <span class="text-danger">{{ editGeoprocessingModelNotification.descriptionMessage }}</span>
+        </p>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary btn-rounded" (click)="modal.dismiss('取消')">取 消</button>
+    <app-btn-loading
+      [btnClass]="'btn-primary btn-rounded'"
+      (click)="editGeoprocessingModelSave(modal)"
+      [type]="'button'"
+      [loadingText]="editGeoprocessingModelLoadingText"
+      [loading]="editGeoprocessingModelLoading"
+    >
+      保 存
+    </app-btn-loading>
+  </div>
+</ng-template>
+
+<ng-template #deleteGeoprocessingModelContent let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="modal-title">删除地理处理摸型</h5>
+    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>
+      <strong>
+        <i class="icon-Danger text-danger mr-1"></i>
+        确认删除
+        <span class="text-danger px-1">{{ deleteRowNode.data.name }}</span>
+        ?
+      </strong>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary btn-rounded" (click)="modal.dismiss('取消')">取 消</button>
+    <app-btn-loading
+      [btnClass]="'btn-danger btn-rounded'"
+      (click)="deleteGeoprocessingModelSave(modal)"
+      [type]="'button'"
+      [loadingText]="deleteGeoprocessingModelLoadingText"
+      [loading]="deleteGeoprocessingModelLoading"
+    >
+      确 认
+    </app-btn-loading>
+  </div>
+</ng-template>

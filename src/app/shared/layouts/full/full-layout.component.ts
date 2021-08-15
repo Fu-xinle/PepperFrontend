@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router, RouteConfigLoadStart, ResolveStart, RouteConfigLoadEnd, ResolveEnd } from '@angular/router';
+import { Router, RouteConfigLoadStart, ResolveEnd } from '@angular/router';
 
 import { PerfectScrollbarDirective } from 'ngx-perfect-scrollbar';
 import { SearchService } from 'src/app/shared/services/search.service';
@@ -13,17 +13,19 @@ import { NavigationService } from '../../services/navigation.service';
 })
 export class FullLayoutComponent implements OnInit {
   @ViewChild(PerfectScrollbarDirective, { static: true })
-  perfectScrollbar!: PerfectScrollbarDirective;
-  moduleLoading: boolean = false;
+  public perfectScrollbar!: PerfectScrollbarDirective;
+
+  public moduleLoading: boolean = false;
 
   constructor(public navService: NavigationService, public searchService: SearchService, private router: Router) {}
 
   ngOnInit() {
+    /**事件的顺序:RouteConfigLoadStart->RouteConfigLoadEnd->ResolveStart->ResolveEnd */
     this.router.events.subscribe(event => {
-      if (event instanceof RouteConfigLoadStart || event instanceof ResolveStart) {
+      if (event instanceof RouteConfigLoadStart) {
         this.moduleLoading = true;
       }
-      if (event instanceof RouteConfigLoadEnd || event instanceof ResolveEnd) {
+      if (event instanceof ResolveEnd) {
         this.moduleLoading = false;
       }
     });

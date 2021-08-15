@@ -138,6 +138,9 @@
           }
           &.open {
             color: $primary;
+            .nav-icon {
+              color: $primary;
+            }
           }
           .nav-icon {
             color: $gray-600;
@@ -170,7 +173,7 @@
           }
           > .childNav {
             max-height: 1000px;
-            overflow: visible;
+            transition: max-height 1s ease-in-out;
           }
         }
       }
@@ -185,7 +188,7 @@
           background: $background;
           max-height: 0;
           overflow: hidden;
-          transition: all 0.4s ease-in-out;
+          transition: max-height 0.5s cubic-bezier(0, 1, 0, 1);
           li.nav-item a {
             padding: 12px 12px 12px 50px;
           }

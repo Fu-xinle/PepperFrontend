@@ -7,8 +7,19 @@
     <img src="./assets/images/logo.png" alt="" />
   </div>
   <ul class="navigation-left">
-    <li [ngClass]="{ active: item.active }" (click)="onClickChangeActiveFlag(item)" class="nav-item lvl1" *ngFor="let item of nav">
-      <div class="nav-item-hold" routerLink="{{ item.state }}" (click)="closeChildNav()" *ngIf="!item.disabled && item.type === 'link'">
+    <li
+      [ngClass]="{ active: item.active }"
+      (mouseleave)="mouseLeaveIMenuItem('sidebar', $event)"
+      (mouseenter)="setActiveMainItem(item)"
+      class="nav-item lvl1"
+      *ngFor="let item of nav"
+    >
+      <div
+        class="nav-item-hold"
+        routerLink="{{ item.state }}"
+        (mouseenter)="closeChildNav()"
+        *ngIf="!item.disabled && item.type === 'link'"
+      >
         <i [class]="'nav-icon ' + item.icon"></i>
         <span class="nav-text">{{ item.name }}</span>
       </div>
@@ -16,7 +27,7 @@
         <i [class]="'nav-icon ' + item.icon"></i>
         <span class="nav-text">{{ item.name }}</span>
       </div>
-      <div class="nav-item-hold" *ngIf="!item.disabled && item.type === 'extLink'">
+      <div class="nav-item-hold" *ngIf="!item.disabled && item.type === 'extLink'" (mouseenter)="closeChildNav()">
         <a [href]="item.state" target="_blank">
           <i [class]="'nav-icon ' + item.icon"></i>
           <span class="nav-text">{{ item.name }}</span>
@@ -32,7 +43,7 @@
   [ngClass]="{ open: navService.sidebarState.childnavOpen }"
   class="sidebar-left-secondary rtl-ps-none"
   [perfectScrollbar]="{ suppressScrollX: true, wheelPropagation: true }"
-  (mouseleave)="closeChildNav()"
+  (mouseleave)="mouseLeaveIMenuItem('sidebar-secondary', $event)"
 >
   <header>
     <h6>Apps</h6>
@@ -43,17 +54,22 @@
 
 <ng-template #menuTemplate let-parentItem="parentItem">
   <ul class="childNav" appDropdown>
-    <li *ngFor="let item of parentItem?.sub" appDropdownLink class="nav-item">
+    <li *ngFor="let item of parentItem?.sub" appDropdownLink [linkType]="item.type" class="nav-item">
       <a routerLink="{{ item.state }}" *ngIf="item.type === 'link'" class="" routerLinkActive="open">
         <i *ngIf="item.icon" [class]="'nav-icon ' + item.icon"></i>
         <span class="item-name lvl1">{{ item.name }}</span>
       </a>
 
+      <a [href]="item.state" target="_blank" *ngIf="item.type === 'extLink'" class="">
+        <i *ngIf="item.icon" [class]="'nav-icon ' + item.icon"></i>
+        <span class="item-name lvl1">{{ item.name }}</span>
+      </a>
+
       <div *ngIf="item.type === 'dropDown'">
-        <a appDropdownToggle [ngClass]="{ open: item.active }" routerLinkActive="open">
+        <a appDropdownToggle [open]="item.active" [ngClass]="{ open: item.active }" routerLinkActive="open">
           <i *ngIf="item.icon" [class]="'nav-icon ' + item.icon"></i>
           <span class="item-name">{{ item.name }}</span>
-          <i class="dd-arrow icon-Arrow-Down"></i>
+          <i class="dd-arrow icon-Arrow-Right"></i>
         </a>
         <ng-container *ngTemplateOutlet="menuTemplate; context: { parentItem: item }"></ng-container>
       </div>
@@ -61,4 +77,4 @@
   </ul>
 </ng-template>
 
-<div [ngClass]="{ open: navService.sidebarState.childnavOpen }" class="sidebar-overlay" (click)="closeChildNav()"></div>
+<div [ngClass]="{ open: navService.sidebarState.childnavOpen }" class="sidebar-overlay" (mouseenter)="setCurrentRouteActiveFlag()"></div>

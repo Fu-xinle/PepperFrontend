@@ -9,8 +9,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { ToastrModule } from 'ngx-toastr';
 
-// components
-import { SystemManagerAuthorizeService } from '../system-manager-authorize/system-manager-authorize.service';
+/**components */
 import { AppLoadingOverlayComponent } from './components/ag-grid/app-loading-overlay.component';
 import { AppNorowsOverlayComponent } from './components/ag-grid/app-no-rows-overlay.component';
 import { BtnLoadingComponent } from './components/btn-loading/btn-loading.component';
@@ -33,17 +32,17 @@ const components = [
   AppNorowsOverlayComponent,
 ];
 
-// pipes
+/**pipes */
 import { ExcerptPipe } from './pipes/excerpt.pipe';
 import { GetValueByKeyPipe } from './pipes/get-value-by-key.pipe';
 import { RelativeTimePipe } from './pipes/relative-time.pipe';
 
 const pipes = [ExcerptPipe, GetValueByKeyPipe, RelativeTimePipe];
 
-// Directives
-import { DropdownAnchorDirective } from './directives/dropdown-anchor.directive';
+/**Directives */
+import { DropdownToggleDirective } from './directives/dropdown-toggle.directive';
 import { DropdownLinkDirective } from './directives/dropdown-link.directive';
-import { AppDropdownDirective } from './directives/dropdown.directive';
+import { DropdownDirective } from './directives/dropdown.directive';
 import { ScrollToDirective } from './directives/scroll-to.directive';
 import {
   SidebarDirective,
@@ -51,20 +50,21 @@ import {
   SidebarContentDirective,
   SidebarTogglerDirective,
 } from './directives/sidebar.directive';
-import { FullScreenWindowDirective } from './directives/full-screen.directive';
+import { ScreenFullDirective } from './directives/screen-full.directive';
 
-// 导入的外部服务
+/**outer Service */
+import { SystemManageAuthorizeService } from '../system-manage-authorize/system-manage-authorize.service';
 
 const directives = [
-  DropdownAnchorDirective,
+  DropdownToggleDirective,
   DropdownLinkDirective,
-  AppDropdownDirective,
+  DropdownDirective,
   ScrollToDirective,
   SidebarDirective,
   SidebarContainerDirective,
   SidebarContentDirective,
   SidebarTogglerDirective,
-  FullScreenWindowDirective,
+  ScreenFullDirective,
 ];
 
 @NgModule({
@@ -80,6 +80,6 @@ const directives = [
   ],
   declarations: [...components, ...pipes, ...directives],
   exports: [...components, ...pipes, ...directives],
-  providers: [SystemManagerAuthorizeService],
+  providers: [SystemManageAuthorizeService],
 })
 export class SharedModule {}

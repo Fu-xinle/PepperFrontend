@@ -4,7 +4,8 @@ import { Router, NavigationEnd } from '@angular/router';
 import { PerfectScrollbarDirective } from 'ngx-perfect-scrollbar';
 import { filter } from 'rxjs/operators';
 
-import { NavigationService, IMenuItem } from '../../services/navigation.service';
+import { IMenuItem } from '../../interface/shared-layout.interface';
+import { NavigationService } from '../../services/navigation.service';
 import { Utils } from '../../utils/utils';
 
 @Component({
@@ -13,11 +14,18 @@ import { Utils } from '../../utils/utils';
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit {
+  /** 主sidebar、二级sidebar滚动条 */
   @ViewChildren(PerfectScrollbarDirective)
-  psContainers!: QueryList<PerfectScrollbarDirective>;
-  selectedItem!: IMenuItem;
-  nav!: IMenuItem[];
-  psContainerSecSidebar!: PerfectScrollbarDirective;
+  public psContainers!: QueryList<PerfectScrollbarDirective>;
+  public psContainerSecSidebar!: PerfectScrollbarDirective;
+
+  /** sidebar数据以及 主sidebar为dropdown时,当前选择的主sidebar菜单项  */
+  public selectedItem!: IMenuItem;
+  public nav!: IMenuItem[];
+
+  /** 主sidebar宽度与header高度 */
+  public sidebarWidth!: number;
+  public headerHeight!: number;
 
   constructor(public router: Router, public navService: NavigationService) {
     setTimeout(() => {
@@ -27,52 +35,75 @@ export class SidebarComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(_event: MouseEvent) {
-    this.updateSidebar();
+    this.initSidebarState();
   }
 
   ngOnInit() {
-    this.updateSidebar();
-    // CLOSE SIDENAV ON ROUTE CHANGE
+    this.initSidebarState();
+
+    // 获取sidebar数据,当前路由对应的主sidebar、二级sidebar菜单项标记为avtive状态
+    this.navService.menuItems$.subscribe(items => {
+      this.nav = items;
+      this.setCurrentRouteActiveFlag();
+    });
+
+    /** 路由到新页面时,关闭二级sidebar */
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(_routeChange => {
-      this.closeChildNav();
+      this.setCurrentRouteActiveFlag();
       if (Utils.isMobile()) {
         this.navService.sidebarState.sidenavOpen = false;
       }
     });
-
-    this.navService.menuItems$.subscribe(items => {
-      this.nav = items;
-      this.setActiveFlag();
-    });
   }
 
-  selectItem(item: any) {
+  /**
+   * 主sidebar中dropDown菜单，mouseenter事件选中当前菜单项
+   *
+   * @param {item} item Parameter IMenuItem菜单项
+   */
+  selectItem(item: IMenuItem) {
     this.navService.sidebarState.childnavOpen = true;
     this.navService.selectedItem = item;
-    this.setActiveMainItem(item);
 
-    // Scroll to top secondary sidebar
+    /** 次sidebar滚动条滚动到顶部 */
     setTimeout(() => {
       this.psContainerSecSidebar.update();
       this.psContainerSecSidebar.scrollToTop(0, 400);
     });
   }
+
+  /**
+   *关闭二级sidebar
+   */
   closeChildNav() {
     this.navService.sidebarState.childnavOpen = false;
-    this.setActiveFlag();
   }
 
-  onClickChangeActiveFlag(item: any) {
-    this.setActiveMainItem(item);
+  /**
+   *展开二级sidebar
+   */
+  openChildNav() {
+    this.navService.sidebarState.childnavOpen = false;
   }
-  setActiveMainItem(item: any) {
+
+  /**
+   * 将item对应的主sidebar项设置为active
+   *
+   * @param {item} item Parameter IMenuItem菜单项
+   */
+  setActiveMainItem(item: IMenuItem) {
     this.nav.forEach(i => {
       i.active = false;
     });
     item.active = true;
   }
 
-  setActiveFlag() {
+  /**
+   * 将当前路由对应的主sidebar、二级sidebar菜单项标记为avtive状态
+   */
+  setCurrentRouteActiveFlag() {
+    this.closeChildNav();
+
     if (window && window.location) {
       const activeRoute = window.location.hash || window.location.pathname;
       this.nav.forEach(item => {
@@ -103,12 +134,43 @@ export class SidebarComponent implements OnInit {
     }
   }
 
-  updateSidebar() {
+  /**
+   * mouseLeave事件,移动到header、content、UL
+   *
+   * @param {elementType} elementType Parameter 元素类型:主sidebar Or 二级sidebar
+   * @param {MouseEvent} event Parameter mouseLeave事件对象
+   */
+  mouseLeaveIMenuItem(elementType: string, event: MouseEvent) {
+    const eventAny = event as any;
+    if (eventAny.toElement === null) {
+      this.setCurrentRouteActiveFlag();
+    } else {
+      if (
+        elementType === 'sidebar' &&
+        (eventAny.clientY <= this.headerHeight ||
+          (!this.navService.sidebarState.childnavOpen && eventAny.clientX >= this.sidebarWidth) ||
+          eventAny.toElement.className.includes('navigation-left'))
+      ) {
+        this.setCurrentRouteActiveFlag();
+      } else if (elementType === 'sidebar-secondary' && eventAny.clientY <= this.headerHeight) {
+        this.setCurrentRouteActiveFlag();
+      }
+    }
+  }
+
+  /**
+   * sidebar 状态初始化,默认：主sidebar打开(手机窄屏幕关闭);二级sidebar关闭
+   */
+  initSidebarState() {
     if (Utils.isMobile()) {
       this.navService.sidebarState.sidenavOpen = false;
       this.navService.sidebarState.childnavOpen = false;
     } else {
       this.navService.sidebarState.sidenavOpen = true;
+      this.navService.sidebarState.childnavOpen = false;
     }
+
+    this.sidebarWidth = $('.sidebar-left').eq(0).width()!;
+    this.headerHeight = $('.main-header').eq(0).height()!;
   }
 }

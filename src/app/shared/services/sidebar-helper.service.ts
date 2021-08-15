@@ -6,7 +6,7 @@ import { SidebarDirective } from '../directives/sidebar.directive';
   providedIn: 'root',
 })
 export class SidebarHelperService {
-  sidenavInstances: Map<string, SidebarDirective>;
+  private sidenavInstances: Map<string, SidebarDirective>;
 
   constructor() {
     this.sidenavInstances = new Map<string, SidebarDirective>();

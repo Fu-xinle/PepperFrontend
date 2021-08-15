@@ -6,15 +6,12 @@ import { Subject } from 'rxjs';
   providedIn: 'root',
 })
 export class EventListenerService {
-  // Observable string sources
+  /**用户信息中上传新的用户照片,Header组件中的照片也立即修改 */
   public changePhotoAnnouncedSource = new Subject<void>();
-
-  // Observable string streams
   public changePhotoAnnounced$ = this.changePhotoAnnouncedSource.asObservable();
 
   constructor() {}
 
-  // Service message commands
   changePhoto() {
     this.changePhotoAnnouncedSource.next();
   }

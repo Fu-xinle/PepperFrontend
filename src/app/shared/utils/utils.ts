@@ -43,7 +43,7 @@ export class Utils {
   }
 
   /**
-   * 通过设置scrollTop属性为0,,将元素滚动条滚动到顶部.
+   * 通过设置scrollTop属性为0,将元素滚动条滚动到顶部.
    *
    * @param {string} selector Parameter html元素选择器
    */

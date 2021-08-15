@@ -1,0 +1,167 @@
+<div class="pb-2 toolbar">
+  <input
+    class="form-control form-control-rounded search-input"
+    (ngModelChange)="keySearcchValue$.next(keySearcchValue)"
+    [(ngModel)]="keySearcchValue"
+    name="key-searcch"
+    autocomplete="off"
+    placeholder="搜索"
+    type="text"
+  />
+  <button class="btn btn-primary float-right btn-iconmind btn-rounded" (click)="createFlow()">
+    <i class="icon-Add text-17 mr-2"></i>新建流程
+  </button>
+</div>
+<div class="card full-height-container">
+  <ag-grid-angular
+    style="height: 100%; width: 100%"
+    class="ag-theme-material"
+    [rowData]="flowData"
+    [suppressContextMenu]="true"
+    [columnDefs]="columnDefs"
+    [context]="context"
+    [quickFilterText]="quickFilterText"
+    [frameworkComponents]="frameworkComponents"
+    [loadingOverlayComponent]="loadingOverlayComponent"
+    [loadingOverlayComponentParams]="loadingOverlayComponentParams"
+    [noRowsOverlayComponent]="noRowsOverlayComponent"
+    [noRowsOverlayComponentParams]="noRowsOverlayComponentParams"
+    (gridReady)="onGridReady($event)"
+  >
+  </ag-grid-angular>
+</div>
+
+<ng-template #createFlowContent let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="modal-title">创建新流程</h5>
+    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.dismiss('关闭')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="createFlowForm" class="ml-4 mr-4">
+      <div class="form-group">
+        <label for="name">名称</label>
+        <input
+          id="name"
+          class="form-control form-control-rounded"
+          [ngClass]="{ 'value-invalid': createFlowNotification.nameMessageShow }"
+          formControlName="name"
+          type="text"
+          autocomplete="off"
+        />
+        <p *ngIf="createFlowNotification.nameMessageShow" class="pt-1 mb-0">
+          <span class="text-danger">{{ createFlowNotification.nameMessage }}</span>
+        </p>
+      </div>
+      <div class="form-group">
+        <label for="description">描述</label>
+        <textarea
+          id="description"
+          class="form-control form-control-rounded"
+          [ngClass]="{ 'value-invalid': createFlowNotification.descriptionMessageShow }"
+          formControlName="description"
+          rows="3"
+        ></textarea>
+        <p *ngIf="createFlowNotification.descriptionMessageShow" class="pt-1 mb-0">
+          <span class="text-danger">{{ createFlowNotification.descriptionMessage }}</span>
+        </p>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary btn-rounded" (click)="modal.dismiss('取消')">取 消</button>
+    <app-btn-loading
+      [btnClass]="'btn-primary btn-rounded'"
+      (click)="createFlowSave(modal)"
+      [type]="'button'"
+      [loadingText]="createFlowLoadingText"
+      [loading]="createFlowLoading"
+    >
+      保 存
+    </app-btn-loading>
+  </div>
+</ng-template>
+
+<ng-template #editFlowContent let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="modal-title">编辑流程</h5>
+    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.dismiss('关闭')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="editFlowForm" class="ml-4 mr-4">
+      <div class="form-group">
+        <label for="name">名称</label>
+        <input
+          id="name"
+          class="form-control form-control-rounded"
+          [ngClass]="{ 'value-invalid': editFlowNotification.nameMessageShow }"
+          formControlName="name"
+          type="text"
+          autocomplete="off"
+        />
+        <p *ngIf="editFlowNotification.nameMessageShow" class="pt-1 mb-0">
+          <span class="text-danger">{{ editFlowNotification.nameMessage }}</span>
+        </p>
+      </div>
+      <div class="form-group">
+        <label for="description">描述</label>
+        <textarea
+          id="description"
+          class="form-control form-control-rounded"
+          [ngClass]="{ 'value-invalid': editFlowNotification.descriptionMessageShow }"
+          formControlName="description"
+          rows="3"
+        ></textarea>
+        <p *ngIf="editFlowNotification.descriptionMessageShow" class="pt-1 mb-0">
+          <span class="text-danger">{{ editFlowNotification.descriptionMessage }}</span>
+        </p>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary btn-rounded" (click)="modal.dismiss('取消')">取 消</button>
+    <app-btn-loading
+      [btnClass]="'btn-primary btn-rounded'"
+      (click)="editFlowSave(modal)"
+      [type]="'button'"
+      [loadingText]="editFlowLoadingText"
+      [loading]="editFlowLoading"
+    >
+      保 存
+    </app-btn-loading>
+  </div>
+</ng-template>
+
+<ng-template #deleteFlowContent let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="modal-title">删除流程</h5>
+    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>
+      <strong>
+        <i class="icon-Danger text-danger mr-1"></i>
+        确认删除
+        <span class="text-danger px-1">{{ deleteRowNode.data.name }}</span>
+        ?
+      </strong>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary btn-rounded" (click)="modal.dismiss('取消')">取 消</button>
+    <app-btn-loading
+      [btnClass]="'btn-danger btn-rounded'"
+      (click)="deleteFlowSave(modal)"
+      [type]="'button'"
+      [loadingText]="deleteFlowLoadingText"
+      [loading]="deleteFlowLoading"
+    >
+      确 认
+    </app-btn-loading>
+  </div>
+</ng-template>

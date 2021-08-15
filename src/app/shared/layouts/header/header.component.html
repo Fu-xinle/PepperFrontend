@@ -63,14 +63,14 @@
     <!-- Search bar -->
     <div class="search-bar">
       <input type="text" placeholder="搜索" (focus)="searchService.searchOpen = true" />
-      <i class="search-icon text-muted icon-Magnifi-Glass2"></i>
+      <i class="search-icon cursor-pointer text-muted icon-Magnifi-Glass2" (click)="searchService.searchOpen = true"></i>
     </div>
   </div>
 
   <div style="margin: auto"></div>
 
   <div class="header-part-right">
-    <i appFullScreenWindow class="icon-Full-Screen header-icon d-none d-sm-inline-block" role="button"></i>
+    <i appScreenFull class="icon-Full-Screen header-icon d-none d-sm-inline-block" role="button"></i>
     <div ngbDropdown [placement]="'bottom-right'" class="d-none d-sm-inline-block">
       <i ngbDropdownToggle class="icon-Gear text-muted header-icon" role="button"></i>
       <div ngbDropdownMenu class="menu-icon-grid-dropdown">

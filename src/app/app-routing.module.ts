@@ -26,7 +26,7 @@ const appRoutes: Routes = [
     data: { title: 'content Views' },
     children: CONTENT_ROUTES,
   },
-  { path: '**', redirectTo: 'content/system-manager-authorize/error' },
+  { path: '**', redirectTo: 'content/system-manage-authorize/error' },
 ];
 
 @NgModule({

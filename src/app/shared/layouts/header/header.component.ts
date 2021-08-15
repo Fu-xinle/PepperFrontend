@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, TemplateRef } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -8,7 +8,8 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 
-import { SystemManagerAuthorizeService } from '../../../system-manager-authorize/system-manager-authorize.service';
+import { SystemManageAuthorizeService } from '../../../system-manage-authorize/system-manage-authorize.service';
+import { IUserInformation, IConfirmPasswordNotification, IConfirmPasswordValue } from '../../interface/system-manage.interface';
 import { AuthService } from '../../services/auth/auth.service';
 import { EventListenerService } from '../../services/event-listener.service';
 import { NavigationService } from '../../services/navigation.service';
@@ -21,17 +22,17 @@ import { SearchService } from '../../services/search.service';
 })
 export class HeaderComponent implements OnDestroy {
   // 修改密码对话框
-  public changePasswordNotification: any;
+  public changePasswordNotification: IConfirmPasswordNotification;
   public changePasswordForm: FormGroup;
   public loading: boolean = false;
   public loadingText: string = '';
   public modalReference!: NgbModalRef;
 
-  // 网站的个人新通知
+  /**网站的个人新通知 */
   public notifications: any[];
 
-  // 用户名
-  public userInfo: any;
+  /**用户信息，用于显示用户名 */
+  public userInfo: IUserInformation;
 
   private subscriptions: Subscription[] = [];
 
@@ -40,14 +41,14 @@ export class HeaderComponent implements OnDestroy {
     public domSanitizerService: DomSanitizer,
     public searchService: SearchService,
     private authService: AuthService,
-    private systemManagerAuthorizeService: SystemManagerAuthorizeService,
+    private systemManageAuthorizeService: SystemManageAuthorizeService,
     public eventListenerService: EventListenerService,
     private router: Router,
     private modalService: NgbModal,
-    private fb: FormBuilder,
+    private formBuilder: FormBuilder,
     private toastr: ToastrService
   ) {
-    // 修改密码对话框
+    /** 修改密码对话框:表单信息通知、表单对象以及Input变化监测 */
     this.changePasswordNotification = {
       newPasswordMessageShow: false,
       newPasswordMessage: '请输入用户名',
@@ -55,7 +56,7 @@ export class HeaderComponent implements OnDestroy {
       confirmNewPasswordMessage: '密码输入不一致',
     };
 
-    this.changePasswordForm = this.fb.group({
+    this.changePasswordForm = this.formBuilder.group({
       newPassword: [''],
       confirmNewPassword: [''],
     });
@@ -68,7 +69,7 @@ export class HeaderComponent implements OnDestroy {
       this.changePasswordNotification.confirmNewPasswordMessageShow = false;
     });
 
-    // 网站个人通知,从后台获取
+    /** //!!网站个人通知初始化,后台获取 */
     this.notifications = [
       {
         icon: 'icon-Speach-Bubble7',
@@ -115,10 +116,10 @@ export class HeaderComponent implements OnDestroy {
       },
     ];
 
-    // 用户在用户信息界面更换照片后，更新照片
-    this.userInfo = this.authService.getUserInfo();
+    /** 用户在用户信息界面更换照片后，更新照片 */
+    this.userInfo = this.authService.getUserInfo()!;
     this.eventListenerService.changePhotoAnnounced$.subscribe(_param => {
-      this.userInfo = this.authService.getUserInfo();
+      this.userInfo = this.authService.getUserInfo()!;
     });
   }
 
@@ -128,6 +129,11 @@ export class HeaderComponent implements OnDestroy {
     }
   }
 
+  /**
+   * header 头部中折叠/展开左侧导航栏
+   *
+   * @returns {boolean|undefined} Return
+   */
   toggelSidebar() {
     const state = this.navService.sidebarState;
     if (state.childnavOpen && state.sidenavOpen) {
@@ -150,23 +156,32 @@ export class HeaderComponent implements OnDestroy {
     return;
   }
 
+  /**
+   * 用户注销,退出登录
+   */
   signout() {
     this.authService.logout();
-    this.router.navigate(['content', 'system-manager-authorize', 'login']);
+    this.router.navigate(['content', 'system-manage-authorize', 'login']);
   }
 
+  /**
+   * 路由到用户信息详细页面,管理用户信息
+   */
   userInformation() {
-    this.router.navigate(['full', 'system-manager', 'user-info']);
+    this.router.navigate(['full', 'system-manage', 'user-info']);
   }
 
-  changePassword(content: any) {
-    // 弹出对话框修改密码
-    //ariaLabelledBy：读屏软件，盲人使用的暂时不考虑
+  /**
+   * 利用ngbModal弹出修改密码对话框
+   *
+   * @param {TemplateRef<void>} content Parameter 对话框内容模板
+   */
+  changePassword(content: TemplateRef<void>) {
     this.modalReference = this.modalService.open(content, { centered: true });
     this.modalReference.result.then(
       _result => {},
       _reason => {
-        // 关闭对话框,关于控件的值需要重新初始化?
+        /** 关闭对话框,关于控件的值需要重新初始化 */
         this.loading = false;
         this.changePasswordForm.controls['newPassword'].setValue('');
         this.changePasswordForm.controls['confirmNewPassword'].setValue('');
@@ -180,8 +195,14 @@ export class HeaderComponent implements OnDestroy {
     );
   }
 
-  onSubmit(value: any) {
-    // 新密码一些判断:字符和数字5-30个，两次密码输入一致
+  /**
+   * 用户修改密码，新密码保存到数据库
+   *
+   * @param {IConfirmPasswordValue} value Parameter 用户输入的新密码以及确认密码（第二次输入）
+   * @returns {void} Retunr
+   */
+  onSubmit(value: IConfirmPasswordValue) {
+    /** 新密码一些判断:字符和数字5-30个，两次密码输入一致 */
     const newPassword: string = value.newPassword.toString().trim();
     if (!/^[0-9a-zA-Z]*$/g.test(newPassword)) {
       this.changePasswordNotification.newPasswordMessageShow = true;
@@ -202,58 +223,64 @@ export class HeaderComponent implements OnDestroy {
     this.loading = true;
     this.loadingText = '提交中...';
 
-    // 保存到服务器
+    /** 保存到服务器 */
     this.subscriptions.push(
-      this.systemManagerAuthorizeService
+      this.systemManageAuthorizeService
         .resetPassword(this.authService.getUserInfo()!.userGUID, value.newPassword.toString().trim())
-        .subscribe(
-          _res => {
-            //关闭对话框、注销登录
+        .subscribe({
+          next: _res => {
             this.loading = false;
             this.modalReference.close();
             this.countdownSweetalert2();
           },
-          err => {
+          error: err => {
             console.error(err);
             this.toastr.error([err.url, err.error.errMessage, err.error.traceMessage].join('\n'), '错误');
           },
-          () => {
+          complete: () => {
             /*Completed*/
-          }
-        )
+          },
+        })
     );
   }
 
-  // 利用Sweetalert2实现计时器跳转组件
+  /**
+   * 利用Sweetalert2实现计时器跳转组件
+   */
   countdownSweetalert2() {
     let timerInterval: NodeJS.Timer;
     Swal.fire({
-      html: '密码重置成功!  <b> 5 </b> 秒后跳转到登录页面, ' + '<a href="#">点击跳转</a>',
+      html: '密码重置成功!  <b></b> 秒后跳转到登录页面, ' + '<a href="#">点击跳转</a>',
       icon: 'success',
       allowOutsideClick: false,
       allowEscapeKey: false,
-      timer: 600000,
+      timerProgressBar: true,
+      timer: 60000,
       customClass: {
         container: 'countdown',
       },
       didOpen: () => {
-        const content = (Swal as any).getContent();
+        Swal.showLoading();
+        /** 计时秒数倒数 */
+        const swalContent: HTMLElement = Swal.getHtmlContainer()!;
         timerInterval = setInterval(() => {
-          if (content) {
-            const bElement: any = content.querySelector('b');
+          if (swalContent) {
+            const bElement: HTMLElement | null = swalContent.querySelector('b');
             if (bElement) {
-              bElement.textContent = parseInt((Swal.getTimerLeft()! / 1000).toString(), 10);
+              bElement.textContent = parseInt((Swal.getTimerLeft()! / 1000).toString(), 10).toString();
             }
           }
         }, 1000);
-        // 利用jQuery更好?
-        const aElement: any = content.querySelector('a');
-        aElement.onclick = () => {
-          clearInterval(timerInterval);
-          Swal.close();
-          this.signout();
-          return false;
-        };
+        /** 跳转链接 */
+        const aElement: HTMLElement | null = swalContent.querySelector('a');
+        if (aElement) {
+          aElement.onclick = () => {
+            clearInterval(timerInterval);
+            Swal.close();
+            this.signout();
+            return false;
+          };
+        }
       },
       willClose: () => {
         clearInterval(timerInterval);
