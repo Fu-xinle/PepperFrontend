@@ -61,13 +61,17 @@ export class HeaderComponent implements OnDestroy {
       confirmNewPassword: [''],
     });
 
-    this.changePasswordForm.controls['newPassword'].valueChanges.subscribe((_value: string) => {
-      this.changePasswordNotification.newPasswordMessageShow = false;
-    });
+    this.subscriptions.push(
+      this.changePasswordForm.controls['newPassword'].valueChanges.subscribe((_value: string) => {
+        this.changePasswordNotification.newPasswordMessageShow = false;
+      })
+    );
 
-    this.changePasswordForm.controls['confirmNewPassword'].valueChanges.subscribe((_value: string) => {
-      this.changePasswordNotification.confirmNewPasswordMessageShow = false;
-    });
+    this.subscriptions.push(
+      this.changePasswordForm.controls['confirmNewPassword'].valueChanges.subscribe((_value: string) => {
+        this.changePasswordNotification.confirmNewPasswordMessageShow = false;
+      })
+    );
 
     /** //!!网站个人通知初始化,后台获取 */
     this.notifications = [
@@ -118,9 +122,11 @@ export class HeaderComponent implements OnDestroy {
 
     /** 用户在用户信息界面更换照片后，更新照片 */
     this.userInfo = this.authService.getUserInfo()!;
-    this.eventListenerService.changePhotoAnnounced$.subscribe(_param => {
-      this.userInfo = this.authService.getUserInfo()!;
-    });
+    this.subscriptions.push(
+      this.eventListenerService.changePhotoAnnounced$.subscribe(_param => {
+        this.userInfo = this.authService.getUserInfo()!;
+      })
+    );
   }
 
   ngOnDestroy() {

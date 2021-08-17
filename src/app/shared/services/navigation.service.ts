@@ -1,18 +1,21 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
 
 import { IMenuItem, ISidebarState } from '../interface/shared-layout.interface';
+import { LocalStoreService } from '../services/local-store.service';
 @Injectable({
   providedIn: 'root',
 })
-export class NavigationService {
+export class NavigationService implements OnDestroy {
   public sidebarState: ISidebarState = {
     sidenavOpen: true,
     childnavOpen: false,
   };
   public selectedItem!: IMenuItem;
-  public defaultMenu: IMenuItem[] = [
+
+  /** 预设值各系统路由菜单 */
+  public developmentMenu: IMenuItem[] = [
     {
       name: '主页',
       description: '网站主页.',
@@ -48,7 +51,7 @@ export class NavigationService {
     },
     {
       name: '系统管理',
-      description: '系统管理:.',
+      description: '系统管理',
       type: 'dropDown',
       icon: 'icon-Data-Settings',
       sub: [
@@ -56,41 +59,37 @@ export class NavigationService {
           icon: 'icon-Key',
           name: '用户-角色-权限',
           state: '/full/system-manage/authorize',
-          type: 'dropDown',
-          sub: [
-            {
-              icon: 'icon-ID-Card',
-              name: '用户信息',
-              state: '/full/system-manage/user-info',
-              type: 'link',
-            },
-            {
-              icon: 'icon-File-Refresh',
-              name: '用户日志',
-              state: '/full/system-manage/user-log',
-              type: 'link',
-            },
-          ],
+          type: 'link',
+        },
+        {
+          icon: 'icon-ID-Card',
+          name: '用户信息',
+          state: '/full/system-manage/user-info',
+          type: 'link',
+        },
+        {
+          icon: 'icon-File-Refresh',
+          name: '用户日志',
+          state: '/full/system-manage/user-log',
+          type: 'link',
         },
         {
           icon: 'icon-Speach-BubbleComic2',
           name: '地理处理模型',
           state: '/full/system-manage/geoprocessing-model-manage',
-          type: 'dropDown',
-          sub: [
-            {
-              icon: 'icon-Network-Window',
-              name: '流程管理',
-              state: '/full/system-manage/flow-manage',
-              type: 'link',
-            },
-            {
-              icon: 'icon-Notepad',
-              name: '表单管理',
-              state: '/full/system-manage/form-manage',
-              type: 'link',
-            },
-          ],
+          type: 'link',
+        },
+        {
+          icon: 'icon-Network-Window',
+          name: '流程管理',
+          state: '/full/system-manage/flow-manage',
+          type: 'link',
+        },
+        {
+          icon: 'icon-Notepad',
+          name: '表单管理',
+          state: '/full/system-manage/form-manage',
+          type: 'link',
         },
       ],
     },
@@ -100,12 +99,12 @@ export class NavigationService {
       type: 'dropDown',
       icon: 'icon-Big-Data',
       sub: [
-        /*  {
+        {
           icon: 'icon-Geo2-plus',
           name: '空间分析',
           state: '/full/technology-research/spatial-analysis',
           type: 'link',
-        }, */
+        },
         {
           icon: 'icon-File-Search',
           name: '全文检索',
@@ -126,27 +125,23 @@ export class NavigationService {
         },
       ],
     },
-    {
-      name: '其它',
-      description: '大数据算法、空间分析算法.',
-      icon: 'icon-Big-Data',
-      state: '/full/technology-research/spatial-analysis',
-      type: 'link',
-    },
-    {
-      name: '百度',
-      description: '大数据算法、空间分析算法.',
-      icon: 'icon-Big-Data',
-      state: 'https://www.baidu.com/',
-      type: 'extLink',
-    },
   ];
 
+  public productOAMenu: IMenuItem[] = [];
+
+  public supervisionMenu: IMenuItem[] = [];
+
+  public deepLearningMenu: IMenuItem[] = [];
+
+  public portalMenu: IMenuItem[] = [];
+
   /**利用Observable,在其它组件动态切换不同的导航栏 */
-  public menuItems = new BehaviorSubject<IMenuItem[]>(this.defaultMenu);
+  public menuItems = new BehaviorSubject<IMenuItem[]>([]);
   public menuItems$ = this.menuItems.asObservable();
 
-  constructor() {}
+  constructor(public localStoreService: LocalStoreService) {
+    this.publishNavigationChange(this.localStoreService.getItem('layout'));
+  }
 
   /**
    *不同平台使用不同的主题,切换平台类型,依据用户权限过滤显示的导航菜单
@@ -155,15 +150,29 @@ export class NavigationService {
    */
   publishNavigationChange(platformType: string) {
     switch (platformType) {
-      case 'admin':
-        this.menuItems.next(this.defaultMenu);
+      case 'development':
+        this.menuItems.next(this.developmentMenu);
         break;
-      case 'user':
-        this.menuItems.next(this.defaultMenu);
+      case 'productOA':
+        this.menuItems.next(this.productOAMenu);
+        break;
+      case 'supervision':
+        this.menuItems.next(this.supervisionMenu);
+        break;
+      case 'deep-learning':
+        this.menuItems.next(this.deepLearningMenu);
+        break;
+      case 'portal':
+        this.menuItems.next(this.portalMenu);
         break;
       default:
-        this.menuItems.next(this.defaultMenu);
+        this.menuItems.next(this.developmentMenu);
     }
+    this.localStoreService.setItem('layout', platformType);
     /** //!依据用户权限过滤显示的导航菜单 预留 */
+  }
+
+  ngOnDestroy() {
+    this.menuItems.complete();
   }
 }

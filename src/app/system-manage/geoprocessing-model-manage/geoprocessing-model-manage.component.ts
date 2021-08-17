@@ -178,13 +178,17 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
       description: [''],
     });
 
-    this.createGeoprocessingModelGroup.controls['name'].valueChanges.subscribe((_value: string) => {
-      this.createGeoprocessingModelNotification.nameMessageShow = false;
-    });
+    this.subscriptions.push(
+      this.createGeoprocessingModelGroup.controls['name'].valueChanges.subscribe((_value: string) => {
+        this.createGeoprocessingModelNotification.nameMessageShow = false;
+      })
+    );
 
-    this.createGeoprocessingModelGroup.controls['description'].valueChanges.subscribe((_value: string) => {
-      this.createGeoprocessingModelNotification.descriptionMessageShow = false;
-    });
+    this.subscriptions.push(
+      this.createGeoprocessingModelGroup.controls['description'].valueChanges.subscribe((_value: string) => {
+        this.createGeoprocessingModelNotification.descriptionMessageShow = false;
+      })
+    );
 
     /**编辑地理处理模型变量初始化:信息提示对象、表单对象初始化，监测Input事件 */
     this.editGeoprocessingModelNotification = {
@@ -199,13 +203,17 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
       description: [''],
     });
 
-    this.editGeoprocessingModelGroup.controls['name'].valueChanges.subscribe((_value: string) => {
-      this.editGeoprocessingModelNotification.nameMessageShow = false;
-    });
+    this.subscriptions.push(
+      this.editGeoprocessingModelGroup.controls['name'].valueChanges.subscribe((_value: string) => {
+        this.editGeoprocessingModelNotification.nameMessageShow = false;
+      })
+    );
 
-    this.editGeoprocessingModelGroup.controls['description'].valueChanges.subscribe((_value: string) => {
-      this.editGeoprocessingModelNotification.descriptionMessageShow = false;
-    });
+    this.subscriptions.push(
+      this.editGeoprocessingModelGroup.controls['description'].valueChanges.subscribe((_value: string) => {
+        this.editGeoprocessingModelNotification.descriptionMessageShow = false;
+      })
+    );
 
     /**Ag-Grid表格的加载显示和空数据显示,自定义重载*/
     this.frameworkComponents = {
@@ -241,15 +249,18 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     /**实现搜索框防抖功能 */
-    this.keySearcchValue$.pipe(debounceTime(200), distinctUntilChanged()).subscribe(_res => {
-      this.quickFilterText = this.keySearcchValue;
-    });
+    this.subscriptions.push(
+      this.keySearcchValue$.pipe(debounceTime(200), distinctUntilChanged()).subscribe(_res => {
+        this.quickFilterText = this.keySearcchValue;
+      })
+    );
   }
 
   ngOnDestroy() {
     for (const subscription of this.subscriptions) {
       subscription.unsubscribe();
     }
+    this.keySearcchValue$.complete();
   }
 
   /**

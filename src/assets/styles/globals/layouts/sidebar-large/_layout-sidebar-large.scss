@@ -9,6 +9,7 @@
   float: right;
   margin-top: $topbar-height;
   min-height: calc(100vh - #{$topbar-height});
+  max-height: calc(100vh - #{$topbar-height});
   padding: 2rem 2rem 0;
   position: relative;
   transition: all 0.24s ease-in-out;

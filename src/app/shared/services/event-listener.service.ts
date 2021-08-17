@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 
 import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
-export class EventListenerService {
+export class EventListenerService implements OnDestroy {
   /**用户信息中上传新的用户照片,Header组件中的照片也立即修改 */
   public changePhotoAnnouncedSource = new Subject<void>();
   public changePhotoAnnounced$ = this.changePhotoAnnouncedSource.asObservable();
@@ -14,5 +14,9 @@ export class EventListenerService {
 
   changePhoto() {
     this.changePhotoAnnouncedSource.next();
+  }
+
+  ngOnDestroy() {
+    this.changePhotoAnnouncedSource.complete();
   }
 }

@@ -46,6 +46,7 @@ body {
   &[dir='rtl'],
   &[dir='ltr'] {
     unicode-bidi: embed;
+    overflow: hidden;
   }
 }
 bdo[dir='rtl'] {

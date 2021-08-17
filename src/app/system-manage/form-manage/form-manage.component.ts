@@ -178,13 +178,17 @@ export class FormManageComponent implements OnInit, OnDestroy {
       description: [''],
     });
 
-    this.createFormGroup.controls['name'].valueChanges.subscribe((_value: string) => {
-      this.createFormNotification.nameMessageShow = false;
-    });
+    this.subscriptions.push(
+      this.createFormGroup.controls['name'].valueChanges.subscribe((_value: string) => {
+        this.createFormNotification.nameMessageShow = false;
+      })
+    );
 
-    this.createFormGroup.controls['description'].valueChanges.subscribe((_value: string) => {
-      this.createFormNotification.descriptionMessageShow = false;
-    });
+    this.subscriptions.push(
+      this.createFormGroup.controls['description'].valueChanges.subscribe((_value: string) => {
+        this.createFormNotification.descriptionMessageShow = false;
+      })
+    );
 
     /**编辑表单变量初始化:信息提示对象、表单对象初始化，监测Input事件 */
     this.editFormNotification = {
@@ -199,13 +203,17 @@ export class FormManageComponent implements OnInit, OnDestroy {
       description: [''],
     });
 
-    this.editFormGroup.controls['name'].valueChanges.subscribe((_value: string) => {
-      this.editFormNotification.nameMessageShow = false;
-    });
+    this.subscriptions.push(
+      this.editFormGroup.controls['name'].valueChanges.subscribe((_value: string) => {
+        this.editFormNotification.nameMessageShow = false;
+      })
+    );
 
-    this.editFormGroup.controls['description'].valueChanges.subscribe((_value: string) => {
-      this.editFormNotification.descriptionMessageShow = false;
-    });
+    this.subscriptions.push(
+      this.editFormGroup.controls['description'].valueChanges.subscribe((_value: string) => {
+        this.editFormNotification.descriptionMessageShow = false;
+      })
+    );
 
     /**Ag-Grid表格的加载显示和空数据显示,自定义重载*/
     this.frameworkComponents = {
@@ -224,32 +232,35 @@ export class FormManageComponent implements OnInit, OnDestroy {
 
     /**从服务器获取已有表单数据，显示在Ag-Grid表格中 */
     this.subscriptions.push(
-      this.systemManageService.getAllForms().subscribe(
-        res => {
+      this.systemManageService.getAllForms().subscribe({
+        next: res => {
           this.formData = res.formData;
         },
-        err => {
+        error: err => {
           console.error(err);
           this.toastr.error([err.url, err.error.errMessage, err.error.traceMessage].join('\n'), '错误');
         },
-        () => {
+        complete: () => {
           /*Completed*/
-        }
-      )
+        },
+      })
     );
   }
 
   ngOnInit() {
     /**实现搜索框防抖功能 */
-    this.keySearcchValue$.pipe(debounceTime(200), distinctUntilChanged()).subscribe(_res => {
-      this.quickFilterText = this.keySearcchValue;
-    });
+    this.subscriptions.push(
+      this.keySearcchValue$.pipe(debounceTime(200), distinctUntilChanged()).subscribe(_res => {
+        this.quickFilterText = this.keySearcchValue;
+      })
+    );
   }
 
   ngOnDestroy() {
     for (const subscription of this.subscriptions) {
       subscription.unsubscribe();
     }
+    this.keySearcchValue$.complete();
   }
 
   /**

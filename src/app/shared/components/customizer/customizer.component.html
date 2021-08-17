@@ -1,0 +1,25 @@
+<div class="customizer" [ngClass]="{ open: isOpen }">
+  <div class="handle" (click)="isOpen = !isOpen">
+    <i class="icon-Gear spin"></i>
+  </div>
+  <div class="customizer-body" [perfectScrollbar]="{ suppressScrollX: true, wheelPropagation: false }">
+    <ngb-accordion #acc="ngbAccordion" activeIds="tab-layouts, tab-sidebar-colors">
+      <ngb-panel title="布局" id="tab-layouts">
+        <ng-template ngbPanelContent>
+          <div class="layouts">
+            <div
+              *ngFor="let l of layouts; let i = index"
+              (click)="selectLayout(l)"
+              class="layout-box"
+              [ngClass]="{ active: customizerService.selectedLayout.name === l.name, 'mt-4': i > 1 }"
+            >
+              <img [src]="l.img" alt="" />
+              <i class="icon-Eye"></i>
+            </div>
+          </div>
+          <div class="text-center pt-3"></div>
+        </ng-template>
+      </ngb-panel>
+    </ngb-accordion>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { Router, RouteConfigLoadStart, ResolveEnd } from '@angular/router';
+import { Router, NavigationStart, NavigationEnd } from '@angular/router';
 
 import * as CryptoJS from 'crypto-js';
 import { ToastrService } from 'ngx-toastr';
@@ -73,28 +73,34 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     /**监测Input事件 */
-    this.loginForm.controls['inputName'].valueChanges.subscribe((_value: string) => {
-      this.loginNotification.userMessageShow = false;
-    });
+    this.subscriptions.push(
+      this.loginForm.controls['inputName'].valueChanges.subscribe((_value: string) => {
+        this.loginNotification.userMessageShow = false;
+      })
+    );
 
-    this.loginForm.controls['inputPass'].valueChanges.subscribe((_value: string) => {
-      this.loginNotification.passMessageShow = false;
-    });
+    this.subscriptions.push(
+      this.loginForm.controls['inputPass'].valueChanges.subscribe((_value: string) => {
+        this.loginNotification.passMessageShow = false;
+      })
+    );
 
-    this.loginForm.controls['inputCaptcha'].valueChanges.subscribe((_value: string) => {
-      this.loginNotification.captchaMessageShow = false;
-    });
+    this.subscriptions.push(
+      this.loginForm.controls['inputCaptcha'].valueChanges.subscribe((_value: string) => {
+        this.loginNotification.captchaMessageShow = false;
+      })
+    );
   }
 
   ngOnInit() {
-    /**事件的顺序:RouteConfigLoadStart->RouteConfigLoadEnd->ResolveStart->ResolveEnd */
+    /**事件的顺序:NavigationStart-> ... ->NavigationEnd */
     this.subscriptions.push(
       this.router.events.subscribe(event => {
-        if (event instanceof RouteConfigLoadStart) {
+        if (event instanceof NavigationStart) {
           this.loadingText = '加载主页...';
           this.loading = true;
         }
-        if (event instanceof ResolveEnd) {
+        if (event instanceof NavigationEnd) {
           this.loadingText = '';
           this.loading = false;
         }
@@ -146,6 +152,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
             /**导航到系统主页 */
             this.router.navigate(['/']);
+          } else {
+            this.loadingText = '登 录';
+            this.loading = false;
           }
         },
         error: err => {

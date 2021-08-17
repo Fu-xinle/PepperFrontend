@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { GridApi, DetailGridInfo, ILoadingOverlayComp, INoRowsOverlayComp, IServerSideGetRowsParams } from 'ag-grid-community';
 import { ToastrService } from 'ngx-toastr';
-import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
+import { Subscription, Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { AppLoadingOverlayComponent } from '../../shared/components/ag-grid/app-loading-overlay.component';
 import { AppNorowsOverlayComponent } from '../../shared/components/ag-grid/app-no-rows-overlay.component';
@@ -13,7 +13,7 @@ import { SystemManageService } from '../system-manage.service';
   templateUrl: './user-log.component.html',
   styleUrls: ['./user-log.component.scss'],
 })
-export class UserLogComponent implements OnInit {
+export class UserLogComponent implements OnInit, OnDestroy {
   /**Ag-Grid表格列配置信息 */
   public columnDefs = [
     {
@@ -91,6 +91,8 @@ export class UserLogComponent implements OnInit {
   public keySearcchValue$ = new Subject<string>();
   private totalCount: number | null = null;
 
+  private subscription: Subscription = new Subscription();
+
   constructor(private systemManageService: SystemManageService, private toastr: ToastrService) {
     /**Ag-Grid表格的加载显示和空数据显示,自定义重载*/
     this.frameworkComponents = {
@@ -109,9 +111,11 @@ export class UserLogComponent implements OnInit {
 
   ngOnInit() {
     /**实现搜索框防抖功能 */
-    this.keySearcchValue$.pipe(debounceTime(200), distinctUntilChanged()).subscribe(_res => {
-      this.refreshStore();
-    });
+    this.subscription.add(
+      this.keySearcchValue$.pipe(debounceTime(200), distinctUntilChanged()).subscribe(_res => {
+        this.refreshStore();
+      })
+    );
   }
 
   /**
@@ -124,9 +128,8 @@ export class UserLogComponent implements OnInit {
 
     params.api!.setServerSideDatasource({
       getRows: (serverParams: IServerSideGetRowsParams) => {
-        const subscription = this.systemManageService
-          .userLogServerSideData(this.totalCount, this.keySearcchValue, serverParams.request)
-          .subscribe({
+        this.subscription.add(
+          this.systemManageService.userLogServerSideData(this.totalCount, this.keySearcchValue, serverParams.request).subscribe({
             next: res => {
               serverParams.success({
                 rowCount: res.rowCount,
@@ -140,10 +143,10 @@ export class UserLogComponent implements OnInit {
               this.toastr.error([err.url, err.error.errMessage, err.error.traceMessage].join('\n'), '错误');
             },
             complete: () => {
-              subscription.unsubscribe();
               /*Completed*/
             },
-          });
+          })
+        );
       },
     });
   }
@@ -156,5 +159,10 @@ export class UserLogComponent implements OnInit {
   refreshStore() {
     this.totalCount = null;
     this.gridApi.refreshServerSideStore({ purge: false });
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+    this.keySearcchValue$.complete();
   }
 }

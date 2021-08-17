@@ -1,8 +1,8 @@
-import { Component, OnInit, HostListener, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChildren, QueryList, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 
 import { PerfectScrollbarDirective } from 'ngx-perfect-scrollbar';
-import { filter } from 'rxjs/operators';
+import { filter, Subject, takeUntil } from 'rxjs';
 
 import { IMenuItem } from '../../interface/shared-layout.interface';
 import { NavigationService } from '../../services/navigation.service';
@@ -13,7 +13,7 @@ import { Utils } from '../../utils/utils';
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, OnDestroy {
   /** 主sidebar、二级sidebar滚动条 */
   @ViewChildren(PerfectScrollbarDirective)
   public psContainers!: QueryList<PerfectScrollbarDirective>;
@@ -26,6 +26,8 @@ export class SidebarComponent implements OnInit {
   /** 主sidebar宽度与header高度 */
   public sidebarWidth!: number;
   public headerHeight!: number;
+
+  private ngUnsubscribe = new Subject<boolean>();
 
   constructor(public router: Router, public navService: NavigationService) {
     setTimeout(() => {
@@ -41,19 +43,24 @@ export class SidebarComponent implements OnInit {
   ngOnInit() {
     this.initSidebarState();
 
-    // 获取sidebar数据,当前路由对应的主sidebar、二级sidebar菜单项标记为avtive状态
-    this.navService.menuItems$.subscribe(items => {
+    /** 获取sidebar数据,当前路由对应的主sidebar、二级sidebar菜单项标记为avtive状态 */
+    this.navService.menuItems$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(items => {
       this.nav = items;
       this.setCurrentRouteActiveFlag();
     });
 
     /** 路由到新页面时,关闭二级sidebar */
-    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(_routeChange => {
-      this.setCurrentRouteActiveFlag();
-      if (Utils.isMobile()) {
-        this.navService.sidebarState.sidenavOpen = false;
-      }
-    });
+    this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        takeUntil(this.ngUnsubscribe)
+      )
+      .subscribe(_routeChange => {
+        this.setCurrentRouteActiveFlag();
+        if (Utils.isMobile()) {
+          this.navService.sidebarState.sidenavOpen = false;
+        }
+      });
   }
 
   /**
@@ -172,5 +179,10 @@ export class SidebarComponent implements OnInit {
 
     this.sidebarWidth = $('.sidebar-left').eq(0).width()!;
     this.headerHeight = $('.main-header').eq(0).height()!;
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next(true);
+    this.ngUnsubscribe.complete();
   }
 }

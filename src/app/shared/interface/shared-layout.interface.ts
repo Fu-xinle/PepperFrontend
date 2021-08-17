@@ -40,3 +40,17 @@ export interface ISidebarState {
   sidenavOpen?: boolean;
   childnavOpen?: boolean;
 }
+
+/** 自定义动态切换布局的接口 */
+export interface ICustomizerLayout {
+  title: string;
+  name: string;
+  img: string;
+}
+
+/** 自定义动态切换主题颜色的接口 */
+export interface ICustomizerTheme {
+  sidebarClass: string;
+  class: string;
+  active: boolean;
+}

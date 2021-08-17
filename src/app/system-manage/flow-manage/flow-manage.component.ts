@@ -178,13 +178,17 @@ export class FlowManageComponent implements OnInit, OnDestroy {
       description: [''],
     });
 
-    this.createFlowForm.controls['name'].valueChanges.subscribe((_value: string) => {
-      this.createFlowNotification.nameMessageShow = false;
-    });
+    this.subscriptions.push(
+      this.createFlowForm.controls['name'].valueChanges.subscribe((_value: string) => {
+        this.createFlowNotification.nameMessageShow = false;
+      })
+    );
 
-    this.createFlowForm.controls['description'].valueChanges.subscribe((_value: string) => {
-      this.createFlowNotification.descriptionMessageShow = false;
-    });
+    this.subscriptions.push(
+      this.createFlowForm.controls['description'].valueChanges.subscribe((_value: string) => {
+        this.createFlowNotification.descriptionMessageShow = false;
+      })
+    );
 
     /**编辑流程变量初始化:信息提示对象、表单对象初始化，监测Input事件 */
     this.editFlowNotification = {
@@ -199,13 +203,17 @@ export class FlowManageComponent implements OnInit, OnDestroy {
       description: [''],
     });
 
-    this.editFlowForm.controls['name'].valueChanges.subscribe((_value: string) => {
-      this.editFlowNotification.nameMessageShow = false;
-    });
+    this.subscriptions.push(
+      this.editFlowForm.controls['name'].valueChanges.subscribe((_value: string) => {
+        this.editFlowNotification.nameMessageShow = false;
+      })
+    );
 
-    this.editFlowForm.controls['description'].valueChanges.subscribe((_value: string) => {
-      this.editFlowNotification.descriptionMessageShow = false;
-    });
+    this.subscriptions.push(
+      this.editFlowForm.controls['description'].valueChanges.subscribe((_value: string) => {
+        this.editFlowNotification.descriptionMessageShow = false;
+      })
+    );
 
     /**Ag-Grid表格的加载显示和空数据显示,自定义重载*/
     this.frameworkComponents = {
@@ -241,15 +249,18 @@ export class FlowManageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     /**实现搜索框防抖功能 */
-    this.keySearcchValue$.pipe(debounceTime(200), distinctUntilChanged()).subscribe(_res => {
-      this.quickFilterText = this.keySearcchValue;
-    });
+    this.subscriptions.push(
+      this.keySearcchValue$.pipe(debounceTime(200), distinctUntilChanged()).subscribe(_res => {
+        this.quickFilterText = this.keySearcchValue;
+      })
+    );
   }
 
   ngOnDestroy() {
     for (const subscription of this.subscriptions) {
       subscription.unsubscribe();
     }
+    this.keySearcchValue$.complete();
   }
 
   /**
