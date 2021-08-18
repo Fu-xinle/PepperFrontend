@@ -25,7 +25,7 @@ import { FlowManageComponent } from './flow-manage.component';
           ngxTippy
           [tippyProps]="{ theme: 'light-border', hideOnClick: true }"
           data-tippy-content="修改流程信息"
-          class="icon-Eraser-2 text-25 text-info mr-2"
+          class="icon-Eraser-2 text-25 text-info me-2"
         ></i>
       </a>
       <a href="javascript:void(0)" (click)="designFlow()">
@@ -33,7 +33,7 @@ import { FlowManageComponent } from './flow-manage.component';
           ngxTippy
           [tippyProps]="{ theme: 'light-border' }"
           data-tippy-content="流程图设计"
-          class="icon-Edit text-25 text-success mr-2"
+          class="icon-Edit text-25 text-success me-2"
         ></i>
       </a>
       <a href="javascript:void(0)" (click)="deleteFlow()">

@@ -1,4 +1,4 @@
-<div class="pb-2 toolbar">
+<div class="pb-2 toolbar d-flex justify-content-between">
   <input
     class="form-control form-control-rounded search-input"
     (ngModelChange)="keySearcchValue$.next(keySearcchValue)"
@@ -8,8 +8,8 @@
     placeholder="搜索"
     type="text"
   />
-  <button class="btn btn-primary float-right btn-iconmind btn-rounded" (click)="createGeoprocessingModel()">
-    <i class="icon-Add text-17 mr-2"></i>新建地理处理摸型
+  <button class="btn btn-primary btn-iconmind btn-rounded" (click)="createGeoprocessingModel()">
+    <i class="icon-Add text-17 me-2"></i>新建地理处理摸型
   </button>
 </div>
 <div class="card full-height-container">
@@ -34,14 +34,13 @@
 <ng-template #createGeoprocessingModelContent let-modal>
   <div class="modal-header">
     <h5 class="modal-title" id="modal-title">创建新地理处理摸型</h5>
-    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.dismiss('关闭')">
-      <span aria-hidden="true">&times;</span>
+    <button type="button" class="btn-close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.dismiss('关闭')">
     </button>
   </div>
   <div class="modal-body">
-    <form [formGroup]="createGeoprocessingModelGroup" class="ml-4 mr-4">
-      <div class="form-group">
-        <label for="name">名称</label>
+    <form [formGroup]="createGeoprocessingModelGroup" class="ms-4 me-4">
+      <div class="mb-2">
+        <label for="name" class="form-label">名称</label>
         <input
           id="name"
           class="form-control form-control-rounded"
@@ -54,8 +53,8 @@
           <span class="text-danger">{{ createGeoprocessingModelNotification.nameMessage }}</span>
         </p>
       </div>
-      <div class="form-group">
-        <label for="description">描述</label>
+      <div class="mb-2">
+        <label for="description" class="form-label">描述</label>
         <textarea
           id="description"
           class="form-control form-control-rounded"
@@ -86,14 +85,13 @@
 <ng-template #editGeoprocessingModelContent let-modal>
   <div class="modal-header">
     <h5 class="modal-title" id="modal-title">编辑地理处理摸型信息</h5>
-    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.dismiss('关闭')">
-      <span aria-hidden="true">&times;</span>
+    <button type="button" class="btn-close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.dismiss('关闭')">
     </button>
   </div>
   <div class="modal-body">
-    <form [formGroup]="editGeoprocessingModelGroup" class="ml-4 mr-4">
-      <div class="form-group">
-        <label for="name">名称</label>
+    <form [formGroup]="editGeoprocessingModelGroup" class="ms-4 me-4">
+      <div class="mb-2">
+        <label for="name" class="form-label">名称</label>
         <input
           id="name"
           class="form-control form-control-rounded"
@@ -106,8 +104,8 @@
           <span class="text-danger">{{ editGeoprocessingModelNotification.nameMessage }}</span>
         </p>
       </div>
-      <div class="form-group">
-        <label for="description">描述</label>
+      <div class="mb-2">
+        <label for="description" class="form-label">描述</label>
         <textarea
           id="description"
           class="form-control form-control-rounded"
@@ -138,14 +136,13 @@
 <ng-template #deleteGeoprocessingModelContent let-modal>
   <div class="modal-header">
     <h5 class="modal-title" id="modal-title">删除地理处理摸型</h5>
-    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">&times;</span>
+    <button type="button" class="btn-close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
     </button>
   </div>
   <div class="modal-body">
     <p>
       <strong>
-        <i class="icon-Danger text-danger mr-1"></i>
+        <i class="icon-Danger text-danger me-1"></i>
         确认删除
         <span class="text-danger px-1">{{ deleteRowNode.data.name }}</span>
         ?

@@ -15,38 +15,38 @@
           <div class="row">
             <div class="col-md-4 col-6">
               <div class="mb-4">
-                <p class="text-primary mb-1"><i class="icon-Checked-User text-16 mr-1"></i> 姓名</p>
+                <p class="text-primary mb-1"><i class="icon-Checked-User text-16 me-1"></i> 姓名</p>
                 <ng-container>
                   <div *ngIf="editState['realName']; then editingRealNameTemplate; else descriptionRealNameTemplate"></div>
                   <ng-template #descriptionRealNameTemplate>
                     <span>{{ userInfo.realName ? userInfo.realName : '------------' }}</span>
-                    <a href="javascript:void(0);" (click)="editState['realName'] = true" class="ml-3"> 编辑 </a>
+                    <a href="javascript:void(0);" (click)="editState['realName'] = true" class="ms-3"> 编辑 </a>
                   </ng-template>
                   <ng-template #editingRealNameTemplate>
                     <div class="row row-xs mt-2">
                       <div class="col-md-8">
                         <input type="text" class="form-control form-control-rounded" name="realName" [(ngModel)]="userInfo.realName" />
                       </div>
-                      <div class="col-md-4 mt-3 mt-md-0 pt-1 pl-0">
+                      <div class="col-md-4 mt-3 mt-md-0 pt-1 ps-0">
                         <button
-                          class="btn btn-primary btn-sm btn-rounded"
+                          class="btn btn-primary btn-sm btn-rounded me-1"
                           (click)="saveEditInformation('realName', 'real_name', userInfo.realName)"
                         >
-                          保存
+                          保 存
                         </button>
-                        <button class="btn btn-secondary btn-sm btn-rounded" (click)="cancelEditInformation('realName')">取消</button>
+                        <button class="btn btn-secondary btn-sm btn-rounded" (click)="cancelEditInformation('realName')">取 消</button>
                       </div>
                     </div>
                   </ng-template>
                 </ng-container>
               </div>
               <div class="mb-4">
-                <p class="text-primary mb-1"><i class="icon-Calendar text-16 mr-1"></i> 生日</p>
+                <p class="text-primary mb-1"><i class="icon-Calendar text-16 me-1"></i> 生日</p>
                 <ng-container>
                   <div *ngIf="editState['birthday']; then editingBirthdayTemplate; else descriptionBirthdayTemplate"></div>
                   <ng-template #descriptionBirthdayTemplate>
                     <span>{{ userInfo.birthday ? userInfo.birthday : '------------' }}</span>
-                    <a href="javascript:void(0);" (click)="editState['birthday'] = true" class="ml-3"> 编辑 </a>
+                    <a href="javascript:void(0);" (click)="editState['birthday'] = true" class="ms-3"> 编辑 </a>
                   </ng-template>
                   <ng-template #editingBirthdayTemplate>
                     <div class="row row-xs mt-2">
@@ -67,33 +67,31 @@
                             #d="ngbDatepicker"
                             readonly
                           />
-                          <div class="input-group-append">
-                            <button class="btn btn-outline-primary icon-Calendar-4 btn-rounded" (click)="d.toggle()" type="button"></button>
-                          </div>
+                          <button class="btn btn-outline-primary icon-Calendar-4 btn-rounded" (click)="d.toggle()" type="button"></button>
                         </div>
                       </div>
-                      <div class="col-md-4 mt-3 mt-md-0 pt-1 pl-0">
+                      <div class="col-md-4 mt-3 mt-md-0 pt-1 ps-0">
                         <button
-                          class="btn btn-primary btn-sm btn-rounded"
+                          class="btn btn-primary btn-sm btn-rounded me-1"
                           (click)="saveEditInformation('birthday', 'birthday', userInfo.birthday)"
                         >
-                          保存
+                          保 存
                         </button>
-                        <button class="btn btn-secondary btn-sm btn-rounded" (click)="cancelEditInformation('birthday')">取消</button>
+                        <button class="btn btn-secondary btn-sm btn-rounded" (click)="cancelEditInformation('birthday')">取 消</button>
                       </div>
                     </div>
                   </ng-template>
                 </ng-container>
               </div>
               <div class="mb-4">
-                <p class="text-primary mb-1"><i class="icon-Student-MaleFemale text-16 mr-1"></i> 学历</p>
+                <p class="text-primary mb-1"><i class="icon-Student-MaleFemale text-16 me-1"></i> 学历</p>
                 <ng-container>
                   <div
                     *ngIf="editState['academicDegree']; then editingAcademicDegreeTemplate; else descriptionAcademicDegreeTemplate"
                   ></div>
                   <ng-template #descriptionAcademicDegreeTemplate>
                     <span>{{ userInfo.academicDegree ? userInfo.academicDegree : '------------' }}</span>
-                    <a href="javascript:void(0);" (click)="editState['academicDegree'] = true" class="ml-3"> 编辑 </a>
+                    <a href="javascript:void(0);" (click)="editState['academicDegree'] = true" class="ms-3"> 编辑 </a>
                   </ng-template>
                   <ng-template #editingAcademicDegreeTemplate>
                     <div class="row row-xs mt-2">
@@ -109,14 +107,16 @@
                           [clearable]="false"
                         ></ng-select>
                       </div>
-                      <div class="col-md-4 mt-3 mt-md-0 pt-1 pl-0">
+                      <div class="col-md-4 mt-3 mt-md-0 pt-1 ps-0">
                         <button
-                          class="btn btn-primary btn-sm btn-rounded"
+                          class="btn btn-primary btn-sm btn-rounded me-1"
                           (click)="saveEditInformation('academicDegree', 'academic_degree', userInfo.academicDegree)"
                         >
-                          保存
+                          保 存
                         </button>
-                        <button class="btn btn-secondary btn-sm btn-rounded" (click)="cancelEditInformation('academicDegree')">取消</button>
+                        <button class="btn btn-secondary btn-sm btn-rounded" (click)="cancelEditInformation('academicDegree')"
+                          >取 消</button
+                        >
                       </div>
                     </div>
                   </ng-template>
@@ -125,12 +125,12 @@
             </div>
             <div class="col-md-4 col-6">
               <div class="mb-4">
-                <p class="text-primary mb-1"><i class="icon-MaleFemale text-16 mr-1"></i> 性别</p>
+                <p class="text-primary mb-1"><i class="icon-MaleFemale text-16 me-1"></i> 性别</p>
                 <ng-container>
                   <div *ngIf="editState['gender']; then editingGenderTemplate; else descriptionGenderTemplate"></div>
                   <ng-template #descriptionGenderTemplate>
                     <span>{{ userInfo.gender ? userInfo.gender : '------------' }}</span>
-                    <a href="javascript:void(0);" (click)="editState['gender'] = true" class="ml-3"> 编辑 </a>
+                    <a href="javascript:void(0);" (click)="editState['gender'] = true" class="ms-3"> 编辑 </a>
                   </ng-template>
                   <ng-template #editingGenderTemplate>
                     <div class="row row-xs mt-2">
@@ -146,26 +146,26 @@
                           class="select select-rounded"
                         ></ng-select>
                       </div>
-                      <div class="col-md-4 mt-3 mt-md-0 pt-1 pl-0">
+                      <div class="col-md-4 mt-3 mt-md-0 pt-1 ps-0">
                         <button
-                          class="btn btn-primary btn-sm btn-rounded"
+                          class="btn btn-primary btn-sm btn-rounded me-1"
                           (click)="saveEditInformation('gender', 'gender', userInfo.gender)"
                         >
-                          保存
+                          保 存
                         </button>
-                        <button class="btn btn-secondary btn-sm btn-rounded" (click)="cancelEditInformation('gender')">取消</button>
+                        <button class="btn btn-secondary btn-sm btn-rounded" (click)="cancelEditInformation('gender')">取 消</button>
                       </div>
                     </div>
                   </ng-template>
                 </ng-container>
               </div>
               <div class="mb-4">
-                <p class="text-primary mb-1"><i class="icon-Email text-16 mr-1"></i> 邮箱</p>
+                <p class="text-primary mb-1"><i class="icon-Email text-16 me-1"></i> 邮箱</p>
                 <ng-container>
                   <div *ngIf="editState['email']; then editingEmailTemplate; else descriptionEmailTemplate"></div>
                   <ng-template #descriptionEmailTemplate>
                     <span>{{ userInfo.email ? userInfo.email : '------------' }}</span>
-                    <a href="javascript:void(0);" (click)="editState['email'] = true" class="ml-3"> 编辑 </a>
+                    <a href="javascript:void(0);" (click)="editState['email'] = true" class="ms-3"> 编辑 </a>
                   </ng-template>
                   <ng-template #editingEmailTemplate>
                     <div class="row row-xs mt-2">
@@ -176,31 +176,31 @@
                           [ngClass]="{ 'value-invalid': userInfoNotification.emailMessageShow }"
                           (ngModelChange)="this.userInfoNotification.emailMessageShow = false"
                           [(ngModel)]="userInfo.email"
-                          class="form-control form-control-rounded"
+                          class="form-control form-control-rounded me-1"
                         />
                         <p *ngIf="userInfoNotification.emailMessageShow" class="pt-1 mt-1">
                           <span class="text-danger">{{ userInfoNotification.emailMessage }}</span>
                         </p>
                       </div>
-                      <div class="col-md-4 mt-3 mt-md-0 pt-1 pl-0">
+                      <div class="col-md-4 mt-3 mt-md-0 pt-1 ps-0">
                         <button class="btn btn-primary btn-sm btn-rounded" (click)="saveEditInformation('email', 'email', userInfo.email)">
-                          保存
+                          保 存
                         </button>
-                        <button class="btn btn-secondary btn-sm btn-rounded" (click)="cancelEditInformation('email')">取消</button>
+                        <button class="btn btn-secondary btn-sm btn-rounded" (click)="cancelEditInformation('email')">取 消</button>
                       </div>
                     </div>
                   </ng-template>
                 </ng-container>
               </div>
               <div class="mb-4">
-                <p class="text-primary mb-1"><i class="icon-University-2 text-16 mr-1"></i> 毕业院校</p>
+                <p class="text-primary mb-1"><i class="icon-University-2 text-16 me-1"></i> 毕业院校</p>
                 <ng-container>
                   <div
                     *ngIf="editState['graduatedSchool']; then editingGraduatedSchoolTemplate; else descriptionGraduatedSchoolTemplate"
                   ></div>
                   <ng-template #descriptionGraduatedSchoolTemplate>
                     <span>{{ userInfo.graduatedSchool ? userInfo.graduatedSchool : '------------' }}</span>
-                    <a href="javascript:void(0);" (click)="editState['graduatedSchool'] = true" class="ml-3"> 编辑 </a>
+                    <a href="javascript:void(0);" (click)="editState['graduatedSchool'] = true" class="ms-3"> 编辑 </a>
                   </ng-template>
                   <ng-template #editingGraduatedSchoolTemplate>
                     <div class="row row-xs mt-2">
@@ -212,15 +212,15 @@
                           [(ngModel)]="userInfo.graduatedSchool"
                         />
                       </div>
-                      <div class="col-md-4 mt-3 mt-md-0 pt-1 pl-0">
+                      <div class="col-md-4 mt-3 mt-md-0 pt-1 ps-0">
                         <button
-                          class="btn btn-primary btn-sm btn-rounded"
+                          class="btn btn-primary btn-sm btn-rounded me-1"
                           (click)="saveEditInformation('graduatedSchool', 'graduated_school', userInfo.graduatedSchool)"
                         >
-                          保存
+                          保 存
                         </button>
                         <button class="btn btn-secondary btn-sm btn-rounded" (click)="cancelEditInformation('graduatedSchool')">
-                          取消
+                          取 消
                         </button>
                       </div>
                     </div>
@@ -230,12 +230,12 @@
             </div>
             <div class="col-md-4 col-6">
               <div class="mb-4">
-                <p class="text-primary mb-1"><i class="icon-Smartphone text-16 mr-1"></i> 手机号码</p>
+                <p class="text-primary mb-1"><i class="icon-Smartphone text-16 me-1"></i> 手机号码</p>
                 <ng-container>
                   <div *ngIf="editState['phoneNumber']; then editingPhoneNumberTemplate; else descriptionPhoneNumberTemplate"></div>
                   <ng-template #descriptionPhoneNumberTemplate>
                     <span>{{ userInfo.phoneNumber ? userInfo.phoneNumber : '------------' }}</span>
-                    <a href="javascript:void(0);" (click)="editState['phoneNumber'] = true" class="ml-3"> 编辑 </a>
+                    <a href="javascript:void(0);" (click)="editState['phoneNumber'] = true" class="ms-3"> 编辑 </a>
                   </ng-template>
                   <ng-template #editingPhoneNumberTemplate>
                     <div class="row row-xs mt-2">
@@ -252,66 +252,66 @@
                           <span class="text-danger">{{ userInfoNotification.phoneNumberMessage }}</span>
                         </p>
                       </div>
-                      <div class="col-md-4 mt-3 mt-md-0 pt-1 pl-0">
+                      <div class="col-md-4 mt-3 mt-md-0 pt-1 ps-0">
                         <button
-                          class="btn btn-primary btn-sm btn-rounded"
+                          class="btn btn-primary btn-sm btn-rounded me-1"
                           (click)="saveEditInformation('phoneNumber', 'phone_number', userInfo.phoneNumber)"
                         >
-                          保存
+                          保 存
                         </button>
-                        <button class="btn btn-secondary btn-sm btn-rounded" (click)="cancelEditInformation('phoneNumber')">取消</button>
+                        <button class="btn btn-secondary btn-sm btn-rounded" (click)="cancelEditInformation('phoneNumber')">取 消</button>
                       </div>
                     </div>
                   </ng-template>
                 </ng-container>
               </div>
               <div class="mb-4">
-                <p class="text-primary mb-1"><i class="icon-Home-2 text-16 mr-1"></i> 住址</p>
+                <p class="text-primary mb-1"><i class="icon-Home-2 text-16 me-1"></i> 住址</p>
                 <ng-container>
                   <div *ngIf="editState['address']; then editingAddressTemplate; else descriptionAddressTemplate"></div>
                   <ng-template #descriptionAddressTemplate>
                     <span>{{ userInfo.address ? userInfo.address : '------------' }}</span>
-                    <a href="javascript:void(0);" (click)="editState['address'] = true" class="ml-3"> 编辑 </a>
+                    <a href="javascript:void(0);" (click)="editState['address'] = true" class="ms-3"> 编辑 </a>
                   </ng-template>
                   <ng-template #editingAddressTemplate>
                     <div class="row row-xs mt-2">
                       <div class="col-md-8">
                         <input type="text" class="form-control form-control-rounded" name="address" [(ngModel)]="userInfo.address" />
                       </div>
-                      <div class="col-md-4 mt-3 mt-md-0 pt-1 pl-0">
+                      <div class="col-md-4 mt-3 mt-md-0 pt-1 ps-0">
                         <button
-                          class="btn btn-primary btn-sm btn-rounded"
+                          class="btn btn-primary btn-sm btn-rounded me-1"
                           (click)="saveEditInformation('address', 'address', userInfo.address)"
                         >
-                          保存
+                          保 存
                         </button>
-                        <button class="btn btn-secondary btn-sm btn-rounded" (click)="cancelEditInformation('address')">取消</button>
+                        <button class="btn btn-secondary btn-sm btn-rounded" (click)="cancelEditInformation('address')">取 消</button>
                       </div>
                     </div>
                   </ng-template>
                 </ng-container>
               </div>
               <div class="mb-4">
-                <p class="text-primary mb-1"><i class="icon-Building text-16 mr-1"></i> 工作单位</p>
+                <p class="text-primary mb-1"><i class="icon-Building text-16 me-1"></i> 工作单位</p>
                 <ng-container>
                   <div *ngIf="editState['workPlace']; then editingWorkPlaceTemplate; else descriptionWorkPlaceTemplate"></div>
                   <ng-template #descriptionWorkPlaceTemplate>
                     <span>{{ userInfo.workPlace ? userInfo.workPlace : '------------' }}</span>
-                    <a href="javascript:void(0);" (click)="editState['workPlace'] = true" class="ml-3"> 编辑 </a>
+                    <a href="javascript:void(0);" (click)="editState['workPlace'] = true" class="ms-3"> 编辑 </a>
                   </ng-template>
                   <ng-template #editingWorkPlaceTemplate>
                     <div class="row row-xs mt-2">
                       <div class="col-md-8">
                         <input type="text" class="form-control form-control-rounded" name="workPlace" [(ngModel)]="userInfo.workPlace" />
                       </div>
-                      <div class="col-md-4 mt-3 mt-md-0 pt-1 pl-0">
+                      <div class="col-md-4 mt-3 mt-md-0 pt-1 ps-0">
                         <button
-                          class="btn btn-primary btn-sm btn-rounded"
+                          class="btn btn-primary btn-sm btn-rounded me-1"
                           (click)="saveEditInformation('workPlace', 'work_place', userInfo.workPlace)"
                         >
-                          保存
+                          保 存
                         </button>
-                        <button class="btn btn-secondary btn-sm btn-rounded" (click)="cancelEditInformation('workPlace')">取消</button>
+                        <button class="btn btn-secondary btn-sm btn-rounded" (click)="cancelEditInformation('workPlace')">取 消</button>
                       </div>
                     </div>
                   </ng-template>
@@ -360,8 +360,8 @@
       <li [ngbNavItem]="2">
         <a ngbNavLink>头像</a>
         <ng-template ngbNavContent>
-          <button class="btn btn-outline-primary btn-rounded mr-3 mb-2 btn-iconmind" (click)="trickUpload()">
-            <i class="icon-Cloud-Picture text-17 mr-1"></i> 选择图片
+          <button class="btn btn-outline-primary btn-rounded me-3 mb-2 btn-iconmind" (click)="trickUpload()">
+            <i class="icon-Cloud-Picture text-17 me-1"></i> 选择图片
           </button>
           <input type="file" (change)="fileChangeEvent($event)" style="display: none" />
           <image-cropper
@@ -375,15 +375,15 @@
           <button
             *ngIf="isNewPicture"
             style="display: block"
-            class="btn btn-outline-info btn-rounded btn-iconmind mr-3"
+            class="btn btn-outline-info btn-rounded btn-iconmind me-3"
             (click)="changePhoto()"
           >
-            <i class="icon-Arrow-Refresh text-17 mr-1"></i>
+            <i class="icon-Arrow-Refresh text-17 me-1"></i>
             更换头像
           </button>
           <img
             *ngIf="croppedImage"
-            class="mt-3 mr-3"
+            class="mt-3 me-3"
             [src]="domSanitizerService.bypassSecurityTrustUrl(croppedImage)"
             [width]="100"
             [height]="100"

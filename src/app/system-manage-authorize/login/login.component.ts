@@ -107,6 +107,13 @@ export class LoginComponent implements OnInit, OnDestroy {
       })
     );
 
+    /** 设置canvas的高度与宽度与父元素一样 */
+    const canvas = document.querySelector('canvas')!;
+    canvas.style.width = '100%';
+    canvas.style.height = '33px';
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+
     this.generateCaptcha();
   }
 

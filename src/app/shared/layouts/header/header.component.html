@@ -12,7 +12,7 @@
   <div class="d-flex align-items-center">
     <!-- Mega menu -->
     <div ngbDropdown class="mega-menu d-none d-md-block">
-      <button ngbDropdownToggle href="#" class="btn text-muted dropdown-toggle mr-3">Mega Menu</button>
+      <button ngbDropdownToggle href="#" class="btn text-muted dropdown-toggle me-3">Mega Menu</button>
       <div ngbDropdownMenu [perfectScrollbar]="{ suppressScrollX: false }">
         <div class="row m-0">
           <div class="col-md-4 p-4 bg-img">
@@ -87,20 +87,20 @@
 
     <div ngbDropdown [placement]="'bottom-right'">
       <div class="badge-top-container">
-        <span class="badge badge-primary">{{ notifications.length }}</span>
+        <span class="badge bg-primary">{{ notifications.length }}</span>
         <i ngbDropdownToggle class="icon-Bell text-muted header-icon" role="button"></i>
       </div>
       <div ngbDropdownMenu class="notification-dropdown rtl-ps-none" [perfectScrollbar]="{ suppressScrollX: false }">
         <div class="dropdown-item d-flex" *ngFor="let item of notifications" [routerLink]="[item.link]">
           <div class="notification-icon">
-            <i class="{{ item.icon }} text-{{ item.status }} mr-1"></i>
+            <i class="{{ item.icon }} text-{{ item.status }} me-1"></i>
           </div>
           <div class="notification-details flex-grow-1">
             <p class="m-0 d-flex align-items-center">
               <span>{{ item.title }}</span>
-              <span *ngIf="item.badge" class="badge badge-pill badge-{{ item.status }} ml-1 mr-1">{{ item.badge }}</span>
+              <span *ngIf="item.badge" class="badge rounded-pill bg-{{ item.status }} ms-1 me-1">{{ item.badge }}</span>
               <span class="flex-grow-1"></span>
-              <span class="text-small text-muted ml-auto">{{ item.time | relativeTime }}</span>
+              <span class="text-small text-muted ms-auto">{{ item.time | relativeTime }}</span>
             </p>
             <p class="text-small text-muted m-0">
               {{ item.text | excerpt: 30 }}
@@ -110,11 +110,11 @@
       </div>
     </div>
 
-    <div ngbDropdown [placement]="'bottom-right'" class="user col align-self-end">
+    <div ngbDropdown [placement]="'bottom-right'" class="user col align-self-end ps-4">
       <img [src]="domSanitizerService.bypassSecurityTrustUrl(userInfo.photo)" class="cursor-pointer" ngbDropdownToggle alt="" />
 
       <div ngbDropdownMenu aria-labelledby="userDropdown" class="header-account-dropdown">
-        <div class="dropdown-header"><i class="icon-Lock-User mr-1"></i> {{ userInfo.userName }}</div>
+        <div class="dropdown-header"><i class="icon-Lock-User me-1"></i> {{ userInfo.userName }}</div>
         <button class="dropdown-item" (click)="userInformation()">账户信息</button>
         <button class="dropdown-item" (click)="changePassword(modalChangePassword)">重置密码</button>
         <button class="dropdown-item" (click)="signout()">注销</button>
@@ -126,14 +126,12 @@
 <ng-template #modalChangePassword let-modal>
   <div class="modal-header">
     <h5 class="modal-title" id="modal-title">重置密码</h5>
-    <button type="button" class="close" aria-label="关闭按钮" aria-describedby="标题" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <button type="button" class="btn-close" aria-label="关闭按钮" aria-describedby="标题" (click)="modal.dismiss('Cross click')"> </button>
   </div>
   <div class="modal-body">
-    <form [formGroup]="changePasswordForm" class="ml-4 mr-4">
-      <div class="form-group">
-        <label for="newPassword">新密码</label>
+    <form [formGroup]="changePasswordForm" class="ms-4 me-4">
+      <div class="mb-2">
+        <label for="newPassword" class="form-label">新密码</label>
         <input
           id="newPassword"
           class="form-control form-control-rounded"
@@ -145,8 +143,8 @@
           <span class="text-danger">{{ changePasswordNotification.newPasswordMessage }}</span>
         </p>
       </div>
-      <div class="form-group">
-        <label for="confirmNewPassword">确认密码</label>
+      <div class="mb-2">
+        <label for="confirmNewPassword" class="form-label">确认密码</label>
         <input
           id="confirmNewPassword"
           class="form-control form-control-rounded"

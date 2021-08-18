@@ -1,5 +1,5 @@
 <button class="btn {{ btnClass }}" [type]="type" [disabled]="loading" [ngClass]="{ loading: loading }">
-  <div class="btn-spinner float-left" *ngIf="loading"></div>
+  <div class="btn-spinner float-start" *ngIf="loading"></div>
   <span *ngIf="!loading">
     <ng-content></ng-content>
   </span>

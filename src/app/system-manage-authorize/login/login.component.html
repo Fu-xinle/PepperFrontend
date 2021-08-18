@@ -9,14 +9,18 @@
     >
       <div class="row">
         <div class="col-md-6">
-          <div class="p-4">
+          <div class="p-4 justify-content-center d-flex flex-column align-items-center">
             <div class="auth-logo text-center">
               <img src="assets/images/logo.png" alt="" />
             </div>
-            <h1 class="mb-3 text-18">登录</h1>
-            <form (ngSubmit)="onSubmit(loginForm.value)" [formGroup]="loginForm">
-              <div class="form-group">
-                <label for="inputName">账号</label>
+            <h1 class="3 text-18 align-self-start">登录</h1>
+            <form
+              (ngSubmit)="onSubmit(loginForm.value)"
+              [formGroup]="loginForm"
+              class="justify-content-center d-flex flex-column flex-fill"
+            >
+              <div class="mb-2">
+                <label class="form-label" for="inputName">账号</label>
                 <input
                   id="inputName"
                   class="form-control form-control-rounded"
@@ -29,8 +33,8 @@
                   <span class="text-danger">{{ loginNotification.userMessage }}</span>
                 </p>
               </div>
-              <div class="form-group">
-                <label for="inputPass">密码</label>
+              <div class="mb-2">
+                <label class="form-label" for="inputPass">密码</label>
                 <input
                   id="inputPass"
                   class="form-control form-control-rounded"
@@ -43,10 +47,10 @@
                   <span class="text-danger">{{ loginNotification.passMessage }}</span>
                 </p>
               </div>
-              <div class="form-group">
-                <label for="inputCaptcha">验证码</label>
+              <div class="mb-2">
+                <label class="form-label" for="inputCaptcha">验证码</label>
                 <div class="row row-xs">
-                  <div class="col-md-6 pr-0">
+                  <div class="col-md-6 pe-0">
                     <input
                       id="inputCaptcha"
                       class="form-control form-control-rounded"
@@ -60,12 +64,12 @@
                     </p>
                   </div>
                   <div class="col-md-6">
-                    <canvas id="canvas" width="110" height="30" (click)="reGenerateCaptcha()"></canvas>
+                    <canvas id="canvas" (click)="reGenerateCaptcha()"></canvas>
                   </div>
                 </div>
               </div>
 
-              <div class="form-group">
+              <div class="mb-2">
                 <div class="row row-xs">
                   <div class="col-md-6">
                     <div class="form-check">
@@ -73,8 +77,8 @@
                       <label class="form-check-label" for="remember-pasword"> 记住密码 </label>
                     </div>
                   </div>
-                  <div class="col-md-6 text-right">
-                    <a href="" class="text-muted" routerLink="/content/system-manage-authorize/forget-password"><u>忘记密码?</u></a>
+                  <div class="col-md-6 text-end">
+                    <a href="" class="link-muted" routerLink="/content/system-manage-authorize/forget-password"><u>忘记密码?</u></a>
                   </div>
                 </div>
               </div>
@@ -82,7 +86,7 @@
               <!-- <button class="btn btn-rounded btn-primary btn-block mt-2">Sign In</button> -->
               <div class="d-grid gap-2">
                 <app-btn-loading
-                  [btnClass]="'btn-primary btn-rounded btn-block mt-3'"
+                  [btnClass]="'btn-primary btn-rounded mt-1 w-100'"
                   [type]="'submit'"
                   [loadingText]="loadingText"
                   [loading]="loading"
@@ -93,13 +97,16 @@
             </form>
 
             <div class="mt-3 text-center">
-              <a href="" class="text-muted" routerLink="/content/system-manage-authorize/register"><u>注册账号</u></a>
+              <a href="" class="link-muted" routerLink="/content/system-manage-authorize/register"><u>注册账号</u></a>
             </div>
           </div>
         </div>
-        <div class="col-md-6 text-center" style="background-image: url('assets/images/login/auth-panel-right.jpg'); background-size: cover">
-          <div class="pr-3 auth-right">
-            <button class="btn btn-rounded btn-outline-primary btn-block btn-icon-text" routerLink="/sessions/signup">
+        <div
+          class="col-md-6 justify-content-center d-flex align-items-center"
+          style="background-image: url('assets/images/login/auth-panel-right.jpg'); background-size: cover"
+        >
+          <div class="p-3 d-grid gap-2 align-items-center flex-fill">
+            <button class="btn btn-rounded btn-outline-primary btn-icon-text" routerLink="/sessions/signup">
               <i class="">
                 <svg
                   t="1617334320274"
@@ -119,7 +126,7 @@
               </i>
               手机短信登陆
             </button>
-            <button class="btn btn-rounded btn-outline-danger btn-block btn-icon-text">
+            <button class="btn btn-rounded btn-outline-danger btn-icon-text">
               <i class="">
                 <svg
                   t="1617334271724"
@@ -143,7 +150,7 @@
               </i>
               微信登录
             </button>
-            <button class="btn btn-rounded btn-outline-info btn-block btn-icon-text">
+            <button class="btn btn-rounded btn-outline-info btn-icon-text">
               <i class="">
                 <svg
                   t="1617334397419"
@@ -163,7 +170,7 @@
               </i>
               支付宝登录
             </button>
-            <button class="btn btn-rounded btn-outline-success btn-block btn-icon-text">
+            <button class="btn btn-rounded btn-outline-success btn-icon-text">
               <i class="">
                 <svg
                   t="1617334188151"

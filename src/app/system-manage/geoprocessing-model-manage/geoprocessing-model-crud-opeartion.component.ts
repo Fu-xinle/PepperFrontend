@@ -25,7 +25,7 @@ import { GeoprocessingModelManageComponent } from './geoprocessing-model-manage.
           ngxTippy
           [tippyProps]="{ theme: 'light-border', hideOnClick: true }"
           data-tippy-content="修改地理处理摸型信息"
-          class="icon-Eraser-2 text-25 text-info mr-2"
+          class="icon-Eraser-2 text-25 text-info me-2"
         ></i>
       </a>
       <a href="javascript:void(0)" (click)="designGeoprocessingModel()">
@@ -33,7 +33,7 @@ import { GeoprocessingModelManageComponent } from './geoprocessing-model-manage.
           ngxTippy
           [tippyProps]="{ theme: 'light-border' }"
           data-tippy-content="地理处理摸型设计"
-          class="icon-Edit text-25 text-success mr-2"
+          class="icon-Edit text-25 text-success me-2"
         ></i>
       </a>
       <a href="javascript:void(0)" (click)="deleteGeoprocessingModel()">
