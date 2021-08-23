@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { AgRendererComponent } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
@@ -22,21 +22,26 @@ import { FormManageComponent } from './form-manage.component';
     <span class="datatable-custom-operation">
       <a href="javascript:void(0)" (click)="editForm()">
         <i
+          class="icon-Eraser-2 text-25 text-info me-2"
           ngxTippy
           [tippyProps]="{ theme: 'light-border', hideOnClick: true }"
           data-tippy-content="修改表单信息"
-          class="icon-Eraser-2 text-25 text-info me-2"
         ></i>
       </a>
       <a href="javascript:void(0)" (click)="designForm()">
-        <i ngxTippy [tippyProps]="{ theme: 'light-border' }" data-tippy-content="表单设计" class="icon-Edit text-25 text-success me-2"></i>
+        <i
+          class="icon-Edit text-25 text-success me-2"
+          ngxTippy
+          [tippyProps]="{ theme: 'light-border', hideOnClick: true }"
+          data-tippy-content="表单设计"
+        ></i>
       </a>
       <a href="javascript:void(0)" (click)="deleteForm()">
         <i
-          ngxTippy
-          [tippyProps]="{ theme: 'light-border' }"
-          data-tippy-content="删除表单"
           class="icon-Close-Window text-25 text-danger"
+          ngxTippy
+          [tippyProps]="{ theme: 'light-border', hideOnClick: true }"
+          data-tippy-content="删除表单"
         ></i>
       </a>
     </span>
@@ -47,7 +52,7 @@ export class FormCrudOperationComponent implements AgRendererComponent {
   public params!: ICellRendererParams;
   public componentParent!: FormManageComponent;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, public activatedRoute: ActivatedRoute) {}
 
   agInit(params: ICellRendererParams): void {
     this.params = params;
@@ -63,7 +68,7 @@ export class FormCrudOperationComponent implements AgRendererComponent {
   }
 
   designForm() {
-    this.router.navigate(['/full/system-manage/form-design', { guid: this.params.data.guid }]);
+    this.router.navigate(['../../system-manage/form-design', { guid: this.params.data.guid }], { relativeTo: this.activatedRoute });
   }
 
   deleteForm() {

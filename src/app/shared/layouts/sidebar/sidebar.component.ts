@@ -6,7 +6,7 @@ import { filter, Subject, takeUntil } from 'rxjs';
 
 import { IMenuItem } from '../../interface/shared-layout.interface';
 import { NavigationService } from '../../services/navigation.service';
-import { Utils } from '../../utils/utils';
+import { GeneralUtils } from '../../utils/general.utils';
 
 @Component({
   selector: 'app-sidebar',
@@ -57,7 +57,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       )
       .subscribe(_routeChange => {
         this.setCurrentRouteActiveFlag();
-        if (Utils.isMobile()) {
+        if (GeneralUtils.isMobile()) {
           this.navService.sidebarState.sidenavOpen = false;
         }
       });
@@ -169,7 +169,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
    * sidebar 状态初始化,默认：主sidebar打开(手机窄屏幕关闭);二级sidebar关闭
    */
   initSidebarState() {
-    if (Utils.isMobile()) {
+    if (GeneralUtils.isMobile()) {
       this.navService.sidebarState.sidenavOpen = false;
       this.navService.sidebarState.childnavOpen = false;
     } else {

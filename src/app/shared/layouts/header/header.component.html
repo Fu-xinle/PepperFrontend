@@ -125,7 +125,7 @@
 
 <ng-template #modalChangePassword let-modal>
   <div class="modal-header">
-    <h5 class="modal-title" id="modal-title">重置密码</h5>
+    <h5 class="modal-title">重置密码</h5>
     <button type="button" class="btn-close" aria-label="关闭按钮" aria-describedby="标题" (click)="modal.dismiss('Cross click')"> </button>
   </div>
   <div class="modal-body">
@@ -169,5 +169,20 @@
     >
       确 认
     </app-btn-loading>
+  </div>
+</ng-template>
+
+<ng-template #countdownModelContent let-modal>
+  <div class="modal-body">
+    <figure class="text-center mb-0">
+      <p class="mb-0">
+        密码重置成功! <mark><countdown [config]="config" (event)="handleCountDownEvent($event)"></countdown></mark>后跳转到登录页面,<a
+          href="javascript:void(0)"
+          class="link-danger"
+          (click)="modal.dismiss('cancel'); signout()"
+          >点击跳转</a
+        >.
+      </p>
+    </figure>
   </div>
 </ng-template>

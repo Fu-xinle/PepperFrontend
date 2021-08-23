@@ -1,0 +1,8 @@
+.ag-theme-material {
+    @include ag-theme-material(
+      (
+        material-primary-color: $primary,
+        material-accent-color: $secondary,
+      )
+    );
+  }

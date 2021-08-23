@@ -1,7 +1,7 @@
 import { Directive, ElementRef, HostListener, Input, OnInit, Inject } from '@angular/core';
 
 import { SidebarHelperService } from '../services/sidebar-helper.service';
-import { Utils } from '../utils/utils';
+import { GeneralUtils } from '../utils/general.utils';
 
 @Directive({
   selector: '[appSidebarContainer]',
@@ -78,12 +78,12 @@ export class SidebarDirective implements OnInit {
   open() {
     if (this.align === 'left') {
       this.nativeEl.style.left = 0;
-      if (!Utils.isMobile()) {
+      if (!GeneralUtils.isMobile()) {
         this.contentNativeEl.style.marginLeft = this.width;
       }
     } else if (this.align === 'right') {
       this.nativeEl.style.right = 0;
-      if (!Utils.isMobile()) {
+      if (!GeneralUtils.isMobile()) {
         this.contentNativeEl.style.marginRight = this.width;
       }
     }
@@ -110,7 +110,7 @@ export class SidebarDirective implements OnInit {
   }
 
   private initSidebar() {
-    this.closed = Utils.isMobile();
+    this.closed = GeneralUtils.isMobile();
     if (this.closed) {
       this.close();
     } else {

@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
+import { CountdownModule } from 'ngx-countdown';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
@@ -65,6 +66,7 @@ const directives = [
 @NgModule({
   imports: [
     CommonModule,
+    CountdownModule,
     PerfectScrollbarModule,
     ToastrModule.forRoot(),
     NgbModule,

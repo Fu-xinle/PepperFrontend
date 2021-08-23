@@ -1,4 +1,4 @@
-export class Utils {
+export class GeneralUtils {
   /**
    * 根据屏幕的尺寸判断设备是否是手机
    *

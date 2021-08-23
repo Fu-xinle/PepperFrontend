@@ -1,12 +1,13 @@
-import { Component, OnDestroy, TemplateRef } from '@angular/core';
+import { formatDate } from '@angular/common';
+import { Component, ViewChild, OnDestroy, TemplateRef, Inject, LOCALE_ID } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { CountdownConfig, CountdownEvent } from 'ngx-countdown';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
-import Swal from 'sweetalert2';
 
 import { SystemManageAuthorizeService } from '../../../system-manage-authorize/system-manage-authorize.service';
 import { IUserInformation, IConfirmPasswordNotification, IConfirmPasswordValue } from '../../interface/system-manage.interface';
@@ -21,6 +22,25 @@ import { SearchService } from '../../services/search.service';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnDestroy {
+  /**对话框模板引用,利用ngbModal创建对话框，倒计时对话框 */
+  @ViewChild('countdownModelContent') countdownModelContent!: TemplateRef<void>;
+
+  /** countdown日期格式设置 */
+  public config: CountdownConfig = {
+    leftTime: 1 * 60,
+    formatDate: ({ date, formatStr, timezone }) => {
+      let f = formatStr;
+      if (date > 1000 * 60) {
+        f = 'm分s秒';
+      } else if (date === 1000 * 60) {
+        f = 'm分';
+      } else {
+        f = 's秒';
+      }
+      return formatDate(date, f, this.locale, timezone || '+0000');
+    },
+  };
+
   // 修改密码对话框
   public changePasswordNotification: IConfirmPasswordNotification;
   public changePasswordForm: FormGroup;
@@ -37,12 +57,14 @@ export class HeaderComponent implements OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(
+    @Inject(LOCALE_ID) private locale: string,
     private navService: NavigationService,
     public domSanitizerService: DomSanitizer,
     public searchService: SearchService,
     private authService: AuthService,
     private systemManageAuthorizeService: SystemManageAuthorizeService,
     public eventListenerService: EventListenerService,
+    public activatedRoute: ActivatedRoute,
     private router: Router,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
@@ -174,7 +196,7 @@ export class HeaderComponent implements OnDestroy {
    * 路由到用户信息详细页面,管理用户信息
    */
   userInformation() {
-    this.router.navigate(['full', 'system-manage', 'user-info']);
+    this.router.navigate(['../../system-manage/user-info'], { relativeTo: this.activatedRoute });
   }
 
   /**
@@ -237,7 +259,7 @@ export class HeaderComponent implements OnDestroy {
           next: _res => {
             this.loading = false;
             this.modalReference.close();
-            this.countdownSweetalert2();
+            this.modalReference = this.modalService.open(this.countdownModelContent, { centered: true, backdrop: 'static' });
           },
           error: err => {
             console.error(err);
@@ -251,47 +273,14 @@ export class HeaderComponent implements OnDestroy {
   }
 
   /**
-   * 利用Sweetalert2实现计时器跳转组件
+   * countdown倒计时组件事件处理
+   *
+   * @param {CountdownEvent} event Parameter countdown倒计时组件事件对象
    */
-  countdownSweetalert2() {
-    let timerInterval: NodeJS.Timer;
-    Swal.fire({
-      html: '密码重置成功!  <b></b> 秒后跳转到登录页面, ' + '<a href="#">点击跳转</a>',
-      icon: 'success',
-      allowOutsideClick: false,
-      allowEscapeKey: false,
-      timerProgressBar: true,
-      timer: 60000,
-      customClass: {
-        container: 'countdown',
-      },
-      didOpen: () => {
-        Swal.showLoading();
-        /** 计时秒数倒数 */
-        const swalContent: HTMLElement = Swal.getHtmlContainer()!;
-        timerInterval = setInterval(() => {
-          if (swalContent) {
-            const bElement: HTMLElement | null = swalContent.querySelector('b');
-            if (bElement) {
-              bElement.textContent = parseInt((Swal.getTimerLeft()! / 1000).toString(), 10).toString();
-            }
-          }
-        }, 1000);
-        /** 跳转链接 */
-        const aElement: HTMLElement | null = swalContent.querySelector('a');
-        if (aElement) {
-          aElement.onclick = () => {
-            clearInterval(timerInterval);
-            Swal.close();
-            this.signout();
-            return false;
-          };
-        }
-      },
-      willClose: () => {
-        clearInterval(timerInterval);
-        this.signout();
-      },
-    }).then(_result => {});
+  handleCountDownEvent(event: CountdownEvent) {
+    if (event.action === 'done') {
+      this.modalReference.close();
+      this.signout();
+    }
   }
 }

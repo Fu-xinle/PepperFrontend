@@ -3,9 +3,9 @@ import { Router, NavigationStart, NavigationEnd } from '@angular/router';
 
 import { PerfectScrollbarDirective } from 'ngx-perfect-scrollbar';
 import { Subject, takeUntil } from 'rxjs';
-import { SearchService } from 'src/app/shared/services/search.service';
 
 import { NavigationService } from '../../services/navigation.service';
+import { SearchService } from '../../services/search.service';
 
 @Component({
   selector: 'app-full-layout',
@@ -17,11 +17,13 @@ export class FullLayoutComponent implements OnInit, OnDestroy {
   public perfectScrollbar!: PerfectScrollbarDirective;
 
   public moduleLoading: boolean = false;
-  public customizerShow: boolean = true;
+  public customizerShow: boolean = false;
 
   private ngUnsubscribe = new Subject<boolean>();
 
-  constructor(public navService: NavigationService, public searchService: SearchService, private router: Router) {}
+  constructor(public navService: NavigationService, public searchService: SearchService, private router: Router) {
+    this.customizerShow = this.router.routerState.snapshot.url.split('/').pop() === 'home';
+  }
 
   ngOnInit() {
     /**事件的顺序:NavigationStart-> ... ->NavigationEnd */
@@ -31,6 +33,7 @@ export class FullLayoutComponent implements OnInit, OnDestroy {
       }
       if (event instanceof NavigationEnd) {
         this.customizerShow = (event as NavigationEnd).urlAfterRedirects.split('/').pop() === 'home';
+
         this.moduleLoading = false;
         /** 路由至新页面诗，更新滚动条 */
         this.perfectScrollbar.update();

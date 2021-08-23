@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { ICustomizerLayout, ICustomizerTheme } from '../interface/shared-layout.interface';
-import { LocalStoreService } from '../services/local-store.service';
 import { NavigationService } from '../services/navigation.service';
 
 @Injectable({
@@ -19,6 +17,16 @@ export class CustomizerService {
       title: '开发测试系统',
       name: 'development',
       img: 'assets/images/customizer/layout-development.png',
+    },
+    {
+      title: '自然资源审计系统',
+      name: 'audit',
+      img: 'assets/images/customizer/layout-audit.png',
+    },
+    {
+      title: '国土空间规划系统',
+      name: 'spatial-planning',
+      img: 'assets/images/customizer/layout-spatial-planning.png',
     },
     {
       title: '深度学习系统',
@@ -103,23 +111,32 @@ export class CustomizerService {
   ];
   public selectedSidebarColor!: ICustomizerTheme;
 
-  constructor(private router: Router, public localStoreService: LocalStoreService, public navService: NavigationService) {
-    /** 初始化布局 */
-    this.publishLayoutChange(this.localStoreService.getItem('layout'));
-  }
+  constructor(public navService: NavigationService) {}
 
+  /**
+   * 更改布局,同时更改主题颜色，通过body元素添加和移除类实现
+   *
+   * @param {string | null} layoutname Parameter 布局类型名称
+   */
   publishLayoutChange(layoutname: string | null) {
     layoutname = layoutname ? layoutname : 'development';
     this.layouts.some(element => {
       if (element.name === layoutname) {
         this.selectedLayout = element;
-        /** //!! 布局更改，同时变更主题(颜色、圆角、字体、空白、dark/light等) */
+        /** //?? 布局更改，同时变更主题(颜色、圆角、字体、空白、dark/light等) */
+        this.changeTheme(this.layouts, layoutname);
         return true;
       }
       return false;
     });
   }
 
+  /**
+   * html元素移除的特定class类
+   *
+   * @param {HTMLElement | HTMLElement[] | null} el Parameter  html元素或者元素数组
+   * @param {string} className Parameter html元素移除的class类名称
+   */
   removeClass(el: HTMLElement | HTMLElement[] | null, className: string) {
     if (!el || (el as HTMLElement[]).length === 0) return;
     if (!el.hasOwnProperty('length')) {
@@ -133,6 +150,12 @@ export class CustomizerService {
     }
   }
 
+  /**
+   * html元素添加的特定class类
+   *
+   * @param  {HTMLElement | HTMLElement[] | null} el Parameter  html元素或者元素数组
+   * @param {string} className Parameter html元素添加的class类名称
+   */
   addClass(el: HTMLElement | HTMLElement[] | null, className: string) {
     if (!el || (el as HTMLElement[]).length === 0) return;
     if (!el.hasOwnProperty('length')) {
@@ -146,6 +169,13 @@ export class CustomizerService {
     }
   }
 
+  /**
+   * 寻找最近的包含class类名的父元素
+   *
+   * @param {HTMLElement | null} el Parameter html元素
+   * @param {string} className Parameter class类名字符串
+   * @returns {HTMLElement | undefined} Return 最近的包含class类名的父元素
+   */
   findClosest(el: HTMLElement | null, className: string) {
     if (!el) return;
     while (el) {
@@ -158,11 +188,24 @@ export class CustomizerService {
     return;
   }
 
+  /**
+   * 判断html元素是否包含class类
+   *
+   * @param {HTMLElement} el Parameter html元素
+   * @param {string} className Parameter 类名字符串
+   * @returns {boolean | undefined} Return html元素是否包含class类
+   */
   hasClass(el: HTMLElement, className: string) {
     if (!el) return;
     return ` ${el.className} `.replace(/[\n\t]/g, ' ').indexOf(` ${className} `) > -1;
   }
 
+  /**
+   * html元素切换class类
+   *
+   * @param {HTMLElement} el Parameter html元素
+   * @param {string} className Parameter class类名字符串
+   */
   toggleClass(el: HTMLElement, className: string) {
     if (!el) return;
     if (this.hasClass(el, className)) {
@@ -172,10 +215,16 @@ export class CustomizerService {
     }
   }
 
-  //   changeTheme(themes: any[], themeName: string) {
-  //     themes.forEach(theme => {
-  //       this.removeClass(document.body, theme.name);
-  //     });
-  //     this.addClass(document.body, themeName);
-  //   }
+  /**
+   * 将目前已有的主题移除，切换到新主题
+   *
+   * @param {ICustomizerLayout[]} themes Parameter 目前已有的主题
+   * @param {string} themeName Parameter 目标主题的名称即布局名称
+   */
+  changeTheme(themes: ICustomizerLayout[], themeName: string) {
+    themes.forEach(theme => {
+      this.removeClass(document.body, `scrsnb-${theme.name}`);
+    });
+    this.addClass(document.body, `scrsnb-${themeName}`);
+  }
 }

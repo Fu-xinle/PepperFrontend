@@ -11,7 +11,7 @@ import { IUserInformation, IUserInformationEditMark, IUserInformationNotificatio
 import { AuthService } from '../../shared/services/auth/auth.service';
 import { EventListenerService } from '../../shared/services/event-listener.service';
 import { I18n, CustomDatepickerI18n, CustomAdapter, CustomDateParserFormatter } from '../../shared/services/i18n/datepicker';
-import { Utils } from '../../shared/utils/utils';
+import { GeneralUtils } from '../../shared/utils/general.utils';
 import { SystemManageService } from '../system-manage.service';
 
 @Component({
@@ -38,7 +38,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
   };
 
   /** 当前日期对象，设置ngbDate最大日期为当前日期  */
-  public currentDateNgbStruct = Utils.dateToNgbDate(new Date())!;
+  public currentDateNgbStruct = GeneralUtils.dateToNgbDate(new Date())!;
 
   /**用户上传图片、裁切,更新头像 */
   public imageChangedEvent: Event | null = null;

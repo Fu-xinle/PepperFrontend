@@ -65,12 +65,3 @@ $theme-colors: (
   gray-400: $gray-400,
   dark: $dark,
 ) !default;
-
-.ag-theme-material {
-  @include ag-theme-material(
-    (
-      material-primary-color: $primary,
-      material-accent-color: $secondary,
-    )
-  );
-}

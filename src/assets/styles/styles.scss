@@ -1,0 +1,40 @@
+// ?? scss注释: //与/** */(即静默注释)
+// ??=> // 这种注释内容不会出现在生成的css文件中
+// ??=> /** 这种注释内容会出现在生成的css文件中 */
+
+// 图标字体css/scss文件
+@import '../font-icons/iconsmind';
+
+
+// 自定义的主题样式中sass变量定义,!default遮盖bootstrap中样式变量
+// !default 声明赋值的变量，如果变量已经被赋值，不会被重新赋值；如果变量还没有被赋值，则会被赋予新的值。
+@import 'variables';
+@import 'themes/lite-purple';
+
+// bootstrap作为基础样式库
+@import '~bootstrap/scss/bootstrap';
+
+// 自定义的主题样式
+@import 'globals/globals';
+
+// 第三方库、插件样式scss文件
+// !如果第三方库、插件样式没有scss文件，仅有css文件，将css文件在angular.json中导入? 不同主题面临导入不同css文件问题??
+// !待解决???
+// 由于Sass兼容原生的CSS，也支持原生的CSS@import。在Sass中使用@import时， Sass会尝试找到对应的Sass文件并导入进来，
+// 在下列三种情况下会生成原生的CSS@import，会造成浏览器解析CSS时的额外下载：
+// 被导入文件的名字以.css结尾；
+// 被导入文件的名字是一个URL地址（比如http://sass-lang.com/stylesheets/application.css）
+// 被导入文件的名字是CSS的url()值。
+
+@import '~perfect-scrollbar/css/perfect-scrollbar.css';
+@import '~ngx-toastr/toastr.css';
+@import '~@ng-select/ng-select/scss/default.theme';
+@import '~ag-grid-community/dist/styles/ag-grid';
+@import '~ag-grid-community/dist/styles/ag-theme-material/sass/ag-theme-material-mixin';
+@import '~tippy.js/dist/tippy.css';
+@import '~tippy.js/themes/light-border.css';
+
+// 自定义的第三方库、插件样式的个性化定制
+@import 'development-theme/external-plugins/ag-grid';
+
+// .scrsnb-development{}

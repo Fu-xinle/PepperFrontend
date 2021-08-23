@@ -1,24 +1,23 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-/**
- * 页面共三种布局
- * CONTENT布局：用于登录、注册、错误、空白等页面，没有Navbar和Sidebar
- * FULL布局：包含Navbar和Sidebar,页面为流式布局，整个页面滚动
- * FIX布局：包含Navbar和Sidebar,页面为100%高度，通过FULL布局特定的CSS样式实现
- */
 import { ContentLayoutComponent } from './shared/layouts/content/content-layout.component';
 import { FullLayoutComponent } from './shared/layouts/full/full-layout.component';
-import { CONTENT_ROUTES } from './shared/routes/content-layout.routes';
-import { FULL_ROUTES } from './shared/routes/full-layout.routes';
+import { CONTENT_ROUTES } from './shared/routes/layout-content.routes';
+import { DEVELOPMENT_ROUTES } from './shared/routes/layout-development.routes';
+import { LocalStoreUtils } from './shared/utils/local-store.utils';
 
 const appRoutes: Routes = [
-  { path: '', redirectTo: 'full/home', pathMatch: 'full' },
   {
-    path: 'full',
+    path: '',
+    redirectTo: `${LocalStoreUtils.getItem('layout') ? LocalStoreUtils.getItem('layout') : 'development'}/home`,
+    pathMatch: 'full',
+  },
+  {
+    path: 'development',
     component: FullLayoutComponent,
-    data: { title: 'full Views' },
-    children: FULL_ROUTES,
+    data: { title: 'development Views' },
+    children: DEVELOPMENT_ROUTES,
   },
   {
     path: 'content',
@@ -34,6 +33,9 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes, {
       useHash: true,
       relativeLinkResolution: 'corrected',
+      /**路由复用是指当我们离开当前页时若符合复用条件（即：匹配模式）则保存当前路由所有组件状态（包括子组件），
+       * 待下一次进入相同路由（即：匹配模式）时再从中缓存中获取到。 */
+      scrollPositionRestoration: 'top',
     }),
   ],
   exports: [RouterModule],

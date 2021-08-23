@@ -28,8 +28,8 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/assets/styles/_app.scss", "src/styles.scss"],
-            "scripts": ["node_modules/jquery/dist/jquery.min.js"]
+            "styles": ["src/assets/styles/styles.scss", "src/styles.scss"],
+            "scripts": ["node_modules/jquery/dist/jquery.min.js", "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"]
           },
           "configurations": {
             "production": {
@@ -91,8 +91,8 @@
             "karmaConfig": "karma.conf.js",
             "inlineStyleLanguage": "scss",
             "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/assets/styles/_app.scss", "src/styles.scss"],
-            "scripts": ["node_modules/jquery/dist/jquery.min.js"]
+            "styles": ["src/assets/styles/styles.scss", "src/styles.scss"],
+            "scripts": ["node_modules/jquery/dist/jquery.min.js", "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"]
           }
         },
         "lint": {
