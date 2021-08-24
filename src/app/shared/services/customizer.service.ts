@@ -223,8 +223,8 @@ export class CustomizerService {
    */
   changeTheme(themes: ICustomizerLayout[], themeName: string) {
     themes.forEach(theme => {
-      this.removeClass(document.body, `scrsnb-${theme.name}`);
+      this.removeClass(document.getElementsByTagName('html')[0], `scrsnb-${theme.name}`);
     });
-    this.addClass(document.body, `scrsnb-${themeName}`);
+    this.addClass(document.getElementsByTagName('html')[0], `scrsnb-${themeName}`);
   }
 }

@@ -125,6 +125,32 @@ export class NavigationService implements OnDestroy {
         },
       ],
     },
+    {
+      name: 'CSS特效',
+      description: 'CSS特效收集.',
+      type: 'dropDown',
+      icon: 'icon-Formula',
+      sub: [
+        {
+          icon: 'icon-Gemini',
+          name: 'CSS揭秘',
+          state: '/development/css-effect/css-secrets',
+          type: 'link',
+        },
+        {
+          icon: 'icon-Landscape',
+          name: 'CSS-Tricks',
+          state: '/development/css-effect/css-tricks',
+          type: 'link',
+        },
+        {
+          icon: 'icon-Myspace',
+          name: 'CSS-Other',
+          state: '/development/css-effect/css-collect',
+          type: 'link',
+        },
+      ],
+    },
   ];
 
   public productOAMenu: IMenuItem[] = [];

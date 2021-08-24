@@ -34,7 +34,20 @@
 @import '~tippy.js/dist/tippy.css';
 @import '~tippy.js/themes/light-border.css';
 
-// 自定义的第三方库、插件样式的个性化定制
+// 一些自定义库使用全局的混合器和函数,定义在外面
 @import 'development-theme/external-plugins/ag-grid';
 
-// .scrsnb-development{}
+html {
+    // bootstrap5 样式
+    &.scrsnb-development,&.scrsnb-portal,&.scrsnb-productOA,&.scrsnb-deep-learning,&.scrsnb-supervision {
+      
+        // 自定义的第三方库、插件样式的个性化定制
+    }
+    // ant design 样式
+    &.scrsnb-audit,&.scrsnb-spatial-planning,&.scrsnb-image-server {
+
+        // 自定义的第三方库、插件样式的个性化定制
+
+    }
+  }
+
