@@ -113,6 +113,34 @@ module.exports = {
             default: 'array-simple',
           },
         ],
+        // typescript变量命名
+        // interface接口的命名遵循PascalCase格式，且具有I前缀
+        // parameter命名遵循camelCase格式，可添加前下划线_(标识未使用的参数)
+        '@typescript-eslint/naming-convention': [
+          'error',
+          {
+            selector: 'interface',
+            format: ['PascalCase'],
+            prefix: ['I'],
+          },
+          {
+            selector: 'class',
+            format: ['PascalCase'],
+          },
+          {
+            selector: ['variable', 'classProperty'],
+            format: ['camelCase'],
+          },
+          {
+            selector: ['parameter'],
+            format: ['camelCase'],
+            leadingUnderscore: 'allow',
+          },
+          {
+            selector: ['function', 'classMethod'],
+            format: ['camelCase'],
+          },
+        ],
         // 禁止特定类型，并建议替代方案
         '@typescript-eslint/ban-types': [
           'off',
