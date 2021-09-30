@@ -1,6 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import { GridApi, DetailGridInfo, ILoadingOverlayComp, INoRowsOverlayComp, IServerSideGetRowsParams } from 'ag-grid-community';
+import {
+  GridApi,
+  ServerSideStoreType,
+  GridReadyEvent,
+  ICellRenderer,
+  INoRowsOverlayComp,
+  IServerSideGetRowsParams,
+} from 'ag-grid-community';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 
@@ -67,7 +74,7 @@ export class UserLogComponent implements OnInit, OnDestroy {
     | any;
   public loadingOverlayComponent:
     | {
-        new (): ILoadingOverlayComp;
+        new (): ICellRenderer;
       }
     | string;
   public loadingOverlayComponentParams:
@@ -85,6 +92,8 @@ export class UserLogComponent implements OnInit, OnDestroy {
         noRowsMessageFunc: () => string;
       }
     | any;
+
+  public serverSideStoreType: ServerSideStoreType = ServerSideStoreType.Partial;
 
   /**搜索关键字、记录总数（用于服务器端分页） */
   public keySearcchValue: string = '';
@@ -121,9 +130,9 @@ export class UserLogComponent implements OnInit, OnDestroy {
   /**
    * Ag-Grid初始化完成后回调函数
    *
-   * @param {DetailGridInfo} params Paramater Ag-Grid对象
+   * @param {GridReadyEvent} params Paramater Ag-Grid对象
    */
-  onGridReady(params: DetailGridInfo) {
+  onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api!;
 
     params.api!.setServerSideDatasource({

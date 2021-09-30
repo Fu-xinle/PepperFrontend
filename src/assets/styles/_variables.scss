@@ -1,6 +1,14 @@
-$font-family-heading: 'Nunito', sans-serif;
-$font-family-base: 'Nunito', sans-serif;
-$font-size-base: 0.813rem;
+// 默认的普通文本字体13px,即body的字体
+$font-size-base: 0.8125rem !default; 
+
+// 参考 https://www.uisdc.com/web-font
+// 不要忘记声明英文字体，并且英文字体应该在中文字体之前
+// 对于英文字符，首先查找Helvetica(Mac)，然后查找Tahoma(Win)，都找不到就用Arial(Mac&Win)
+// 若是以上三者都缺失，则使用当前默认的sans-serif字体(操作系统或浏览器指定)
+// 华文细黑(Mac)，微软雅黑(Win)是两个平台的默认中文字体。
+// Windows XP，宋体是主要中文字体
+// 黑体作为fallback字体
+$font-family-base:"Helvetica", "Tahoma", "Arial","Microsoft YaHei","微软雅黑","STXihei", "华文细黑", "SimSun", "宋体", "Heiti", "黑体", "sans-serif" !default;
 
 // // LAYOUT VARS
 // $topbar-height: 80px;
@@ -16,3 +24,4 @@ $font-size-base: 0.813rem;
 $facebook: rgb(55, 101, 201);
 $google: rgb(236, 65, 44);
 $twitter: rgb(3, 159, 245);
+

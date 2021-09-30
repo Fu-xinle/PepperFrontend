@@ -3,8 +3,8 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": ["node", "jquery", "bootstrap", "leaflet"]
+    "types": ["node", "jquery", "bootstrap", "leaflet", "backbone", "dagre", "graphlib", "lodash"]
   },
-  "files": ["src/main.ts", "src/polyfills.ts"],
+  "files": ["src/main.ts", "src/polyfills.ts", "node_modules/@clientio/rappid/index.ts"],
   "include": ["src/**/*.d.ts"]
 }

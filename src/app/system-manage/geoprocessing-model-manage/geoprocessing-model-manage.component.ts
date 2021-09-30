@@ -5,7 +5,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import {
   RowNode,
   GridApi,
-  DetailGridInfo,
+  GridReadyEvent,
   ValueSetterParams,
   GetQuickFilterTextParams,
   ILoadingOverlayComp,
@@ -488,9 +488,9 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
   /**
    * Ag-Grid初始化完成后回调函数
    *
-   * @param {DetailGridInfo} params Paramater Ag-Grid对象
+   * @param {GridReadyEvent} params Paramater Ag-Grid对象
    */
-  onGridReady(params: DetailGridInfo) {
+  onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api!;
   }
 }

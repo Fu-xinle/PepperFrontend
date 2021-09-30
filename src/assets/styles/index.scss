@@ -33,6 +33,8 @@
 @import '~ag-grid-community/dist/styles/ag-theme-material/sass/ag-theme-material-mixin';
 @import '~tippy.js/dist/tippy.css';
 @import '~tippy.js/themes/light-border.css';
+// 流程图的插件rappid
+@import "@clientio/rappid/rappid.scss";
 
 // 一些自定义库使用全局的混合器和函数,定义在外面
 @import 'development-theme/external-plugins/ag-grid';
@@ -40,14 +42,17 @@
 html {
     // bootstrap5 样式
     &.scrsnb-development,&.scrsnb-portal,&.scrsnb-productOA,&.scrsnb-deep-learning,&.scrsnb-supervision {
-      
-        // 自定义的第三方库、插件样式的个性化定制
+        $facebook: rgb(55, 101, 201);
     }
-    // ant design 样式
+
+    // Material Design google的材料主题
     &.scrsnb-audit,&.scrsnb-spatial-planning,&.scrsnb-image-server {
-
-        // 自定义的第三方库、插件样式的个性化定制
-
+        $facebook: rgb(55, 101, 201);
     }
+
+    // bulma 主题
+
+    // uikit 简洁的主题
+
   }
 

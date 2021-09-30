@@ -1,4 +1,4 @@
-<div class="pb-2 toolbar d-flex justify-content-between">
+<div class="bg-white align-items-start py-2 mb-3 rounded-pill toolbar d-flex justify-content-between">
   <input
     class="form-control form-control-rounded search-input"
     name="quickFilterText"
@@ -6,11 +6,12 @@
     [(ngModel)]="keySearcchValue"
     name="key-searcch"
     autocomplete="off"
+    placeholder="搜索"
     type="text"
   />
   <button class="btn btn-primary btn-iconmind btn-rounded" (click)="createForm()"> <i class="icon-Add text-17 me-2"></i>新建表单 </button>
 </div>
-<div class="card full-height-container">
+<div class="shadow rounded-3 full-height-container">
   <ag-grid-angular
     style="height: 100%; width: 100%"
     class="ag-theme-material"

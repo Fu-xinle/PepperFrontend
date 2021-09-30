@@ -43,6 +43,13 @@ module.exports = {
         ignorePseudoElements: ['ng-deep'],
       },
     ],
+    // scss 嵌套的最大深度
+    'max-nesting-depth': [
+      4,
+      {
+        ignore: ['blockless-at-rules'],
+      },
+    ],
     // 限制选择器中类型选择器的数量,不应多层查找
     'selector-max-type': [
       2,
@@ -65,6 +72,24 @@ module.exports = {
         ignore: ['attribute', 'class', 'id'],
       },
     ],
+    // 使用单引号
+    'string-quotes': [
+      'single',
+      {
+        avoidEscape: true,
+      },
+    ],
+    // 限制选择器中复合选择器的数量。
+    'selector-max-compound-selectors': [4],
+    // scss 函数
+    'at-rule-no-unknown': [
+      true,
+      {
+        ignoreAtRules: ['function', 'if', 'each', 'include', 'mixin'],
+      },
+    ],
+    // 特殊字体
+    'font-family-no-missing-generic-family-keyword': [true, { ignoreFontFamilies: ['icomoon'] }],
     // scss是否允许为空
     'no-empty-source': null,
     // 换行符是unix格式还是windows格式,null标识关闭此规则检查

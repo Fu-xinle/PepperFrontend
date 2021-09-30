@@ -3,6 +3,10 @@
       (
         material-primary-color: $primary,
         material-accent-color: $secondary,
+        range-selection-border-color:transparent,
       )
     );
+    .ag-root-wrapper{
+      border-radius: $border-radius;
+    }
   }

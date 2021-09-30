@@ -10,6 +10,14 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import 'ag-grid-enterprise';
 import { NgxTippyModule } from 'ngx-tippy-wrapper';
 
+// rappid
+import { BatchDirective } from '../../assets/non-npm/angular-rappid/directives/batch.directive';
+import { InspectorComponent } from '../../assets/non-npm/angular-rappid/inspector/inspector.component';
+import { LabelInspectorComponent } from '../../assets/non-npm/angular-rappid/inspector/label-inspector/label-inspector.component';
+import { LinkInspectorComponent } from '../../assets/non-npm/angular-rappid/inspector/link-inspector/link-inspector.component';
+import { MessageInspectorComponent } from '../../assets/non-npm/angular-rappid/inspector/message-inspector/message-inspector.component';
+import { EventBusService } from '../../assets/non-npm/angular-rappid/services/event-bus.service';
+// component
 import { SharedModule } from '../shared/shared.module';
 import { AuthorizeComponent } from './authorize/authorize.component';
 import { FlowDesignComponent } from './flow-design/flow-design.component';
@@ -28,25 +36,31 @@ import { SystemManageService } from './system-manage.service';
 import { UserInfoComponent } from './user-info/user-info.component';
 import { UserLogComponent } from './user-log/user-log.component';
 import { UserComponent } from './user/user.component';
+import { WorkflowManageComponent } from './workflow-manage/workflow-manage.component';
 
 @NgModule({
   declarations: [
     AuthorizeComponent,
     RoleComponent,
     UserComponent,
-    GeoprocessingModelManageComponent,
-    GeoprocessingModelDesignComponent,
-    FlowDesignComponent,
-    FlowManageComponent,
     UserLogComponent,
     UserInfoComponent,
+    WorkflowManageComponent,
+    FlowCrudOperationComponent,
+    FlowManageComponent,
+    FlowDesignComponent,
     FormManageComponent,
     FormDesignComponent,
     FormDesignVisualComponent,
-    FlowCrudOperationComponent,
-    GeoprocessingModelCrudOperationComponent,
     FormCrudOperationComponent,
+    GeoprocessingModelCrudOperationComponent,
+    GeoprocessingModelManageComponent,
     GeoprocessingModelDesignComponent,
+    InspectorComponent,
+    MessageInspectorComponent,
+    LabelInspectorComponent,
+    LinkInspectorComponent,
+    BatchDirective,
   ],
   imports: [
     CommonModule,
@@ -63,6 +77,6 @@ import { UserComponent } from './user/user.component';
     AgGridModule.withComponents([]),
     NgxTippyModule,
   ],
-  providers: [SystemManageService],
+  providers: [SystemManageService, EventBusService],
 })
 export class SystemManageModule {}

@@ -1,10 +1,14 @@
 // comment
 .full-height-container {
-  height: calc(100vh - 220px);
+  height: calc(100vh - 245px);
   min-height: unset;
+}
+
+.toolbar {
+  height: 3rem;
 }
 
 input.search-input {
   display: inline-block;
-  width: 300px;
+  width: 18rem;
 }

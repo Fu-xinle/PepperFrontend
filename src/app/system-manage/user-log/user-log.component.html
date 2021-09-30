@@ -34,7 +34,7 @@
     [suppressCellSelection]="true"
     (gridReady)="onGridReady($event)"
     [rowModelType]="'serverSide'"
-    [serverSideStoreType]="'partial'"
+    [serverSideStoreType]="serverSideStoreType"
     [cacheBlockSize]="100"
     [maxBlocksInCache]="20"
     [columnDefs]="columnDefs"

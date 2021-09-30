@@ -13,6 +13,7 @@ import { RoleComponent } from './role/role.component';
 import { UserInfoComponent } from './user-info/user-info.component';
 import { UserLogComponent } from './user-log/user-log.component';
 import { UserComponent } from './user/user.component';
+import { WorkflowManageComponent } from './workflow-manage/workflow-manage.component';
 
 const routes: Routes = [
   {
@@ -37,34 +38,6 @@ const routes: Routes = [
     },
   },
   {
-    path: 'geoprocessing-model-manage',
-    component: GeoprocessingModelManageComponent,
-    data: {
-      title: '地理处理模型管理',
-    },
-  },
-  {
-    path: 'geoprocessing-model-design',
-    component: GeoprocessingModelDesignComponent,
-    data: {
-      title: '地理处理模型设计器',
-    },
-  },
-  {
-    path: 'flow-design',
-    component: FlowDesignComponent,
-    data: {
-      title: '流程设置',
-    },
-  },
-  {
-    path: 'flow-manage',
-    component: FlowManageComponent,
-    data: {
-      title: '流程管理',
-    },
-  },
-  {
     path: 'user-log',
     component: UserLogComponent,
     data: {
@@ -79,6 +52,41 @@ const routes: Routes = [
     },
   },
   {
+    path: 'geoprocessing-model-manage',
+    component: GeoprocessingModelManageComponent,
+    data: {
+      title: '地理处理模型管理',
+    },
+  },
+  {
+    path: 'geoprocessing-model-design',
+    component: GeoprocessingModelDesignComponent,
+    data: {
+      title: '地理处理模型设计器',
+    },
+  },
+  {
+    path: 'workflow-manage',
+    component: WorkflowManageComponent,
+    data: {
+      title: '工作流管理',
+    },
+  },
+  {
+    path: 'flow-manage',
+    component: FlowManageComponent,
+    data: {
+      title: '流程管理',
+    },
+  },
+  {
+    path: 'flow-design',
+    component: FlowDesignComponent,
+    data: {
+      title: '流程设计',
+    },
+  },
+  {
     path: 'form-manage',
     component: FormManageComponent,
     data: {
@@ -89,14 +97,14 @@ const routes: Routes = [
     path: 'form-design',
     component: FormDesignComponent,
     data: {
-      title: '表单设计页面',
+      title: '表单设计',
     },
   },
   {
     path: 'form-design-visual',
     component: FormDesignVisualComponent,
     data: {
-      title: '表单可视化设计页面',
+      title: '表单可视化设计',
     },
   },
 ];
