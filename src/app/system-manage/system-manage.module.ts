@@ -12,11 +12,15 @@ import { NgxTippyModule } from 'ngx-tippy-wrapper';
 
 // rappid
 import { BatchDirective } from '../../assets/non-npm/angular-rappid/directives/batch.directive';
+// eslint-disable-next-line max-len
+import { FlowNodeInspectorComponent } from '../../assets/non-npm/angular-rappid/inspector/flow-node-inspector/flow-node-inspector.component';
+// eslint-disable-next-line max-len
+import { GeoprocessingModelNodeInspectorComponent } from '../../assets/non-npm/angular-rappid/inspector/geoprocessing-model-node-inspector/geoprocessing-model-node-inspector.component';
 import { InspectorComponent } from '../../assets/non-npm/angular-rappid/inspector/inspector.component';
 import { LabelInspectorComponent } from '../../assets/non-npm/angular-rappid/inspector/label-inspector/label-inspector.component';
 import { LinkInspectorComponent } from '../../assets/non-npm/angular-rappid/inspector/link-inspector/link-inspector.component';
-import { MessageInspectorComponent } from '../../assets/non-npm/angular-rappid/inspector/message-inspector/message-inspector.component';
 import { EventBusService } from '../../assets/non-npm/angular-rappid/services/event-bus.service';
+// ztree
 // component
 import { SharedModule } from '../shared/shared.module';
 import { AuthorizeComponent } from './authorize/authorize.component';
@@ -31,8 +35,16 @@ import { GeoprocessingModelDesignComponent } from './geoprocessing-model-design/
 import { GeoprocessingModelCrudOperationComponent } from './geoprocessing-model-manage/geoprocessing-model-crud-opeartion.component';
 import { GeoprocessingModelManageComponent } from './geoprocessing-model-manage/geoprocessing-model-manage.component';
 import { RoleComponent } from './role/role.component';
+import { AuthorizeManageService } from './service/authorize-manage.service';
+import { FlowManageService } from './service/flow-manage.service';
+import { FormManageService } from './service/form-manage.service';
+import { GeoprocessingModelService } from './service/geoprocessing-model.service';
+import { LogManageService } from './service/log-manage.service';
+import { PersonalCenterService } from './service/personal-center.service';
+import { RoleManageService } from './service/role-manage.service';
+import { UserManageService } from './service/user-manage.service';
+import { WorkflowManageService } from './service/workflow-manage.service';
 import { SystemManageRoutingModule } from './system-manage-routing.module';
-import { SystemManageService } from './system-manage.service';
 import { UserInfoComponent } from './user-info/user-info.component';
 import { UserLogComponent } from './user-log/user-log.component';
 import { UserComponent } from './user/user.component';
@@ -57,7 +69,8 @@ import { WorkflowManageComponent } from './workflow-manage/workflow-manage.compo
     GeoprocessingModelManageComponent,
     GeoprocessingModelDesignComponent,
     InspectorComponent,
-    MessageInspectorComponent,
+    GeoprocessingModelNodeInspectorComponent,
+    FlowNodeInspectorComponent,
     LabelInspectorComponent,
     LinkInspectorComponent,
     BatchDirective,
@@ -77,6 +90,17 @@ import { WorkflowManageComponent } from './workflow-manage/workflow-manage.compo
     AgGridModule.withComponents([]),
     NgxTippyModule,
   ],
-  providers: [SystemManageService, EventBusService],
+  providers: [
+    AuthorizeManageService,
+    FlowManageService,
+    FormManageService,
+    GeoprocessingModelService,
+    LogManageService,
+    PersonalCenterService,
+    RoleManageService,
+    UserManageService,
+    WorkflowManageService,
+    EventBusService,
+  ],
 })
 export class SystemManageModule {}

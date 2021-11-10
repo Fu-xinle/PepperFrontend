@@ -38,6 +38,8 @@
 
 // 一些自定义库使用全局的混合器和函数,定义在外面
 @import 'development-theme/external-plugins/ag-grid';
+@import 'development-theme/external-plugins/rappid';
+@import 'development-theme/external-plugins/ztree';
 
 html {
     // bootstrap5 样式

@@ -13,7 +13,7 @@ import { Subscription, Subject, debounceTime, distinctUntilChanged } from 'rxjs'
 
 import { AppLoadingOverlayComponent } from '../../shared/components/ag-grid/app-loading-overlay.component';
 import { AppNorowsOverlayComponent } from '../../shared/components/ag-grid/app-no-rows-overlay.component';
-import { SystemManageService } from '../system-manage.service';
+import { LogManageService } from '../service/log-manage.service';
 
 @Component({
   selector: 'app-user-log',
@@ -93,7 +93,7 @@ export class UserLogComponent implements OnInit, OnDestroy {
       }
     | any;
 
-  public serverSideStoreType: ServerSideStoreType = ServerSideStoreType.Partial;
+  public serverSideStoreType: ServerSideStoreType = 'partial';
 
   /**搜索关键字、记录总数（用于服务器端分页） */
   public keySearcchValue: string = '';
@@ -102,7 +102,7 @@ export class UserLogComponent implements OnInit, OnDestroy {
 
   private subscription: Subscription = new Subscription();
 
-  constructor(private systemManageService: SystemManageService, private toastr: ToastrService) {
+  constructor(private logManageService: LogManageService, private toastr: ToastrService) {
     /**Ag-Grid表格的加载显示和空数据显示,自定义重载*/
     this.frameworkComponents = {
       customLoadingOverlay: AppLoadingOverlayComponent,
@@ -138,7 +138,7 @@ export class UserLogComponent implements OnInit, OnDestroy {
     params.api!.setServerSideDatasource({
       getRows: (serverParams: IServerSideGetRowsParams) => {
         this.subscription.add(
-          this.systemManageService.userLogServerSideData(this.totalCount, this.keySearcchValue, serverParams.request).subscribe({
+          this.logManageService.userLogServerSideData(this.totalCount, this.keySearcchValue, serverParams.request).subscribe({
             next: res => {
               serverParams.success({
                 rowCount: res.rowCount,

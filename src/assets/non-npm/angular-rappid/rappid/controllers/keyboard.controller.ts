@@ -1,16 +1,3 @@
-/*! Rappid v3.4.0 - HTML5 Diagramming Framework - TRIAL VERSION
-
-Copyright (c) 2021 client IO
-
- 2021-09-23 
-
-
-This Source Code Form is subject to the terms of the Rappid Trial License
-, v. 2.0. If a copy of the Rappid License was not distributed with this
-file, You can obtain one at http://jointjs.com/license/rappid_v2.txt
- or from the Rappid archive as was distributed by client IO. See the LICENSE file.*/
-
-
 import { dia } from '@clientio/rappid';
 
 import RappidService from '../../services/rappid.service';
@@ -32,6 +19,9 @@ export class KeyboardController extends Controller {
             'ctrl+z': onCtrlZ,
             'ctrl+y': onCtrlY,
             'ctrl+e': onCtrlE,
+            'ctrl+o': onCtrlO,
+            'ctrl+s': onCtrlS,
+            'ctrl+d': onCtrlD,
         });
     }
 }
@@ -68,4 +58,19 @@ function onCtrlY(service: RappidService): void {
 
 function onCtrlE(service: RappidService): void {
     actions.exportToPNG(service);
+}
+
+function onCtrlO(service: RappidService, evt: dia.Event): void {
+    evt.preventDefault();
+    actions.setPropertyAction(service);
+}
+
+function onCtrlS(service: RappidService, evt: dia.Event): void {
+    evt.preventDefault();
+    actions.saveAction(service);
+}
+
+function onCtrlD(service: RappidService, evt: dia.Event): void {
+    evt.preventDefault();
+    actions.debugAction(service);
 }

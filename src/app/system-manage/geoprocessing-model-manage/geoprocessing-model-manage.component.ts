@@ -18,7 +18,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { AppLoadingOverlayComponent } from '../../shared/components/ag-grid/app-loading-overlay.component';
 import { AppNorowsOverlayComponent } from '../../shared/components/ag-grid/app-no-rows-overlay.component';
 import { IGeoprocessingModel, INameDescriptionNotification } from '../../shared/interface/system-manage.interface';
-import { SystemManageService } from '../system-manage.service';
+import { GeoprocessingModelService } from '../service/geoprocessing-model.service';
 import { GeoprocessingModelCrudOperationComponent } from './geoprocessing-model-crud-opeartion.component';
 
 @Component({
@@ -160,7 +160,7 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(
-    private systemManageService: SystemManageService,
+    private geoprocessingModelService: GeoprocessingModelService,
     private toastr: ToastrService,
     private modalService: NgbModal,
     private fb: FormBuilder
@@ -232,7 +232,7 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
 
     /**从服务器获取已有地理处理模型，显示在Ag-Grid表格中 */
     this.subscriptions.push(
-      this.systemManageService.getAllGeoprocessingModels().subscribe({
+      this.geoprocessingModelService.getAllGeoprocessingModels().subscribe({
         next: res => {
           this.geoprocessingModelData = res.geoprocessingModelData;
         },
@@ -310,7 +310,7 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
       description: this.createGeoprocessingModelGroup.value.description.toString().trim(),
     };
     this.subscriptions.push(
-      this.systemManageService.addGeoprocessingModel(newGeoprocessingModelInfo).subscribe({
+      this.geoprocessingModelService.addGeoprocessingModel(newGeoprocessingModelInfo).subscribe({
         next: _res => {
           /**更新Ag-Grid、表单对象、关闭对话框、toastr提示 */
           this.gridApi.applyTransaction({ add: [newGeoprocessingModelInfo] });
@@ -383,7 +383,7 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
     rowNode.data.name = this.editGeoprocessingModelGroup.value.name.toString().trim();
     rowNode.data.description = this.editGeoprocessingModelGroup.value.description.toString().trim();
     this.subscriptions.push(
-      this.systemManageService.editGeoprocessingModel(rowNode.data).subscribe({
+      this.geoprocessingModelService.editGeoprocessingModel(rowNode.data).subscribe({
         next: _res => {
           /**更新Ag-Grid、表单对象、关闭对话框、toastr提示 */
           this.gridApi.applyTransaction({ update: [rowNode.data] });
@@ -436,7 +436,7 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
 
     /**保存到数据库 */
     this.subscriptions.push(
-      this.systemManageService.deleteGeoprocessingModel(rowNode.data.guid).subscribe({
+      this.geoprocessingModelService.deleteGeoprocessingModel(rowNode.data.guid).subscribe({
         next: _res => {
           /**更新Ag-Grid(由于删除一行，ID序号需要修改)、表单对象、关闭对话框、toastr提示 */
           this.gridApi.applyTransaction({ remove: [rowNode.data] });
@@ -472,7 +472,7 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
    */
   onlineEdit(params: ValueSetterParams) {
     this.subscriptions.push(
-      this.systemManageService.editGeoprocessingModel(params.data).subscribe({
+      this.geoprocessingModelService.editGeoprocessingModel(params.data).subscribe({
         next: _res => {},
         error: err => {
           console.error(err);

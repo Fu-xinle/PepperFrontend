@@ -1,0 +1,55 @@
+<ng-container>
+  <h1>属性面板</h1>
+
+  <!--算法名称-->
+  <label>节点名称
+    <input [readOnly]="readonly" type="text" batch placeholder="输入..."
+      [(ngModel)]="label" (ngModelChange)="changeCellProp(props.label, label)">
+  </label>
+
+  <!--输入参数信息-->
+  <div class="ports">
+    <div class="out-ports-bar">
+      <span>输入参数</span>
+    </div>
+    <ng-container *ngFor="let port of inPorts; trackBy: trackByPortId">
+      <!-- <nz-descriptions [nzTitle]="port.name_zh_cn">
+        <nz-descriptions-item [nzSpan]="3" nzTitle="参数名称">
+          <input nz-input [readOnly]="readonly" [(ngModel)]="port.name_zh_cn"
+            nzSize="small" />
+        </nz-descriptions-item>
+        <nz-descriptions-item [nzSpan]="3" nzTitle="默认值">
+          <input nz-input [readOnly]="readonly" [(ngModel)]="port.default"
+            nzSize="small" />
+        </nz-descriptions-item>
+        <nz-descriptions-item [nzSpan]="3" nzTitle="是否开放">
+          <nz-radio-group [nzDisabled]="readonly" [(ngModel)]="port.isOpen"
+            (ngModelChange)="paramOpenChanged(port)">
+            <label nz-radio nzValue="P-Y">开放</label>
+            <label nz-radio nzValue="P-N">不开放</label>
+          </nz-radio-group>
+        </nz-descriptions-item>
+      </nz-descriptions> -->
+    </ng-container>
+  </div>
+
+  <!--输出参数信息-->
+  <div class="ports">
+    <div class="out-ports-bar">
+      <span>输出参数</span>
+    </div>
+    <ng-container *ngFor="let port of outPorts; trackBy: trackByPortId">
+      <!-- <nz-descriptions [nzTitle]="port.name_zh_cn">
+        <nz-descriptions-item [nzSpan]="3" nzTitle="参数名称">
+          <input nz-input [(ngModel)]="port.name_zh_cn" nzSize="small" />
+        </nz-descriptions-item>
+        <nz-descriptions-item [nzSpan]="3" nzTitle="是否开放">
+          <nz-radio-group [ngModel]="'R-Y'">
+            <label nz-radio nzValue="R-Y" [nzDisabled]="true">开放</label>
+            <label nz-radio nzValue="R-N" [nzDisabled]="true">不开放</label>
+          </nz-radio-group>
+        </nz-descriptions-item>
+      </nz-descriptions> -->
+    </ng-container>
+  </div>
+</ng-container>

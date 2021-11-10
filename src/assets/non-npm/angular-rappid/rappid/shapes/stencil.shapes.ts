@@ -1,37 +1,27 @@
-/*! Rappid v3.4.0 - HTML5 Diagramming Framework - TRIAL VERSION
-
-Copyright (c) 2021 client IO
-
- 2021-09-23 
-
-
-This Source Code Form is subject to the terms of the Rappid Trial License
-, v. 2.0. If a copy of the Rappid License was not distributed with this
-file, You can obtain one at http://jointjs.com/license/rappid_v2.txt
- or from the Rappid archive as was distributed by client IO. See the LICENSE file.*/
-
-
-import { dia, shapes } from '@clientio/rappid';
 import { ObjectHash } from 'backbone';
+ 
+ import {
+     DARK_COLOR,
+     FONT_FAMILY,
+     LIGHT_COLOR,
+     MAIN_COLOR,
+     MESSAGE_ICON,
+     PADDING_L,
+     TOOL_ICON
+ } from '../../config/theme';
+ import { dia, shapes } from '@clientio/rappid';
 
-import {
-    FONT_FAMILY,
-    PADDING_L,
-    LIGHT_COLOR,
-    MAIN_COLOR,
-    MESSAGE_ICON,
-} from '../../theme';
-
-export enum ShapeTypesEnum {
-    MESSAGE = 'stencil.Message',
-    FLOWCHART_START = 'stencil.FlowchartStart',
-    FLOWCHART_END = 'stencil.FlowchartEnd',
+ export enum ShapeTypesEnum {
+    GEOPROCESSING_MODEL_NODE = 'stencil.GeoprocessingModelNode',
+    FLOW_NODE = 'stencil.FlowNode',
+    START_NODE = 'stencil.StartNode',
+    END_NODE = 'stencil.EndNode',
 }
 
-const SHAPE_SIZE = 48;
+ const SHAPE_SIZE = 48;
 
-const FlowchartStart = dia.Element.define(ShapeTypesEnum.FLOWCHART_START, {
-    name: 'FlowchartStart',
+ const StartNode = dia.Element.define(ShapeTypesEnum.START_NODE, {
+    name: 'StartNode',
     size: { width: SHAPE_SIZE, height: SHAPE_SIZE },
     attrs: {
         body: {
@@ -71,8 +61,8 @@ const FlowchartStart = dia.Element.define(ShapeTypesEnum.FLOWCHART_START, {
     }],
 });
 
-const FlowchartEnd = dia.Element.define(ShapeTypesEnum.FLOWCHART_END, {
-    name: 'FlowchartEnd',
+ const EndNode = dia.Element.define(ShapeTypesEnum.END_NODE, {
+    name: 'EndNode',
     size: { width: SHAPE_SIZE, height: SHAPE_SIZE },
     attrs: {
         body: {
@@ -112,8 +102,8 @@ const FlowchartEnd = dia.Element.define(ShapeTypesEnum.FLOWCHART_END, {
     }],
 });
 
-const Message = dia.Element.define(ShapeTypesEnum.MESSAGE, {
-    name: 'Message',
+ const FlowNode = dia.Element.define(ShapeTypesEnum.FLOW_NODE, {
+    name: 'FlowNode',
     size: { width: SHAPE_SIZE, height: SHAPE_SIZE },
     attrs: {
         body: {
@@ -156,10 +146,55 @@ const Message = dia.Element.define(ShapeTypesEnum.MESSAGE, {
     }]
 });
 
-Object.assign(shapes, {
+ const GeoprocessingModelNode = dia.Element.define(ShapeTypesEnum.GEOPROCESSING_MODEL_NODE, {
+    name: 'GeoprocessingModelNode',
+    size: { width: SHAPE_SIZE, height: SHAPE_SIZE },
+    attrs: {
+        body: {
+            fill: LIGHT_COLOR,
+            stroke: '#E8E8E8',
+            refCx: '50%',
+            refCy: '50%',
+            refR: '50%'
+        },
+        icon: {
+            width: 20,
+            height: 20,
+            refX: '50%',
+            refY: '50%',
+            x: -10,
+            y: -10,
+            xlinkHref: TOOL_ICON
+        },
+        label: {
+            text: 'Component',
+            refDx: PADDING_L,
+            refY: '50%',
+            textAnchor: 'start',
+            textVerticalAnchor: 'middle',
+            fill: '#242424',
+            fontFamily: FONT_FAMILY,
+            fontSize: 13
+        }
+    }
+} as ObjectHash, {
+    markup: [{
+        tagName: 'circle',
+        selector: 'body'
+    }, {
+        tagName: 'image',
+        selector: 'icon'
+    }, {
+        tagName: 'text',
+        selector: 'label'
+    }]
+});
+
+ Object.assign(shapes, {
     stencil: {
-        Message,
-        FlowchartStart,
-        FlowchartEnd,
+        GeoprocessingModelNode,
+        FlowNode,
+        StartNode,
+        EndNode,
     }
 });

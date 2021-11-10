@@ -18,7 +18,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { AppLoadingOverlayComponent } from '../../shared/components/ag-grid/app-loading-overlay.component';
 import { AppNorowsOverlayComponent } from '../../shared/components/ag-grid/app-no-rows-overlay.component';
 import { IFlowModel, INameDescriptionNotification } from '../../shared/interface/system-manage.interface';
-import { SystemManageService } from '../system-manage.service';
+import { FormManageService } from '../service/form-manage.service';
 import { FormCrudOperationComponent } from './form-crud-opeartion.component';
 
 @Component({
@@ -160,7 +160,7 @@ export class FormManageComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(
-    private systemManageService: SystemManageService,
+    private formManageService: FormManageService,
     private toastr: ToastrService,
     private modalService: NgbModal,
     private fb: FormBuilder
@@ -232,7 +232,7 @@ export class FormManageComponent implements OnInit, OnDestroy {
 
     /**从服务器获取已有表单数据，显示在Ag-Grid表格中 */
     this.subscriptions.push(
-      this.systemManageService.getAllForms().subscribe({
+      this.formManageService.getAllForms().subscribe({
         next: res => {
           this.formData = res.formData;
         },
@@ -311,7 +311,7 @@ export class FormManageComponent implements OnInit, OnDestroy {
       description: this.createFormGroup.value.description.toString().trim(),
     };
     this.subscriptions.push(
-      this.systemManageService.addForm(newFormInfo).subscribe({
+      this.formManageService.addForm(newFormInfo).subscribe({
         next: _res => {
           /**更新Ag-Grid、表单对象、关闭对话框、toastr提示 */
           this.gridApi.applyTransaction({ add: [newFormInfo] });
@@ -384,7 +384,7 @@ export class FormManageComponent implements OnInit, OnDestroy {
     rowNode.data.name = this.editFormGroup.value.name.toString().trim();
     rowNode.data.description = this.editFormGroup.value.description.toString().trim();
     this.subscriptions.push(
-      this.systemManageService.editForm(rowNode.data).subscribe({
+      this.formManageService.editForm(rowNode.data).subscribe({
         next: _res => {
           /**更新Ag-Grid、表单对象、关闭对话框、toastr提示 */
           this.gridApi.applyTransaction({ update: [rowNode.data] });
@@ -437,7 +437,7 @@ export class FormManageComponent implements OnInit, OnDestroy {
 
     /**保存到数据库 */
     this.subscriptions.push(
-      this.systemManageService.deleteForm(rowNode.data.guid).subscribe({
+      this.formManageService.deleteForm(rowNode.data.guid).subscribe({
         next: _res => {
           /**更新Ag-Grid(由于删除一行，ID序号需要修改)、表单对象、关闭对话框、toastr提示 */
           this.gridApi.applyTransaction({ remove: [rowNode.data] });
@@ -473,7 +473,7 @@ export class FormManageComponent implements OnInit, OnDestroy {
    */
   onlineEdit(params: ValueSetterParams) {
     this.subscriptions.push(
-      this.systemManageService.editForm(params.data).subscribe({
+      this.formManageService.editForm(params.data).subscribe({
         next: _res => {},
         error: err => {
           console.error(err);

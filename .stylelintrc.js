@@ -15,6 +15,7 @@ module.exports = {
   // 与 SCSS 语法一起使用,stylelint官方推荐，依赖'stylelint-order', 'stylelint-scss'插件。
   // stylelint-config-hudochenkov:stylelint之父的stylelint配置,依赖'stylelint-order', 'stylelint-scss'插件。
   extends: [
+    'stylelint-config-standard-scss',
     'stylelint-config-standard',
     'stylelint-config-prettier',
     'stylelint-config-sass-guidelines',

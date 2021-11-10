@@ -18,7 +18,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { AppLoadingOverlayComponent } from '../../shared/components/ag-grid/app-loading-overlay.component';
 import { AppNorowsOverlayComponent } from '../../shared/components/ag-grid/app-no-rows-overlay.component';
 import { IFlowModel, INameDescriptionNotification } from '../../shared/interface/system-manage.interface';
-import { SystemManageService } from '../system-manage.service';
+import { FlowManageService } from '../service/flow-manage.service';
 import { FlowCrudOperationComponent } from './flow-crud-opeartion.component';
 
 @Component({
@@ -160,7 +160,7 @@ export class FlowManageComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(
-    private systemManageService: SystemManageService,
+    private flowManageService: FlowManageService,
     private toastr: ToastrService,
     private modalService: NgbModal,
     private fb: FormBuilder
@@ -232,7 +232,7 @@ export class FlowManageComponent implements OnInit, OnDestroy {
 
     /**从服务器获取已有流程数据，显示在Ag-Grid表格中 */
     this.subscriptions.push(
-      this.systemManageService.getAllFlows().subscribe({
+      this.flowManageService.getAllFlows().subscribe({
         next: res => {
           this.flowData = res.flowData;
         },
@@ -311,7 +311,7 @@ export class FlowManageComponent implements OnInit, OnDestroy {
       description: this.createFlowForm.value.description.toString().trim(),
     };
     this.subscriptions.push(
-      this.systemManageService.addFlow(newFlowInfo).subscribe({
+      this.flowManageService.addFlow(newFlowInfo).subscribe({
         next: _res => {
           /**更新Ag-Grid、表单对象、关闭对话框、toastr提示 */
           this.gridApi.applyTransaction({ add: [newFlowInfo] });
@@ -384,7 +384,7 @@ export class FlowManageComponent implements OnInit, OnDestroy {
     rowNode.data.name = this.editFlowForm.value.name.toString().trim();
     rowNode.data.description = this.editFlowForm.value.description.toString().trim();
     this.subscriptions.push(
-      this.systemManageService.editFlow(rowNode.data).subscribe({
+      this.flowManageService.editFlow(rowNode.data).subscribe({
         next: _res => {
           /**更新Ag-Grid、表单对象、关闭对话框、toastr提示 */
           this.gridApi.applyTransaction({ update: [rowNode.data] });
@@ -437,7 +437,7 @@ export class FlowManageComponent implements OnInit, OnDestroy {
 
     /**保存到数据库 */
     this.subscriptions.push(
-      this.systemManageService.deleteFlow(rowNode.data.guid).subscribe({
+      this.flowManageService.deleteFlow(rowNode.data.guid).subscribe({
         next: _res => {
           /**更新Ag-Grid(由于删除一行，ID序号需要修改)、表单对象、关闭对话框、toastr提示 */
           this.gridApi.applyTransaction({ remove: [rowNode.data] });
@@ -473,7 +473,7 @@ export class FlowManageComponent implements OnInit, OnDestroy {
    */
   onlineEdit(params: ValueSetterParams) {
     this.subscriptions.push(
-      this.systemManageService.editFlow(params.data).subscribe({
+      this.flowManageService.editFlow(params.data).subscribe({
         next: _res => {},
         error: err => {
           console.error(err);

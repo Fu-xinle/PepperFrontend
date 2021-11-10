@@ -1,28 +1,16 @@
-/*! Rappid v3.4.0 - HTML5 Diagramming Framework - TRIAL VERSION
-
-Copyright (c) 2021 client IO
-
- 2021-09-23 
-
-
-This Source Code Form is subject to the terms of the Rappid Trial License
-, v. 2.0. If a copy of the Rappid License was not distributed with this
-file, You can obtain one at http://jointjs.com/license/rappid_v2.txt
- or from the Rappid archive as was distributed by client IO. See the LICENSE file.*/
-
-
 import { dia, shapes, ui } from '@clientio/rappid';
 
 import { enableVirtualRendering } from '../rappid/features/virtual-rendering';
-import { toolbarConfig } from '../rappid/config/toolbar.config';
-import { BACKGROUND_COLOR, SECONDARY_BACKGROUND_COLOR, GRID_SIZE, PADDING_L, PADDING_S } from '../theme';
+import { toolbarConfig } from '../config/toolbar.config';
+import { BACKGROUND_COLOR, SECONDARY_BACKGROUND_COLOR, GRID_SIZE, PADDING_L, PADDING_S,STENCIL_WIDTH } from '../config/theme';
 import './shapes/index';
 
 export function createPlugins(
     scopeElement: Element,
     paperElement: Element,
     stencilElement: Element,
-    toolbarElement: Element
+    toolbarElement: Element,
+    injectContext:{[key: string]: any}
 ) {
     // Graph
     // https://resources.jointjs.com/docs/jointjs/v3.1/joint.html#dia.Graph
@@ -94,7 +82,8 @@ export function createPlugins(
     // https://resources.jointjs.com/docs/rappid/v3.1/ui.html#ui.Stencil
     const stencil = new ui.Stencil({
         paper: scroller,
-        width: 240,
+        width: STENCIL_WIDTH,
+        height:"calc(100vh - 180px)" as any,
         scaleClones: true,
         dropAnimation: true,
         paperOptions: {
@@ -103,6 +92,11 @@ export function createPlugins(
                 color: SECONDARY_BACKGROUND_COLOR
             }
         },
+        groups: injectContext['stencil-group'] ? injectContext['stencil-group'] : undefined, 
+        groupsToggleButtons: injectContext['stencil-group'] ? true : false ,
+        search: injectContext['stencil-group'] ? {
+            '*': ['type', 'attrs/text/text', 'attrs/root/dataTooltip', 'attrs/label/text']
+        } : undefined,
         dragStartClone: (element) => {
             const name = element.get('name');
             const Shape = (shapes.app as any)[name];
@@ -132,7 +126,7 @@ export function createPlugins(
     // Toolbar Plugin
     // https://resources.jointjs.com/docs/rappid/v3.1/ui.html#ui.Toolbar
     const toolbar = new ui.Toolbar({
-        tools: toolbarConfig.tools,
+        tools: toolbarConfig.tools[injectContext['toolbar-name']],
         autoToggle: true,
         references: {
             paperScroller: scroller,
@@ -159,3 +153,5 @@ export function createPlugins(
 
     return { graph, paper, scroller, stencil, toolbar, tooltip, keyboard, history };
 }
+
+

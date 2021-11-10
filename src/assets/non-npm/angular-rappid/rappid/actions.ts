@@ -1,25 +1,12 @@
-/*! Rappid v3.4.0 - HTML5 Diagramming Framework - TRIAL VERSION
-
-Copyright (c) 2021 client IO
-
- 2021-09-23 
-
-
-This Source Code Form is subject to the terms of the Rappid Trial License
-, v. 2.0. If a copy of the Rappid License was not distributed with this
-file, You can obtain one at http://jointjs.com/license/rappid_v2.txt
- or from the Rappid archive as was distributed by client IO. See the LICENSE file.*/
-
-
 import { dia, ui, shapes } from '@clientio/rappid';
 
 import RappidService from '../services/rappid.service';
-import { SharedEvents } from '../rappid/controller';
-import { addCellTools } from '../rappid/tools';
-import { ZOOM_MAX, ZOOM_MIN, ZOOM_STEP } from '../theme';
-import { stencilConfig } from '../rappid/config/stencil.config';
-import { ShapeTypesEnum } from '../rappid/shapes/app.shapes';
-import { PADDING_L } from '../theme';
+import { SharedEvents } from './controller';
+import { addCellTools } from './tools';
+import { ZOOM_MAX, ZOOM_MIN, ZOOM_STEP } from '../config/theme';
+import { stencilConfig } from '../config/stencil.config';
+import {  ShapeTypesEnum } from './shapes/app.shapes';
+import { PADDING_L } from '../config/theme';
 
 // Selection
 
@@ -139,10 +126,19 @@ export function importGraphFromJSON(service: RappidService, json: any): void {
 
 // Stencil
 
-export function loadStencilShapes(service: RappidService): void {
+export function loadStencilShapes(service: RappidService,customStencilShapes: any= null, customStencilGroups: any= null): void {
     const { stencil } = service;
-    const stencilShapes = stencilConfig.shapes.map(shape => new (shapes.stencil as any)[shape.name](shape));
-    stencil.load(stencilShapes);
+    let  stencilShapes:any = {};
+    if (customStencilShapes){
+        for (const key of Object.keys(customStencilShapes)) {
+            stencilShapes[key] = customStencilShapes[key].map((shape:any) => new (shapes.stencil as any)[shape.name](shape));
+        } 
+        stencil.load(stencilShapes, customStencilGroups); 
+        stencil.closeGroups(); 
+    }else{
+        stencilShapes = stencilConfig.shapes.map(shape => new (shapes.stencil as any)[shape.name](shape));
+        stencil.load(stencilShapes);      
+    }
 }
 
 // Paper
@@ -167,4 +163,18 @@ export function undoAction(service: RappidService) {
 export function redoAction(service: RappidService) {
     const { history } = service;
     history.redo();
+}
+
+//custom toolbar event
+
+export function setPropertyAction(service: RappidService) {
+    service.injectContext['toolbar-set-property'].bind(service.injectContext['inject-scope'])();
+}
+
+export function debugAction(service: RappidService) {
+    service.injectContext['toolbar-debug'].bind(service.injectContext['inject-scope'])();
+}
+
+export function saveAction(service: RappidService) {
+    service.injectContext['toolbar-save'].bind(service.injectContext['inject-scope'])();
 }

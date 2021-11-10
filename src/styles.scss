@@ -4,7 +4,7 @@
 }
 
 .swal2-container > div {
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: 1px solid rgb(0 0 0 / 20%);
   border-radius: 0.3rem;
   background-color: #fff;
   background-clip: padding-box;
@@ -36,4 +36,20 @@
 
 .ag-status-bar-custom ul {
   margin-bottom: 0;
+}
+
+// 滚动条
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f8f9fa;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 2px solid #f8f9fa;
+  border-radius: 6px;
+  background-color: #70657b;
 }

@@ -7,7 +7,7 @@ import { ICellRendererParams } from 'ag-grid-community';
 import { GeoprocessingModelManageComponent } from './geoprocessing-model-manage.component';
 
 /**
- * ?目前是图标+tooltip的模式，更换为Button
+ * ?目前是图标+tooltip的模式，更换为Button,Button存在位置不正确问题
  */
 @Component({
   selector: 'app-geoprocessing-model-crud-operation',

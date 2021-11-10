@@ -12,7 +12,7 @@ import { AuthService } from '../../shared/services/auth/auth.service';
 import { EventListenerService } from '../../shared/services/event-listener.service';
 import { I18n, CustomDatepickerI18n, CustomAdapter, CustomDateParserFormatter } from '../../shared/services/i18n/datepicker';
 import { GeneralUtils } from '../../shared/utils/general.utils';
-import { SystemManageService } from '../system-manage.service';
+import { PersonalCenterService } from '../service/personal-center.service';
 
 @Component({
   selector: 'app-user-info',
@@ -50,7 +50,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
   constructor(
     public domSanitizerService: DomSanitizer,
     private authService: AuthService,
-    private systemManageService: SystemManageService,
+    private personalCenterService: PersonalCenterService,
     private toastr: ToastrService,
     private eventListenerService: EventListenerService
   ) {
@@ -85,7 +85,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     /** 性别配置数据 */
     this.subscriptions.push(
-      this.systemManageService.genderOption().subscribe({
+      this.personalCenterService.genderOption().subscribe({
         next: res => {
           this.selectOptionsConfig.gender = res.genderOptions;
         },
@@ -101,7 +101,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
 
     /** 学历配置数据 */
     this.subscriptions.push(
-      this.systemManageService.academicDegreeOption().subscribe({
+      this.personalCenterService.academicDegreeOption().subscribe({
         next: res => {
           this.selectOptionsConfig.academicDegree = res.academicDegreeOptions;
         },
@@ -144,7 +144,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
 
     /** 用户信息修改保存到数据库 */
     this.subscriptions.push(
-      this.systemManageService.userInfoFieldSave(this.userInfo.userGUID, dbFieldName, fieldValue).subscribe({
+      this.personalCenterService.userInfoFieldSave(this.userInfo.userGUID, dbFieldName, fieldValue).subscribe({
         next: _res => {
           this.editState[fieldName] = false;
           this.userInfo[fieldName] = fieldValue;
@@ -211,7 +211,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
    */
   changePhoto() {
     this.subscriptions.push(
-      this.systemManageService
+      this.personalCenterService
         .updatePhoto(this.userInfo.userGUID, this.croppedImage.toString().replace('data:image/png;base64,', ''))
         .subscribe({
           next: _res => {

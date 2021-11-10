@@ -1,0 +1,31 @@
+<ng-container>
+    <h1>属性面板</h1>
+
+    <label>节点名称
+        <input type="text"
+               batch
+               placeholder="输入..."
+               [(ngModel)]="label"
+               (ngModelChange)="changeCellProp(props.label, label)">
+    </label>
+
+<!--<label>Description
+        <input type="text"
+               batch
+               placeholder="Enter description"
+               [(ngModel)]="description"
+               (ngModelChange)="changeCellProp(props.description, description)">
+    </label>
+
+    <label>Icon (Base64)
+        <span class="icon-input-logo"></span>
+        <input type="text"
+               class="icon-input"
+               batch
+               placeholder="Enter icon"
+               spellcheck="false"
+               [(ngModel)]="icon"
+               (ngModelChange)="changeCellProp(props.icon, icon)">
+    </label> -->
+
+</ng-container>

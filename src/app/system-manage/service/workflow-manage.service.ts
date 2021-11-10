@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Injectable()
-export class SystemManageService {
+export class WorkflowManageService {
   constructor(private http: HttpClient) {}
 
   genderOption(): Observable<any> {

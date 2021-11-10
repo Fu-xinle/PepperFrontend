@@ -1,16 +1,3 @@
-/*! Rappid v3.4.0 - HTML5 Diagramming Framework - TRIAL VERSION
-
-Copyright (c) 2021 client IO
-
- 2021-09-23 
-
-
-This Source Code Form is subject to the terms of the Rappid Trial License
-, v. 2.0. If a copy of the Rappid License was not distributed with this
-file, You can obtain one at http://jointjs.com/license/rappid_v2.txt
- or from the Rappid archive as was distributed by client IO. See the LICENSE file.*/
-
-
 import { dia, shapes, util } from '@clientio/rappid';
 
 import RappidService from '../../services/rappid.service';
@@ -52,7 +39,9 @@ export class RappidController extends Controller {
         });
 
         this.listenTo(toolbar, {
-            'png:pointerclick': onToolbarPNGPointerclick
+            'set-property:pointerclick': onToolbarSetPropertyPointerclick,
+            'save:pointerclick': onToolbarSavePointerclick,
+            'debug:pointerclick': onToolbarDebugPointerclick,
         });
     }
 }
@@ -86,7 +75,7 @@ function onCellRemove(service: RappidService, removedCell: dia.Cell): void {
     }
 }
 
-function onElementPortsChange(_service: RappidService, message: shapes.app.Message): void {
+function onElementPortsChange(_service: RappidService, message: shapes.app.GeoprocessingModelNode): void {
     message.toggleAddPortButton('out');
 }
 
@@ -138,14 +127,14 @@ function onPaperElementPointerup(service: RappidService, _elementView: dia.Eleme
 
 function onPaperElementPortAdd(_service: RappidService, elementView: dia.ElementView, evt: dia.Event): void {
     evt.stopPropagation();
-    const message = elementView.model as shapes.app.Message;
+    const message = elementView.model as shapes.app.GeoprocessingModelNode;
     message.addDefaultPort();
 }
 
 function onPaperElementPortRemove(_service: RappidService, elementView: dia.ElementView, evt: dia.Event): void {
     evt.stopPropagation();
     const portId = elementView.findAttribute('port', evt.target);
-    const message = elementView.model as shapes.app.Message;
+    const message = elementView.model as shapes.app.GeoprocessingModelNode;
     message.removePort(portId as any);
 }
 
@@ -160,6 +149,14 @@ function onPaperScale(service: RappidService): void {
 
 // Toolbar
 
-function onToolbarPNGPointerclick(service: RappidService): void {
-    actions.exportToPNG(service);
+function onToolbarSavePointerclick(service: RappidService): void {
+    actions.saveAction(service);
+}
+
+function onToolbarSetPropertyPointerclick(service: RappidService): void {
+    actions.setPropertyAction(service);
+}
+
+function onToolbarDebugPointerclick(service: RappidService): void {
+    actions.debugAction(service);
 }

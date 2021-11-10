@@ -1,47 +1,35 @@
-/*! Rappid v3.4.0 - HTML5 Diagramming Framework - TRIAL VERSION
-
-Copyright (c) 2021 client IO
-
- 2021-09-23 
-
-
-This Source Code Form is subject to the terms of the Rappid Trial License
-, v. 2.0. If a copy of the Rappid License was not distributed with this
-file, You can obtain one at http://jointjs.com/license/rappid_v2.txt
- or from the Rappid archive as was distributed by client IO. See the LICENSE file.*/
-
-
-import { util, dia, g, shapes } from '@clientio/rappid';
+import { dia, g, shapes, util } from '@clientio/rappid';
 import {
-    MAX_PORT_COUNT,
+    ADD_PORT_SIZE,
+    BACKGROUND_COLOR,
+    DARK_COLOR,
     FONT_FAMILY,
+    LIGHT_COLOR,
+    LINE_WIDTH,
+    MAIN_COLOR,
+    MAX_PORT_COUNT,
     OUT_PORT_HEIGHT,
-    OUT_PORT_WIDTH,
     OUT_PORT_LABEL,
-    PORT_BORDER_RADIUS,
+    OUT_PORT_WIDTH,
     PADDING_L,
     PADDING_S,
-    ADD_PORT_SIZE,
-    REMOVE_PORT_SIZE,
-    BACKGROUND_COLOR,
-    LIGHT_COLOR,
-    DARK_COLOR,
-    MAIN_COLOR,
-    LINE_WIDTH
-} from '../../theme';
+    PORT_BORDER_RADIUS,
+    REMOVE_PORT_SIZE
+} from '../../config/theme';
 
 export enum ShapeTypesEnum {
     BASE = 'app.Base',
-    MESSAGE = 'app.Message',
-    FLOWCHART_START = 'app.FlowchartStart',
-    FLOWCHART_END = 'app.FlowchartEnd',
+    GEOPROCESSING_MODEL_NODE = 'app.GeoprocessingModelNode',
+    FLOW_NODE = 'app.FlowNode',
+    START_NODE = 'app.StartNode',
+    END_NODE = 'app.EndNode',
     LINK = 'app.Link'
 }
 
 const outputPortPosition = (portsArgs: dia.Element.Port[], elBBox: dia.BBox): g.Point[] => {
     const step = OUT_PORT_WIDTH + PADDING_S;
     return portsArgs.map((port: dia.Element.Port, index: number) => new g.Point({
-        x: PADDING_L + OUT_PORT_WIDTH / 2 + index * step,
+        x: PADDING_L + OUT_PORT_WIDTH / 2, // + OUT_PORT_WIDTH / 2 + index * step,
         y: elBBox.height
     }));
 };
@@ -49,11 +37,11 @@ const outputPortPosition = (portsArgs: dia.Element.Port[], elBBox: dia.BBox): g.
 const Base = dia.Element.define(ShapeTypesEnum.BASE, {
     // no default attributes
 }, {
-    getBoundaryPadding: function() {
+    getBoundaryPadding() {
         return util.normalizeSides(this.boundaryPadding);
     },
 
-    toJSON: function() {
+    toJSON() {
         // Simplify the element resulting JSON
         const json = dia.Element.prototype.toJSON.call(this);
         // Remove port groups and angle for better readability
@@ -63,7 +51,7 @@ const Base = dia.Element.define(ShapeTypesEnum.BASE, {
     }
 }, {
 
-    fromStencilShape: function(element: dia.Element) {
+    fromStencilShape(element: dia.Element) {
         const attrs = {
             label: {
                 text: element.attr(['label', 'text'])
@@ -74,16 +62,251 @@ const Base = dia.Element.define(ShapeTypesEnum.BASE, {
             },
             icon: {
                 xlinkHref: element.attr(['icon', 'xlinkHref'])
-            }
-        }
-        return new this({ attrs });
+            },
+            description: {
+                text: element.attr(['description', 'text'])
+            },
+            moduleAnnotations: element.attr(['moduleAnnotations']),
+            functionAnnotations: element.attr(['functionAnnotations']),
+        };
+        const ports = {
+            items: element.attr(['ports', 'items'])
+        };
+        const size = {
+            width: element.attr(['size', 'width'])
+        };
+        return new this({ attrs, ports, size });
     }
 
 });
 
+const GeoprocessingModelNode = Base.define(ShapeTypesEnum.GEOPROCESSING_MODEL_NODE, {
+    size: { width: 368, height: 100 },
+    ports: {
+        groups: {
+            in: {
+                position: {
+                    name: 'manual',
+                    args: {
+                        x: PADDING_L + OUT_PORT_WIDTH / 2,
+                        y: 0
+                    }
+                },
+                size: {
+                    width: OUT_PORT_WIDTH,
+                    height: OUT_PORT_HEIGHT
+                },
+                attrs: {
+                    portBody: {
+                        magnet: 'passive',
+                        refWidth: '100%',
+                        refHeight: '100%',
+                        refX: '-50%',
+                        refY: '-50%',
+                        rx: PORT_BORDER_RADIUS,
+                        ry: PORT_BORDER_RADIUS,
+                        fill: LIGHT_COLOR,
+                        strokeWidth: LINE_WIDTH / 2,
+                        stroke: '#D4D4D4',
+                    },
+                    portLabel: {
+                        pointerEvents: 'none',
+                        fontFamily: FONT_FAMILY,
+                        fontWeight: 400,
+                        fontSize: 10,
+                        fill: DARK_COLOR,
+                        textAnchor: 'start',
+                        textVerticalAnchor: 'middle',
+                        textWrap: {
+                            width: - REMOVE_PORT_SIZE / 4 - PADDING_L - PADDING_S,
+                            maxLineCount: 2,
+                            ellipsis: true
+                        },
+                        x: PADDING_L - OUT_PORT_WIDTH / 2
+                    },
+                },
+                markup: [{
+                    tagName: 'rect',
+                    selector: 'portBody'
+                }, {
+                    tagName: 'text',
+                    selector: 'portLabel',
+                }]
+            },
+            out: {
+                position: {
+                    name: 'manual',
+                    args: {
+                        x: PADDING_L + OUT_PORT_WIDTH / 2, // + OUT_PORT_WIDTH / 2 + index * step,
+                        y: 100
+                    }
+                },
+                size: {
+                    width: OUT_PORT_WIDTH,
+                    height: OUT_PORT_HEIGHT
+                },
+                attrs: {
+                    portBody: {
+                        magnet: 'active',
+                        refWidth: '100%',
+                        refHeight: '100%',
+                        refX: '-50%',
+                        refY: '-50%',
+                        fill: DARK_COLOR,
+                        ry: PORT_BORDER_RADIUS,
+                        rx: PORT_BORDER_RADIUS
+                    },
+                    portLabel: {
+                        pointerEvents: 'none',
+                        fontFamily: FONT_FAMILY,
+                        fontWeight: 400,
+                        fontSize: 10,
+                        fill: LIGHT_COLOR,
+                        textAnchor: 'start',
+                        textVerticalAnchor: 'middle',
+                        textWrap: {
+                            width: - REMOVE_PORT_SIZE / 4 - PADDING_L - PADDING_S,
+                            maxLineCount: 2,
+                            ellipsis: true
+                        },
+                        x: PADDING_L - OUT_PORT_WIDTH / 2
+                    },
+                },
+                markup: [{
+                    tagName: 'rect',
+                    selector: 'portBody'
+                }, {
+                    tagName: 'text',
+                    selector: 'portLabel',
+                }]
+            }
+        },
+        items: []
+        /* items: [{
+            //     group: 'in'
+            // }, {
+            //     group: 'out',
+            //     attrs: { portLabel: { text: '是否' } }
+        }] */
+        // ]
+    },
+    attrs: {
+        body: {
+            refWidth: '100%',
+            refHeight: '100%',
+            fill: LIGHT_COLOR,
+            strokeWidth: LINE_WIDTH / 2,
+            stroke: '#D4D4D4',
+            rx: 3,
+            ry: 3,
+        },
+        label: {
+            refX: 54 + 15,
+            refY: PADDING_L + 15,
+            fontFamily: FONT_FAMILY,
+            fontWeight: 600,
+            fontSize: 16,
+            fill: '#322A49',
+            text: 'Label',
+            textWrap: {
+                width: - 54 - PADDING_L,
+                maxLineCount: 1,
+                ellipsis: true
+            },
+            textVerticalAnchor: 'top',
+        },
+        description: {
+            refX: 54 + 15,
+            refY: 53,
+            fontFamily: FONT_FAMILY,
+            fontWeight: 400,
+            fontSize: 13,
+            lineHeight: 13,
+            fill: '#655E77',
+            textVerticalAnchor: 'top',
+            text: 'Description',
+            textWrap: {
+                width: - 54 - PADDING_L,
+                maxLineCount: 2,
+                ellipsis: true
+            }
+        },
+        icon: {
+            width: 20,
+            height: 20,
+            refX: PADDING_L + 15,
+            refY: 39,
+            xlinkHref: ''
+        },
+        /*     portAddButton: {
+                    cursor: 'pointer',
+                    fill: MAIN_COLOR,
+                    event: 'element:port:add',
+                    refX: '100%',
+                    refX2: -28,
+                    refY: '100%',
+                    dataTooltip: 'Add Output Port',
+                    dataTooltipPosition: 'top'
+                },
+                portAddButtonBody: {
+                    width: ADD_PORT_SIZE,
+                    height: ADD_PORT_SIZE,
+                    rx: PORT_BORDER_RADIUS,
+                    ry: PORT_BORDER_RADIUS,
+                    x: -ADD_PORT_SIZE / 2,
+                    y: -ADD_PORT_SIZE / 2,
+                },
+                portAddButtonIcon: {
+                    d: 'M -4 0 4 0 M 0 -4 0 4',
+                    stroke: '#FFFFFF',
+                    strokeWidth: LINE_WIDTH
+                } */
+    }
+}, {
+    markup: [{
+        tagName: 'rect',
+        selector: 'body',
+    }, {
+        tagName: 'text',
+        selector: 'label',
+    }, {
+        tagName: 'text',
+        selector: 'description',
+    }, {
+        tagName: 'image',
+        selector: 'icon',
+    }],
 
-const Message = Base.define(ShapeTypesEnum.MESSAGE, {
-    size: { width: 368, height: 80 },
+    boundaryPadding: {
+        horizontal: PADDING_L,
+        top: OUT_PORT_HEIGHT / 2 + PADDING_L,
+        bottom: OUT_PORT_HEIGHT / 2 + PADDING_L
+    },
+
+    addDefaultPort() {
+        if (!this.canAddPort('out')) { return; }
+        this.addPort({
+            group: 'out',
+            attrs: { portLabel: { text: OUT_PORT_LABEL } }
+        });
+    },
+
+    canAddPort(group: string): boolean {
+        return Object.keys(this.getGroupPorts(group)).length < MAX_PORT_COUNT;
+    },
+
+    toggleAddPortButton(group: string): void {
+        const buttonAttributes = this.canAddPort(group)
+            ? { fill: MAIN_COLOR, cursor: 'pointer' }
+            : { fill: '#BEBEBE', cursor: 'not-allowed' };
+        this.attr(['portAddButton'], buttonAttributes, {
+            dry: true /* to be ignored by the Command Manager */
+        });
+    }
+});
+
+const FlowNode = Base.define(ShapeTypesEnum.FLOW_NODE, {
+    size: { width: 240, height: 80 },
     ports: {
         groups: {
             in: {
@@ -119,21 +342,21 @@ const Message = Base.define(ShapeTypesEnum.MESSAGE, {
             out: {
                 position: outputPortPosition,
                 size: {
-                    width: OUT_PORT_WIDTH,
-                    height: OUT_PORT_HEIGHT
+                    width: REMOVE_PORT_SIZE, // OUT_PORT_WIDTH,
+                    height: REMOVE_PORT_SIZE, // OUT_PORT_HEIGHT
                 },
                 attrs: {
                     portBody: {
                         magnet: 'active',
                         refWidth: '100%',
                         refHeight: '100%',
-                        refX: '-50%',
+                        // refX: '-50%',
                         refY: '-50%',
                         fill: DARK_COLOR,
                         ry: PORT_BORDER_RADIUS,
                         rx: PORT_BORDER_RADIUS
                     },
-                    portLabel: {
+                    /* portLabel: {
                         pointerEvents: 'none',
                         fontFamily: FONT_FAMILY,
                         fontWeight: 400,
@@ -169,12 +392,12 @@ const Message = Base.define(ShapeTypesEnum.MESSAGE, {
                         d: 'M -4 -4 4 4 M -4 4 4 -4',
                         stroke: DARK_COLOR,
                         strokeWidth: LINE_WIDTH
-                    }
+                    } */
                 },
                 markup: [{
                     tagName: 'rect',
                     selector: 'portBody'
-                }, {
+                }, /* {
                     tagName: 'text',
                     selector: 'portLabel',
                 }, {
@@ -187,14 +410,14 @@ const Message = Base.define(ShapeTypesEnum.MESSAGE, {
                         tagName: 'path',
                         selector: 'portRemoveButtonIcon'
                     }]
-                }]
+                } */]
             }
         },
         items: [{
             group: 'in'
         }, {
             group: 'out',
-            attrs: { portLabel: { text: OUT_PORT_LABEL }}
+            // attrs: { portLabel: { text: OUT_PORT_LABEL }}
         }]
     },
     attrs: {
@@ -209,10 +432,10 @@ const Message = Base.define(ShapeTypesEnum.MESSAGE, {
         },
         label: {
             refX: 54,
-            refY: PADDING_L,
+            refY: PADDING_L + 2*PADDING_S,
             fontFamily: FONT_FAMILY,
             fontWeight: 600,
-            fontSize: 16,
+            fontSize: 14,
             fill: '#322A49',
             text: 'Label',
             textWrap: {
@@ -222,30 +445,30 @@ const Message = Base.define(ShapeTypesEnum.MESSAGE, {
             },
             textVerticalAnchor: 'top',
         },
-        description: {
-            refX: 54,
-            refY: 38,
-            fontFamily: FONT_FAMILY,
-            fontWeight: 400,
-            fontSize: 13,
-            lineHeight: 13,
-            fill: '#655E77',
-            textVerticalAnchor: 'top',
-            text: 'Description',
-            textWrap: {
-                width: - 54 - PADDING_L,
-                maxLineCount: 2,
-                ellipsis: true
-            }
-        },
+        /*  description: {
+             refX: 54,
+             refY: 38,
+             fontFamily: FONT_FAMILY,
+             fontWeight: 400,
+             fontSize: 13,
+             lineHeight: 13,
+             fill: '#655E77',
+             textVerticalAnchor: 'top',
+             text: 'Description',
+             textWrap: {
+                 width: - 54 - PADDING_L,
+                 maxLineCount: 2,
+                 ellipsis: true
+             }
+         }, */
         icon: {
             width: 20,
             height: 20,
             refX: PADDING_L,
-            refY: 24,
-            xlinkHref: 'https://image.flaticon.com/icons/svg/151/151795.svg'
+            refY: 24+PADDING_S,
+            xlinkHref: ''
         },
-        portAddButton: {
+        /* portAddButton: {
             cursor: 'pointer',
             fill: MAIN_COLOR,
             event: 'element:port:add',
@@ -267,7 +490,7 @@ const Message = Base.define(ShapeTypesEnum.MESSAGE, {
             d: 'M -4 0 4 0 M 0 -4 0 4',
             stroke: '#FFFFFF',
             strokeWidth: LINE_WIDTH
-        }
+        } */
     }
 }, {
 
@@ -277,13 +500,13 @@ const Message = Base.define(ShapeTypesEnum.MESSAGE, {
     }, {
         tagName: 'text',
         selector: 'label',
-    }, {
+    }, /*  {
         tagName: 'text',
         selector: 'description',
-    }, {
+    }, */ {
         tagName: 'image',
         selector: 'icon',
-    }, {
+    }, /* {
         tagName: 'g',
         selector: 'portAddButton',
         children: [{
@@ -293,27 +516,27 @@ const Message = Base.define(ShapeTypesEnum.MESSAGE, {
             tagName: 'path',
             selector: 'portAddButtonIcon'
         }]
-    }],
+    } */],
 
     boundaryPadding: {
         horizontal: PADDING_L,
         top: PADDING_L,
-        bottom: OUT_PORT_HEIGHT / 2 + PADDING_L
+        bottom: PADDING_L // + OUT_PORT_HEIGHT / 2 
     },
 
-    addDefaultPort: function() {
-        if (!this.canAddPort('out')) return;
+    addDefaultPort() {
+        if (!this.canAddPort('out')) { return; }
         this.addPort({
             group: 'out',
-            attrs: { portLabel: { text: OUT_PORT_LABEL }}
+            attrs: { portLabel: { text: OUT_PORT_LABEL } }
         });
     },
 
-    canAddPort: function(group: string): boolean {
+    canAddPort(group: string): boolean {
         return Object.keys(this.getGroupPorts(group)).length < MAX_PORT_COUNT;
     },
 
-    toggleAddPortButton: function(group: string): void {
+    toggleAddPortButton(group: string): void {
         const buttonAttributes = this.canAddPort(group)
             ? { fill: MAIN_COLOR, cursor: 'pointer' }
             : { fill: '#BEBEBE', cursor: 'not-allowed' };
@@ -323,7 +546,7 @@ const Message = Base.define(ShapeTypesEnum.MESSAGE, {
     }
 });
 
-const FlowchartStart = Base.define(ShapeTypesEnum.FLOWCHART_START, {
+const StartNode = Base.define(ShapeTypesEnum.START_NODE, {
     size: { width: 48, height: 48 },
     ports: {
         groups: {
@@ -396,7 +619,7 @@ const FlowchartStart = Base.define(ShapeTypesEnum.FLOWCHART_START, {
     }
 });
 
-const FlowchartEnd = Base.define(ShapeTypesEnum.FLOWCHART_END, {
+const EndNode = Base.define(ShapeTypesEnum.END_NODE, {
     size: { width: 48, height: 48 },
     ports: {
         groups: {
@@ -404,8 +627,8 @@ const FlowchartEnd = Base.define(ShapeTypesEnum.FLOWCHART_END, {
                 position: { name: 'top' },
                 attrs: {
                     portBody: {
-                        fill: DARK_COLOR,
-                        stroke: BACKGROUND_COLOR,
+                        fill: LIGHT_COLOR,
+                        stroke: DARK_COLOR,
                         strokeWidth: 6,
                         paintOrder: 'stroke',
                         magnet: 'passive',
@@ -497,7 +720,7 @@ export const Link = dia.Link.define(ShapeTypesEnum.LINK, {
     labels: [{
         attrs: {
             labelText: {
-                text: 'Label',
+                text: '', // 'Label',
             }
         },
         position: {
@@ -555,9 +778,10 @@ export const Link = dia.Link.define(ShapeTypesEnum.LINK, {
 Object.assign(shapes, {
     app: {
         Base,
-        Message,
-        FlowchartStart,
-        FlowchartEnd,
+        GeoprocessingModelNode,
+        FlowNode,
+        StartNode,
+        EndNode,
         Link
     }
 });

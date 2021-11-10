@@ -2,11 +2,11 @@ import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, Ren
 
 import { Subscription } from 'rxjs';
 
+import exampleGraphJSON from '../../../assets/non-npm/angular-rappid/config/example-graph.json';
+import { STENCIL_WIDTH } from '../../../assets/non-npm/angular-rappid/config/theme';
 import { loadStencilShapes, importGraphFromJSON, zoomToFit } from '../../../assets/non-npm/angular-rappid/rappid/actions';
-import exampleGraphJSON from '../../../assets/non-npm/angular-rappid/rappid/config/example-graph.json';
 import { EventBusService } from '../../../assets/non-npm/angular-rappid/services/event-bus.service';
 import RappidService from '../../../assets/non-npm/angular-rappid/services/rappid.service';
-import { STENCIL_WIDTH } from '../../../assets/non-npm/angular-rappid/theme';
 
 @Component({
   selector: 'app-geoprocessing-model-design',
@@ -39,7 +39,15 @@ export class GeoprocessingModelDesignComponent implements AfterViewInit, OnDestr
       paper.nativeElement,
       stencil.nativeElement,
       toolbar.nativeElement,
-      eventBusService
+      eventBusService,
+      {
+        'stencil-group': null,
+        'inject-scope': this,
+        'toolbar-name': 'flow',
+        'toolbar-save': null,
+        'toolbar-debug': null,
+        'toolbar-set-property': null,
+      }
     );
     this.setStencilContainerSize();
     this.onStart();
