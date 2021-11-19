@@ -1,6 +1,6 @@
 import { Directive, HostListener } from '@angular/core';
 
-import * as screenfull from 'screenfull';
+import screenfull from 'screenfull';
 
 @Directive({
   selector: '[appScreenFull]',
