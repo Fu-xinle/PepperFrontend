@@ -110,6 +110,9 @@
   },
   "defaultProject": "PepperWeb",
   "cli": {
+    "cache": {
+      "enabled": false
+    },
     "defaultCollection": "@angular-eslint/schematics"
   }
 }

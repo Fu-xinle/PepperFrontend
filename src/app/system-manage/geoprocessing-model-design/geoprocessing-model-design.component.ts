@@ -52,6 +52,11 @@ export class GeoprocessingModelDesignComponent implements AfterViewInit, OnDestr
     this.setStencilContainerSize();
     this.onStart();
     cdr.detectChanges();
+
+    //!存在更佳的解决方案? 设置side-bar中svg的height为<g>元素的高度
+    this.element.nativeElement
+      .querySelectorAll('.side-bar .content svg')[0]
+      .setAttribute('height', `${this.element.nativeElement.querySelectorAll('.side-bar .content svg g')[0].getBBox().height + 10}px`);
   }
 
   public ngOnDestroy(): void {

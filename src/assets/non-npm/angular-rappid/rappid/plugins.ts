@@ -83,7 +83,7 @@ export function createPlugins(
     const stencil = new ui.Stencil({
         paper: scroller,
         width: STENCIL_WIDTH,
-        height:"calc(100vh - 180px)" as any,
+        height:"calc(100vh - 170px)" as any,
         scaleClones: true,
         dropAnimation: true,
         paperOptions: {

@@ -8,7 +8,7 @@ import { AgGridModule } from 'ag-grid-angular';
 import { ImageCropperModule } from 'ngx-image-cropper';
 // eslint-disable-next-line import/no-unassigned-import
 import 'ag-grid-enterprise';
-import { NgxTippyModule } from 'ngx-tippy-wrapper';
+import { NgxTippyModule, NgxTippyService } from 'ngx-tippy-wrapper';
 
 // rappid
 import { BatchDirective } from '../../assets/non-npm/angular-rappid/directives/batch.directive';
@@ -101,6 +101,7 @@ import { WorkflowManageComponent } from './workflow-manage/workflow-manage.compo
     UserManageService,
     WorkflowManageService,
     EventBusService,
+    NgxTippyService,
   ],
 })
 export class SystemManageModule {}

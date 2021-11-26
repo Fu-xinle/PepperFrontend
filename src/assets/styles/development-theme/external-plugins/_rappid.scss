@@ -41,6 +41,20 @@
       }
     }
   
+    .side-bar .content g.joint-layers {
+      transform: translate(25%, 0);
+    }
+
+    .side-bar .content div.joint-paper{
+      overflow: auto;
+    }
+
+    .side-bar .content svg{
+      height: auto;
+      padding-top: 15px;
+      padding-bottom: 15px;
+    }
+
     /*  Toolbar  */
     .joint-toolbar {
       position: absolute;
