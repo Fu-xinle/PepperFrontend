@@ -1,5 +1,6 @@
 import { Component, OnDestroy, ViewChild, TemplateRef, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import {
@@ -160,6 +161,8 @@ export class FormManageComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
     private formManageService: FormManageService,
     private toastr: ToastrService,
     private modalService: NgbModal,
@@ -267,6 +270,9 @@ export class FormManageComponent implements OnInit, OnDestroy {
    * 利用ngbModal弹出创建表单对话框
    */
   createForm() {
+    this.router.navigate(['../../system-manage/form-design', { guid: '' }], { relativeTo: this.activatedRoute });
+    return;
+
     const modalReference = this.modalService.open(this.createFormContent, { centered: true, backdrop: 'static' });
 
     modalReference.result.then(

@@ -27,7 +27,6 @@ import { AuthorizeComponent } from './authorize/authorize.component';
 import { FlowDesignComponent } from './flow-design/flow-design.component';
 import { FlowCrudOperationComponent } from './flow-manage/flow-crud-opeartion.component';
 import { FlowManageComponent } from './flow-manage/flow-manage.component';
-import { FormDesignVisualComponent } from './form-design-visual/form-design-visual.component';
 import { FormDesignComponent } from './form-design/form-design.component';
 import { FormCrudOperationComponent } from './form-manage/form-crud-opeartion.component';
 import { FormManageComponent } from './form-manage/form-manage.component';
@@ -63,7 +62,6 @@ import { WorkflowManageComponent } from './workflow-manage/workflow-manage.compo
     FlowDesignComponent,
     FormManageComponent,
     FormDesignComponent,
-    FormDesignVisualComponent,
     FormCrudOperationComponent,
     GeoprocessingModelCrudOperationComponent,
     GeoprocessingModelManageComponent,

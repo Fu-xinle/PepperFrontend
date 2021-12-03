@@ -9,7 +9,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DefaultInterceptor } from './shared/services/interceptor/default.interceptor';
-import { StartupService, StartupServiceFactory } from './shared/services/startup.service';
+import { StartupService, startupServiceFactory } from './shared/services/startup.service';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({
@@ -34,7 +34,7 @@ import { SharedModule } from './shared/shared.module';
     { provide: HTTP_INTERCEPTORS, useClass: DefaultInterceptor, multi: true },
     {
       provide: APP_INITIALIZER,
-      useFactory: StartupServiceFactory,
+      useFactory: startupServiceFactory,
       deps: [StartupService],
       multi: true,
     },

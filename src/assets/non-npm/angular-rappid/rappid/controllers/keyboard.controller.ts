@@ -21,6 +21,7 @@ export class KeyboardController extends Controller {
             'ctrl+e': onCtrlE,
             'ctrl+o': onCtrlO,
             'ctrl+s': onCtrlS,
+            'f12': onF12,
             'ctrl+d': onCtrlD,
         });
     }
@@ -68,6 +69,11 @@ function onCtrlO(service: RappidService, evt: dia.Event): void {
 function onCtrlS(service: RappidService, evt: dia.Event): void {
     evt.preventDefault();
     actions.saveAction(service);
+}
+
+function onF12(service: RappidService, evt: dia.Event): void {
+    evt.preventDefault();
+    actions.saveAsAction(service);
 }
 
 function onCtrlD(service: RappidService, evt: dia.Event): void {

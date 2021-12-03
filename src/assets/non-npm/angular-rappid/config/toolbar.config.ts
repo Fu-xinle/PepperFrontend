@@ -67,6 +67,18 @@ export const toolbarConfig:{tools:{[key: string]: any}} = {
             },
             {
                 type: 'button',
+                name: 'set-property',
+                group: 'custom-tool',
+                text: '',
+                attrs: {
+                    button: {
+                        'data-tooltip': '设置节点属性 <i>(Ctrl+O)</i>',
+                        'data-tooltip-position': 'top'
+                    }
+                }
+            },
+            {
+                type: 'button',
                 name: 'save',
                 group: 'custom-tool',
                 text: '',
@@ -79,16 +91,16 @@ export const toolbarConfig:{tools:{[key: string]: any}} = {
             },
             {
                 type: 'button',
-                name: 'set-property',
+                name: 'save-as',
                 group: 'custom-tool',
                 text: '',
                 attrs: {
                     button: {
-                        'data-tooltip': '设置节点属性 <i>(Ctrl+O)</i>',
+                        'data-tooltip': '另存为 <i>(F12)</i>',
                         'data-tooltip-position': 'top'
                     }
                 }
-            }
+            },
         ],
         'geoprocessing-model':[
             {
@@ -161,6 +173,18 @@ export const toolbarConfig:{tools:{[key: string]: any}} = {
                 attrs: {
                     button: {
                         'data-tooltip': '保存 <i>(Ctrl+S)</i>',
+                        'data-tooltip-position': 'top'
+                    }
+                }
+            },
+            {
+                type: 'button',
+                name: 'save-as',
+                group: 'custom-tool',
+                text: '',
+                attrs: {
+                    button: {
+                        'data-tooltip': '另存为 <i>(F12)</i>',
                         'data-tooltip-position': 'top'
                     }
                 }

@@ -1,5 +1,5 @@
 interface ISimpleInformationModel {
-  id: number;
+  id?: number;
   guid: string;
   name: string;
   description: string;
@@ -19,6 +19,25 @@ export interface IFlowModel extends ISimpleInformationModel {}
  * 表单对象接口
  */
 export interface IFormModel extends ISimpleInformationModel {}
+
+interface ISimpleNode {
+  guid: string;
+  nodeName: string | undefined;
+  nextNodeGuid: string | null;
+}
+
+/**
+ *程图解析的连线对象接口
+ */
+export interface IFlowLink {
+  sourceGuid: string;
+  targetGuid: string;
+}
+
+/**
+ * 流程图解析的节点对象接口
+ */
+export interface IFlowNode extends ISimpleNode {}
 
 /**
  * 名称和描述的信息验证提示对象
@@ -53,7 +72,7 @@ export interface IConfirmPasswordValue {
  */
 export interface IUserInformation {
   [key: string]: string;
-  userGUID: string;
+  userGuid: string;
   userName: string;
   realName: string;
   gender: string;

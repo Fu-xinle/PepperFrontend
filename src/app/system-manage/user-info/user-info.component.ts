@@ -144,7 +144,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
 
     /** 用户信息修改保存到数据库 */
     this.subscriptions.push(
-      this.personalCenterService.userInfoFieldSave(this.userInfo.userGUID, dbFieldName, fieldValue).subscribe({
+      this.personalCenterService.userInfoFieldSave(this.userInfo.userGuid, dbFieldName, fieldValue).subscribe({
         next: _res => {
           this.editState[fieldName] = false;
           this.userInfo[fieldName] = fieldValue;
@@ -212,7 +212,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
   changePhoto() {
     this.subscriptions.push(
       this.personalCenterService
-        .updatePhoto(this.userInfo.userGUID, this.croppedImage.toString().replace('data:image/png;base64,', ''))
+        .updatePhoto(this.userInfo.userGuid, this.croppedImage.toString().replace('data:image/png;base64,', ''))
         .subscribe({
           next: _res => {
             this.isNewPicture = false;

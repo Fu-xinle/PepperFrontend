@@ -2,7 +2,7 @@
  * window.localStorage实用工具类
  */
 export class LocalStoreUtils {
-  /** 在window.localStorage中存储对象时,key(例如layout)名称可能与其他系统冲突,利用GUID避免重复 */
+  /** 在window.localStorage中存储对象时,key(例如layout)名称可能与其他系统冲突,利用guid避免重复 */
   static keyGuid: { [key: string]: string } = {
     layout: 'b498bc07-eab4-3828-4c7d-06b5b7d532ec',
   };

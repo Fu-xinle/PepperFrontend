@@ -1,5 +1,6 @@
 import { Component, OnDestroy, ViewChild, TemplateRef, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import {
@@ -13,7 +14,6 @@ import {
 } from 'ag-grid-community';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, Subject, debounceTime, distinctUntilChanged } from 'rxjs';
-import { v4 as uuidv4 } from 'uuid';
 
 import { AppLoadingOverlayComponent } from '../../shared/components/ag-grid/app-loading-overlay.component';
 import { AppNorowsOverlayComponent } from '../../shared/components/ag-grid/app-no-rows-overlay.component';
@@ -28,7 +28,6 @@ import { FlowCrudOperationComponent } from './flow-crud-opeartion.component';
 })
 export class FlowManageComponent implements OnInit, OnDestroy {
   /**对话框模板引用,利用ngbModal创建对话框，创建流程、编辑流程信息、删除流程 */
-  @ViewChild('createFlowContent') createFlowContent!: TemplateRef<void>;
   @ViewChild('editFlowContent') editFlowContent!: TemplateRef<void>;
   @ViewChild('deleteFlowContent') deleteFlowContent!: TemplateRef<void>;
 
@@ -139,12 +138,6 @@ export class FlowManageComponent implements OnInit, OnDestroy {
   /**流程数据列表 */
   public flowData!: IFlowModel[];
 
-  /**创建流程:表单组件、表单信息提示、保存信息提示 */
-  public createFlowForm: FormGroup;
-  public createFlowNotification: INameDescriptionNotification;
-  public createFlowLoading: boolean = false;
-  public createFlowLoadingText: string = '';
-
   /**编辑流程:编辑的流程信息(表中一行)、表单组件、表单信息提示、保存信息提示 */
   public editRowNode!: RowNode;
   public editFlowForm: FormGroup;
@@ -160,36 +153,13 @@ export class FlowManageComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
     private flowManageService: FlowManageService,
     private toastr: ToastrService,
     private modalService: NgbModal,
     private fb: FormBuilder
   ) {
-    /**创建流程变量初始化:信息提示对象、表单对象初始化，监测Input事件 */
-    this.createFlowNotification = {
-      nameMessageShow: false,
-      nameMessage: '请输入流程名称',
-      descriptionMessageShow: false,
-      descriptionMessage: '请输入流程描述',
-    };
-
-    this.createFlowForm = this.fb.group({
-      name: [''],
-      description: [''],
-    });
-
-    this.subscriptions.push(
-      this.createFlowForm.controls['name'].valueChanges.subscribe((_value: string) => {
-        this.createFlowNotification.nameMessageShow = false;
-      })
-    );
-
-    this.subscriptions.push(
-      this.createFlowForm.controls['description'].valueChanges.subscribe((_value: string) => {
-        this.createFlowNotification.descriptionMessageShow = false;
-      })
-    );
-
     /**编辑流程变量初始化:信息提示对象、表单对象初始化，监测Input事件 */
     this.editFlowNotification = {
       nameMessageShow: false,
@@ -264,74 +234,10 @@ export class FlowManageComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * 利用ngbModal弹出创建流程对话框
+   * 创建流程转到流程设计页面
    */
-  createFlow() {
-    const modalReference = this.modalService.open(this.createFlowContent, { centered: true, backdrop: 'static' });
-
-    modalReference.result.then(
-      _result => {},
-      _reason => {
-        // 其他关闭
-        this.createFlowLoading = false;
-        this.createFlowForm.controls['name'].setValue('');
-        this.createFlowForm.controls['description'].setValue('');
-        Object.assign(this.createFlowNotification, {
-          nameMessageShow: false,
-          nameMessage: '请输入流程名称',
-          descriptionMessageShow: false,
-          descriptionMessage: '请输入流程描述',
-        });
-      }
-    );
-  }
-
-  /**
-   * 创建流程对话框,单击保存事件，将新创建流程保存到数据库
-   *
-   * @param {NgbModalRef} modelRef Paramater 对话框对象引用
-   */
-  createFlowSave(modelRef: NgbModalRef) {
-    /**判断名称不能为空，描述暂时不判断、可以为空 */
-    const name: string = this.createFlowForm.value.name.toString().trim();
-    if (name.length === 0) {
-      this.createFlowNotification.nameMessageShow = true;
-      this.createFlowNotification.nameMessage = '请输入流程名称';
-      return;
-    }
-
-    this.createFlowLoading = true;
-    this.createFlowLoadingText = '提交中...';
-
-    /**保存到数据库 */
-    const newFlowInfo = {
-      id: this.flowData.length + 1,
-      guid: uuidv4(),
-      name: this.createFlowForm.value.name.toString().trim(),
-      description: this.createFlowForm.value.description.toString().trim(),
-    };
-    this.subscriptions.push(
-      this.flowManageService.addFlow(newFlowInfo).subscribe({
-        next: _res => {
-          /**更新Ag-Grid、表单对象、关闭对话框、toastr提示 */
-          this.gridApi.applyTransaction({ add: [newFlowInfo] });
-
-          this.createFlowLoading = false;
-          this.createFlowForm.controls['name'].setValue('');
-          this.createFlowForm.controls['description'].setValue('');
-
-          modelRef.close();
-          this.toastr.success('新流程添加成功!');
-        },
-        error: err => {
-          console.error(err);
-          this.toastr.error([err.url, err.error.errMessage, err.error.traceMessage].join('\n'), '错误');
-        },
-        complete: () => {
-          /*Completed*/
-        },
-      })
-    );
+  public createFlow() {
+    this.router.navigate(['../../system-manage/flow-design', { guid: '' }], { relativeTo: this.activatedRoute });
   }
 
   /**

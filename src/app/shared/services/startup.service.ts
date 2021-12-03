@@ -32,6 +32,6 @@ export class StartupService {
  * @param {StartupService} startupService Parameter StartupService实例
  * @returns {Observable<void>} APP_INITIALIZER的工厂函数
  */
-export function StartupServiceFactory(startupService: StartupService): () => Observable<void> {
+export function startupServiceFactory(startupService: StartupService): () => Observable<void> {
   return () => startupService.load();
 }

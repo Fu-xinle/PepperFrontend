@@ -4,7 +4,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthorizeComponent } from './authorize/authorize.component';
 import { FlowDesignComponent } from './flow-design/flow-design.component';
 import { FlowManageComponent } from './flow-manage/flow-manage.component';
-import { FormDesignVisualComponent } from './form-design-visual/form-design-visual.component';
 import { FormDesignComponent } from './form-design/form-design.component';
 import { FormManageComponent } from './form-manage/form-manage.component';
 import { GeoprocessingModelDesignComponent } from './geoprocessing-model-design/geoprocessing-model-design.component';
@@ -98,13 +97,6 @@ const routes: Routes = [
     component: FormDesignComponent,
     data: {
       title: '表单设计',
-    },
-  },
-  {
-    path: 'form-design-visual',
-    component: FormDesignVisualComponent,
-    data: {
-      title: '表单可视化设计',
     },
   },
 ];

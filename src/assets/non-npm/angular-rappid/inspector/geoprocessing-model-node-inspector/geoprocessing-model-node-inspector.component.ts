@@ -33,7 +33,7 @@ export class GeoprocessingModelNodeInspectorComponent extends BaseInspectorCompo
   };
 
   public addCellPort(): void {
-    this.cell.addDefaultPort();
+    //this.cell.addDefaultPort();
     this.assignFormPorts();
   }
 

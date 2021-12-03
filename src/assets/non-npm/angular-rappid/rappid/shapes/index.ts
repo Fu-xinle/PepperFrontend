@@ -12,25 +12,19 @@ declare module '@clientio/rappid' {
                 getBoundaryPadding(): dia.PaddingJSON;
             }
             class FlowNode extends Base {
-                addDefaultPort(): void;
-                canAddPort(group: string): boolean;
-                toggleAddPortButton(group: string): void;
             }
             class GeoprocessingModelNode extends Base {
-                addDefaultPort(): void;
-                canAddPort(group: string): boolean;
-                toggleAddPortButton(group: string): void;
             }
             class StartNode extends Base {
             }
             class EndNode extends Base {
             }
+            class BranchNode extends Base {
+            }
             class Link extends dia.Link {
             }
         }
         namespace stencil {
-            class GeoprocessingModelNode extends dia.Element {
-            }
             class FlowNode extends dia.Element {
             }
             class StartNode extends dia.Element {

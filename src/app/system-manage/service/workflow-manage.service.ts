@@ -15,17 +15,17 @@ export class WorkflowManageService {
     return this.http.get<any>('/system_manage_api/personal_center/academic_degree_option');
   }
 
-  userInfoFieldSave(userGUID: string, fieldName: string, fieldValue: string): Observable<any> {
+  userInfoFieldSave(userGuid: string, fieldName: string, fieldValue: string): Observable<any> {
     return this.http.post<any>('/system_manage_api/personal_center/user_info_field_save', {
-      userGUID,
+      userGuid,
       fieldName,
       fieldValue,
     });
   }
 
-  updatePhoto(userGUID: string, photoString: string): Observable<any> {
+  updatePhoto(userGuid: string, photoString: string): Observable<any> {
     return this.http.post<any>('/system_manage_api/personal_center/update_photo', {
-      userGUID,
+      userGuid,
       photoString,
     });
   }

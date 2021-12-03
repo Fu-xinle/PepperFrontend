@@ -1,8 +1,59 @@
 <div #toolbar></div>
 <div class="side-bar">
-  <div #stencil class="stencil-container"></div>
+  <div #stencil class="stencil-container list-layout"></div>
 </div>
 <div class="main-container">
-  <div #paper class="paper-container"></div>
+  <div #paper class="paper-container" (window:resize)="onResize($event)"></div>
 </div>
 <app-inspector></app-inspector>
+
+<ng-template #saveFlowContent let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">{{ flowSaveType === 0 ? '新建流程' : '流程另存为' }}</h5>
+    <button type="button" class="btn-close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.dismiss('关闭')">
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="saveFlowForm" class="ms-4 me-4">
+      <div class="mb-2">
+        <label for="name" class="form-label">名称</label>
+        <input
+          id="name"
+          class="form-control form-control-rounded"
+          [ngClass]="{ 'value-invalid': saveFlowNotification.nameMessageShow }"
+          formControlName="name"
+          type="text"
+          autocomplete="off"
+        />
+        <p *ngIf="saveFlowNotification.nameMessageShow" class="pt-1 mb-0">
+          <span class="text-danger">{{ saveFlowNotification.nameMessage }}</span>
+        </p>
+      </div>
+      <div class="mb-2">
+        <label for="description" class="form-label">描述</label>
+        <textarea
+          id="description"
+          class="form-control form-control-rounded"
+          [ngClass]="{ 'value-invalid': saveFlowNotification.descriptionMessageShow }"
+          formControlName="description"
+          rows="3"
+        ></textarea>
+        <p *ngIf="saveFlowNotification.descriptionMessageShow" class="pt-1 mb-0">
+          <span class="text-danger">{{ saveFlowNotification.descriptionMessage }}</span>
+        </p>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary btn-rounded" (click)="modal.dismiss('取消')">取 消</button>
+    <app-btn-loading
+      [btnClass]="'btn-primary btn-rounded'"
+      (click)="saveFlowModalOK(modal)"
+      [type]="'button'"
+      [loadingText]="saveFlowLoadingText"
+      [loading]="saveFlowLoading"
+    >
+      保 存
+    </app-btn-loading>
+  </div>
+</ng-template>

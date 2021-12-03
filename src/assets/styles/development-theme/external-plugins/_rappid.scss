@@ -26,11 +26,11 @@
       }
     }
   
-    /*  Sidebar  */
+    /*  Sidebar 与 stencil  */
     .side-bar {
       z-index: 2;
       display: flex;
-      max-width: 250px;
+      max-width: 450px;
       height: 100%;
       background: #222;
       background: none;
@@ -41,19 +41,49 @@
       }
     }
   
-    .side-bar .content g.joint-layers {
+    // 常规的流程的stencil布局
+    .stencil-container.list-layout .content g.joint-layers {
       transform: translate(25%, 0);
     }
 
-    .side-bar .content div.joint-paper{
+    .stencil-container .content div.joint-paper{
       overflow: auto;
     }
 
-    .side-bar .content svg{
+    .stencil-container .content svg{
       height: auto;
       padding-top: 15px;
       padding-bottom: 15px;
     }
+
+    /* Stencil */
+    .joint-stencil {
+      border: 0;
+      border-right: 1px solid #d4d4d426;
+      background: #fcfcfc;
+      .search-wrap{
+        padding: 10px 15px;
+      }
+      .search {
+        height: 40px;
+        max-height: 40px;
+        line-height: 40px;
+        &::-webkit-search-cancel-button {
+          -webkit-appearance: none;
+        }
+      }
+      .joint-element[data-directory=true] {
+        cursor: pointer;
+      }   
+    }
+
+    .joint-stencil.joint-theme-default .search {
+      border-bottom: 1px solid #00000057;
+  }
+
+  .joint-stencil.searchable > .content {
+     top: 50px;
+   }
 
     /*  Toolbar  */
     .joint-toolbar {
@@ -113,6 +143,10 @@
         }
   
         .joint-widget[data-name='save']::after {
+          content: '\ec22';
+        }
+        
+        .joint-widget[data-name='save-as']::after {
           content: '\e7ec';
         }
   
@@ -135,19 +169,9 @@
       .joint-highlight-stroke {
         stroke: #f5b720;
       }
-  
-      .joint-element.joint-type-app[data-type='app.FlowNode'] [joint-selector='body'] {
-        stroke: #212121;
-        stroke-width: 2;
-      }
     }
   
-    /* Stencil */
-    .joint-stencil {
-      border: 0;
-      border-right: 1px solid #d4d4d426;
-      background: #fcfcfc;
-    }
+
   
     /*  Tooltip  */
     .joint-tooltip {

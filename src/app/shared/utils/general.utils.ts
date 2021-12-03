@@ -55,7 +55,7 @@ export class GeneralUtils {
   }
 
   /**
-   * 根据输入长度，随机生成包含大小写字母、数字的ID字符串,请用uuid库生成的GUID代替
+   * 根据输入长度，随机生成包含大小写字母、数字的ID字符串,请用uuid库生成的guid代替
    *
    * @param {number} [length]  Parameter 字符串的长度，默认值5
    * @returns {string} Return 创建的ID字符串

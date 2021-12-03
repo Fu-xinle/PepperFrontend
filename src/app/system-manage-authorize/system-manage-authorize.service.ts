@@ -26,9 +26,9 @@ export class SystemManageAuthorizeService {
     });
   }
 
-  resetPassword(userGUID: string, newPassword: string): Observable<any> {
+  resetPassword(userGuid: string, newPassword: string): Observable<any> {
     return this.http.post<any>('/system_manage_api/personal_center/reset_password', {
-      userGUID,
+      userGuid,
       newPassword,
     });
   }

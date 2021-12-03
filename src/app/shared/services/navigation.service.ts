@@ -37,7 +37,7 @@ export class NavigationService implements OnDestroy {
         },
         {
           icon: 'icon-Bar-Chart',
-          name: 'BI主页',
+          name: 'Kan主页',
           state: '/development/home/home-bi',
           type: 'link',
         },

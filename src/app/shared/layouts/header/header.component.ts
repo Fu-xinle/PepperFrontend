@@ -254,7 +254,7 @@ export class HeaderComponent implements OnDestroy {
     /** 保存到服务器 */
     this.subscriptions.push(
       this.systemManageAuthorizeService
-        .resetPassword(this.authService.getUserInfo()!.userGUID, value.newPassword.toString().trim())
+        .resetPassword(this.authService.getUserInfo()!.userGuid, value.newPassword.toString().trim())
         .subscribe({
           next: _res => {
             this.loading = false;

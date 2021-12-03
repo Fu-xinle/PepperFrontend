@@ -1,8 +1,8 @@
 <div #toolbar></div>
 <div class="side-bar">
-  <div #stencil class="stencil-container"></div>
+  <div #stencil class="stencil-container tree-layout"></div>
 </div>
 <div class="main-container">
-  <div #paper class="paper-container"></div>
+  <div #paper class="paper-container" (window:resize)="onResize($event)"></div>
 </div>
 <app-inspector></app-inspector>

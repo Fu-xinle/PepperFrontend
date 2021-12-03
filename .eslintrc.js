@@ -132,6 +132,11 @@ module.exports = {
             format: ['camelCase'],
           },
           {
+            selector: ['variable'],
+            modifiers: ['const'],
+            format: ['UPPER_CASE', 'camelCase'],
+          },
+          {
             selector: ['parameter'],
             format: ['camelCase'],
             leadingUnderscore: 'allow',

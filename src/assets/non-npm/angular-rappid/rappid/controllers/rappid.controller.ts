@@ -21,7 +21,6 @@ export class RappidController extends Controller {
         this.listenTo(graph, {
             'add': onCellAdd,
             'remove': onCellRemove,
-            'change:ports': onElementPortsChange,
             'change add remove': util.debounce(onGraphChange, DEBOUNCE_TIME_MS),
         });
 
@@ -33,14 +32,13 @@ export class RappidController extends Controller {
             'cell:tool:remove': onPaperCellToolRemove,
             'element:pointermove': onPaperElementPointermove,
             'element:pointerup': onPaperElementPointerup,
-            'element:port:add': onPaperElementPortAdd,
-            'element:port:remove': onPaperElementPortRemove,
             'scale': onPaperScale
         });
 
         this.listenTo(toolbar, {
             'set-property:pointerclick': onToolbarSetPropertyPointerclick,
             'save:pointerclick': onToolbarSavePointerclick,
+            'save-as:pointerclick': onToolbarSaveAsPointerclick,
             'debug:pointerclick': onToolbarDebugPointerclick,
         });
     }
@@ -62,7 +60,7 @@ function onGraphStopBatch(service: RappidService, batchName: string): void {
 
 function onCellAdd(service: RappidService, cell: dia.Cell): void {
     if (cell.isLink()) return;
-    actions.setSelection(service, [cell]);
+    // actions.setSelection(service, [cell]);
     actions.updateLinksRouting(service);
 }
 
@@ -73,10 +71,6 @@ function onCellRemove(service: RappidService, removedCell: dia.Cell): void {
     if (removedCell.isElement()) {
         actions.updateLinksRouting(service);
     }
-}
-
-function onElementPortsChange(_service: RappidService, message: shapes.app.GeoprocessingModelNode): void {
-    message.toggleAddPortButton('out');
 }
 
 function onGraphChange(service: RappidService): void {
@@ -125,18 +119,6 @@ function onPaperElementPointerup(service: RappidService, _elementView: dia.Eleme
     actions.updateLinksRouting(service);
 }
 
-function onPaperElementPortAdd(_service: RappidService, elementView: dia.ElementView, evt: dia.Event): void {
-    evt.stopPropagation();
-    const message = elementView.model as shapes.app.GeoprocessingModelNode;
-    message.addDefaultPort();
-}
-
-function onPaperElementPortRemove(_service: RappidService, elementView: dia.ElementView, evt: dia.Event): void {
-    evt.stopPropagation();
-    const portId = elementView.findAttribute('port', evt.target);
-    const message = elementView.model as shapes.app.GeoprocessingModelNode;
-    message.removePort(portId as any);
-}
 
 function onPaperCellToolRemove(_service: RappidService, cellView: dia.CellView, evt: dia.Event): void {
     cellView.model.remove();
@@ -151,6 +133,10 @@ function onPaperScale(service: RappidService): void {
 
 function onToolbarSavePointerclick(service: RappidService): void {
     actions.saveAction(service);
+}
+
+function onToolbarSaveAsPointerclick(service: RappidService): void {
+    actions.saveAsAction(service);
 }
 
 function onToolbarSetPropertyPointerclick(service: RappidService): void {

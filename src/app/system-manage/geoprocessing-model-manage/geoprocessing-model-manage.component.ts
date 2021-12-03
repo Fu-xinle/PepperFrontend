@@ -1,5 +1,6 @@
 import { Component, OnDestroy, ViewChild, TemplateRef, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import {
@@ -160,6 +161,8 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
     private geoprocessingModelService: GeoprocessingModelService,
     private toastr: ToastrService,
     private modalService: NgbModal,
@@ -267,6 +270,8 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
    * 利用ngbModal弹出创建地理处理模型对话框
    */
   createGeoprocessingModel() {
+    this.router.navigate(['../../system-manage/geoprocessing-model-design', { guid: '' }], { relativeTo: this.activatedRoute });
+    return;
     const modalReference = this.modalService.open(this.createGeoprocessingModelContent, { centered: true, backdrop: 'static' });
 
     modalReference.result.then(

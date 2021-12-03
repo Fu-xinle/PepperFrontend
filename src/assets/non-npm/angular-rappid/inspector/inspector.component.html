@@ -1,8 +1,8 @@
 <div class="inspector-container" [ngClass]="{'disabled-container': !cell}">
   <ng-container *ngIf="cell; else empty" [ngSwitch]="cell.get('type')">
-    <app-geoprocessing-model-node-inspector [readonly]="readonly" [cell]="cell"
+    <!-- <app-geoprocessing-model-node-inspector [readonly]="readonly" [cell]="cell"
       *ngSwitchCase="shapeTypesEnum.GEOPROCESSING_MODEL_NODE">
-    </app-geoprocessing-model-node-inspector>
+    </app-geoprocessing-model-node-inspector> -->
     <app-flow-node-inspector [cell]="cell"
       *ngSwitchCase="shapeTypesEnum.FLOW_NODE"></app-flow-node-inspector>
     <app-link-inspector [cell]="cell" *ngSwitchCase="shapeTypesEnum.LINK">
