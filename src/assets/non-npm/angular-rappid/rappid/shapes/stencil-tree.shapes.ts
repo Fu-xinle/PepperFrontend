@@ -8,6 +8,7 @@ export class StencilNode extends dia.Element {
         return {
             ...super.defaults,
             type: 'app.StencilNode',
+            parentID:'',
             hidden: false,
             collapsed: false,
             matched: false,
@@ -26,7 +27,7 @@ export class StencilNode extends dia.Element {
                     refY: -3,
                     refWidth2: 6,
                     refHeight2: 6,
-                    fill: 'transparent'
+                    fill: 'transparent',
                 },
                 label: {
                     refX: 25,
@@ -53,18 +54,20 @@ export class StencilNode extends dia.Element {
                     width: 10,
                     cursor: 'pointer',
                     event: 'element:collapse',
+                    shapeRendering:"optimizeSpeed"
                 },
                 buttonSign: {
                     refX: -5,
                     refY: -5,
                     stroke: '#808080',
-                    strokeWidth: 1.6
+                    strokeWidth: 1.0,
+                    shapeRendering:"optimizeSpeed"
                 }
             }
         }
     }
-    PLUS_SIGN = 'M 1 5 9 5 M 5 1 5 9'
-    MINUS_SIGN = 'M 2 5 8 5'
+    PLUS_SIGN = 'M 1 5 8 5 M 5 1 5 8'
+    MINUS_SIGN = 'M 1 5 8 5'
 
     markup = [{
         tagName: 'rect',

@@ -87,59 +87,6 @@ export function createPlugins(
 
     // Stencil Plugin (Element Palette)
     // https://resources.jointjs.com/docs/rappid/v3.1/ui.html#ui.Stencil
-    // const stencil = new ui.Stencil({
-    //     paper: scroller,
-    //     width: STENCIL_WIDTH,
-    //     height:"calc(100vh - 170px)" as any,
-    //     scaleClones: true,
-    //     dropAnimation: true,
-    //     paperOptions: {
-    //         sorting: dia.Paper.sorting.NONE,
-    //         background: {
-    //             color: SECONDARY_BACKGROUND_COLOR
-    //         }
-    //     },
-    //     dragStartClone: (element) => {
-    //         const name = element.get('name');
-    //         const Shape = (shapes.app as any)[name];
-    //         if (!Shape) throw new Error(`Invalid stencil shape name: ${name}`);
-    //         return Shape.fromStencilShape(element);
-    //     },
-    //     layout: {
-    //         columns: 1,
-    //         rowGap: PADDING_S,
-    //         rowHeight: 'auto',
-    //         marginY: PADDING_S,
-    //         marginX: -PADDING_L,
-    //         dx: 0,
-    //         dy: 0,
-    //         resizeToFit: false
-    //     }
-    // });
-
-    // const stencil = createStencil(scroller, 280, stencilNodes, (node) => {
-    //     return new shapes.standard.Rectangle({
-    //         size: {
-    //             width: 120,
-    //             height: 40
-    //         },
-    //         attrs: {
-    //             body: {
-    //                 fill: '#333',
-    //                 stroke: '#F3F7F6',
-    //                 rx: 3,
-    //                 ry: 3
-    //             },
-    //             label: {
-    //                 fill: '#fff',
-    //                 fontSize: 15,
-    //                 fontFamily: 'monospace',
-    //                 text: `<${node.get('name')}>`
-    //             }
-    //         }
-    //     })
-    // });
-
     const stencil=stencilGenerate(injectContext,scroller);
     stencilElement.appendChild(stencil.el);
     stencil.el.dataset.textNoMatchesFound = '无匹配项'; 

@@ -6,7 +6,7 @@ import { addCellTools } from './tools';
 import { ZOOM_MAX, ZOOM_MIN, ZOOM_STEP } from '../config/theme';
 import { stencilConfig } from '../config/stencil.config';
 import {  ShapeTypesEnum } from './shapes/app.shapes';
-import { PADDING_L ,DIRECTORY_ICON,FILE_ICON} from '../config/theme';
+import { PADDING_L ,FOLDER_ICON,FOLDER_OPEN_ICON,DATABASE_ICON,TABLE_ICON,TOOL_BOX_ICON,MODEL_ICON,ALGORITHM_ICON,UNKONWN_ICON,MODEL_BOX_ICON} from '../config/theme';
 import { StencilNode,StencilLink } from './shapes/stencil-tree.shapes';
 import { IStencilNode } from './stencil';
 
@@ -134,7 +134,7 @@ export function loadStencilShapes(service: RappidService): void {
     stencil.load(stencilShapes);
 }
 
-export function loadStencilTreeLayout(service: RappidService,list:IStencilNode): void {
+export function loadStencilTreeLayout(service: RappidService,list:IStencilNode[]): void {
 
     const { stencil } = service;
     
@@ -167,16 +167,25 @@ export function loadStencilTreeLayout(service: RappidService,list:IStencilNode):
 
     function layoutTree() {
         // Reset tree layout start position
-        stencilRoot.position(30, 10);
+        stencilRoot.position(20, 10);
+        
         // Or to Hide the first root level use this.
         // stencilRoot.position(10, -20);
         stencilGraph.getElements().forEach(el => el.attributes.hidden = true);
         stencilTree.layout();
-        stencilPaper.fitToContent({
-            minWidth: stencil.options.width,
-            contentArea: stencilTree.getLayoutBBox(),
-            padding: { bottom: 20 }
-        } as dia.Paper.FitToContentOptions);
+        stencilGraph.getElements().forEach(el => {
+            if(el.attributes.id==="#"){
+                el.attributes.hidden = true;
+            }
+        });
+        // 异步事件更新高度
+        setTimeout(() => {
+            stencilPaper.fitToContent({
+                minWidth: stencil.options.width,
+                contentArea: stencilTree.getLayoutBBox(),
+                padding: { bottom: 20 }
+            } as dia.Paper.FitToContentOptions);
+        }, 0);
     }
 
     function resetTree(): void {
@@ -188,7 +197,7 @@ export function loadStencilTreeLayout(service: RappidService,list:IStencilNode):
 
     function layoutGrid(matchedGraph: dia.Graph): void {
         // Display grid layout when graph is filtered
-        layout.GridLayout.layout(matchedGraph, {
+      const stencilGrid= layout.GridLayout.layout(matchedGraph, {
             verticalAlign: 'top',
             horizontalAlign: 'left',
             columns: 1,
@@ -215,15 +224,20 @@ export function loadStencilTreeLayout(service: RappidService,list:IStencilNode):
     function toggleBranch(root: StencilNode): void {
         const shouldHide = !root.isCollapsed();
         root.set({ collapsed: shouldHide });
+        console.info(root)
+        if(root.attributes.parentID!== "#"){
+             root.setIcon(shouldHide?FOLDER_ICON:FOLDER_OPEN_ICON);
+        }
         layoutTree();
     }
 
     // Events
 
-    stencil.on('filter', (matchedGraph: dia.Graph, _group: string, keyword: string) => {
+    stencil.on('filter', (matchedGraph: dia.Graph, _group: string, keyword: string) => { 
         if (keyword === '') {
             resetTree();
         } else {
+            // !! 过滤存在跳跃问题，应该使用rxjs流过滤解决??
             resetGrid(matchedGraph, keyword);
         }
     });
@@ -238,35 +252,44 @@ export function loadStencilTreeLayout(service: RappidService,list:IStencilNode):
     resetTree();
 }
 
-function buildCellsFromList(list: IStencilNode): Array<dia.Cell> {
+function buildCellsFromList(list: IStencilNode[]): Array<dia.Cell> {
 
     const elements: StencilNode[] = [];
     const links: StencilLink[] = [];
 
-    const iterate = (obj: IStencilNode, pathArray: string[] = []): StencilNode => {
+    list.forEach(obj=>{
+        let { name = '', icon = null, dir = false, collapsed = true } = obj;
 
-        const { name = '', icon = null, children = [], dir = false, collapsed = false } = obj;
-        // Path displayed during search
-        const path = pathArray.concat(name);
-        const node = new StencilNode({ path, name, dir, collapsed });
+        // 节点元素
+        // Path displayed during search=>pathArray.concat(name);
+        // ? path应该把路径链接起来？
+        const path =name; 
+        dir= obj.type===0?true:false;
+        collapsed=(obj.parentGUID==="@"||obj.parentGUID==="#")?false:true;
+        const node = new StencilNode({ path, name, dir, collapsed,id:obj.guid,parentID:obj.parentGUID,hidden:true});
+        
+        let defaultIcon = UNKONWN_ICON;
+        if(obj.category==="DATA"){
+            defaultIcon= obj.parentGUID==="#" ? DATABASE_ICON:(obj.type===0?FOLDER_ICON:TABLE_ICON);
+        }else if(obj.category==="ALGORITHM"){
+            defaultIcon= obj.parentGUID==="#" ? TOOL_BOX_ICON:(obj.type===0?FOLDER_ICON:ALGORITHM_ICON);
+        }else if(obj.category==="MODEL"){
+            defaultIcon= obj.parentGUID==="#" ? MODEL_BOX_ICON:(obj.type===0?FOLDER_ICON:MODEL_ICON);
+        }
 
-        const defaultIcon = dir ? DIRECTORY_ICON : FILE_ICON;
         node.setIcon(icon || defaultIcon);
         node.attr(['root', 'dataDirectory'], dir);
 
         elements.push(node);
 
-        children.forEach(child => {
-            const childNode = iterate(child, path);
+        // 连线元素
+        if(obj.parentGUID!=="@"){
             const link = new StencilLink();
-            link.connect(<string>node.id, <string>childNode.id);
+            link.connect(<string>obj.parentGUID, <string>obj.guid);
             links.push(link);
-        });
+        }
 
-        return node;
-    }
-
-    iterate(list);
+    })
 
     return [...elements, ...links];
 }

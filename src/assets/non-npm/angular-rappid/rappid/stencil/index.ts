@@ -6,7 +6,12 @@ import { StencilNode } from '../shapes/stencil-tree.shapes';
  * TreeLayout布局的节点信息
  */
  export interface  IStencilNode{
+    guid?:string,
     name: string;
+    category?:string;
+    type?:number;
+    parentGUID?:string;
+    
     icon?: string;
     dir?: boolean;
     collapsed?: boolean;
@@ -19,7 +24,6 @@ export function stencilGenerate(injectContext:{[key: string]: any},paper: dia.Pa
         const stencil = new ui.Stencil({
             paper,
             width: STENCIL_WIDTH*1.5,
-            height:"calc(100vh - 170px)" as any,
             dropAnimation: true,
             usePaperGrid: true,
             contentOptions: {
@@ -63,32 +67,32 @@ export function stencilGenerate(injectContext:{[key: string]: any},paper: dia.Pa
     } else {
         const stencil= new ui.Stencil({
             paper,
-        width: STENCIL_WIDTH,
-        height:"calc(100vh - 170px)" as any,
-        scaleClones: true,
-        dropAnimation: true,
-        paperOptions: {
-            sorting: dia.Paper.sorting.NONE,
-            background: {
-                color: SECONDARY_BACKGROUND_COLOR
+            width: STENCIL_WIDTH,
+            height:"calc(100vh - 170px)" as any,
+            scaleClones: true,
+            dropAnimation: true,
+            paperOptions: {
+                sorting: dia.Paper.sorting.NONE,
+                background: {
+                    color: SECONDARY_BACKGROUND_COLOR
+                }
+            },
+            dragStartClone: (element) => {
+                const name = element.get('name');
+                const Shape = (shapes.app as any)[name];
+                if (!Shape) throw new Error(`Invalid stencil shape name: ${name}`);
+                return Shape.fromStencilShape(element);
+            },
+            layout: {
+                columns: 1,
+                rowGap: PADDING_S,
+                rowHeight: 'auto',
+                marginY: PADDING_S,
+                marginX: -PADDING_L,
+                dx: 0,
+                dy: 0,
+                resizeToFit: false
             }
-        },
-        dragStartClone: (element) => {
-            const name = element.get('name');
-            const Shape = (shapes.app as any)[name];
-            if (!Shape) throw new Error(`Invalid stencil shape name: ${name}`);
-            return Shape.fromStencilShape(element);
-        },
-        layout: {
-            columns: 1,
-            rowGap: PADDING_S,
-            rowHeight: 'auto',
-            marginY: PADDING_S,
-            marginX: -PADDING_L,
-            dx: 0,
-            dy: 0,
-            resizeToFit: false
-        }
       });
 
       stencil.render();

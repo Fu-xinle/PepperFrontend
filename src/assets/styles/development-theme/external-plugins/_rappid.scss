@@ -50,17 +50,20 @@
       overflow: auto;
     }
 
-    .stencil-container .content svg{
+    .stencil-container.list-layout .content svg{
       height: auto;
       padding-top: 15px;
       padding-bottom: 15px;
     }
 
+    .stencil-container.tree-layout .content svg {
+      height: 100%;
+    }
     /* Stencil */
     .joint-stencil {
       border: 0;
       border-right: 1px solid #d4d4d426;
-      background: #fcfcfc;
+      background: #ffffff;
       .search-wrap{
         padding: 10px 15px;
       }
@@ -82,8 +85,14 @@
   }
 
   .joint-stencil.searchable > .content {
-     top: 50px;
+     top: 40px;
+     margin-bottom: 10px;
+     padding-left: 10px;
    }
+
+    .joint-stencil.joint-theme-default:after {
+      border-top: 0px solid #d3d3d3;
+    }
 
     /*  Toolbar  */
     .joint-toolbar {
