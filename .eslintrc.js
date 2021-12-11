@@ -130,6 +130,7 @@ module.exports = {
           {
             selector: ['variable', 'classProperty'],
             format: ['camelCase'],
+            leadingUnderscore: 'allow',
           },
           {
             selector: ['variable'],

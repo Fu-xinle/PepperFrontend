@@ -38,10 +38,7 @@ const Base = dia.Element.define(ShapeTypesEnum.BASE, {
 }, {
 
     fromStencilShape(element: dia.Element) {
-        const attrs = {
-            moduleAnnotations: element.attr(['moduleAnnotations']),
-            functionAnnotations: element.attr(['functionAnnotations']),
-        };
+        const attrs = {};
         return new this({ attrs });
     }
 

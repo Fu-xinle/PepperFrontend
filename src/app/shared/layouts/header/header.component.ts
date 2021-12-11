@@ -196,7 +196,7 @@ export class HeaderComponent implements OnDestroy {
    * 路由到用户信息详细页面,管理用户信息
    */
   userInformation() {
-    this.router.navigate(['../../system-manage/user-info'], { relativeTo: this.activatedRoute });
+    this.router.navigate(['./system-manage/user-info'], { relativeTo: this.activatedRoute });
   }
 
   /**

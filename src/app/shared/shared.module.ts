@@ -16,8 +16,18 @@ import { AppNorowsOverlayComponent } from './components/ag-grid/app-no-rows-over
 import { BtnLoadingComponent } from './components/btn-loading/btn-loading.component';
 import { SearchComponent } from './components/search/search.component';
 import { CustomizerComponent } from './components/customizer/customizer.component';
+import { ZtreeComponent } from './components/ztree/ztree.component';
+import { ZtreeSelectComponent } from './components/ztree-select/ztree-select.component';
 
-const customComponents = [AppLoadingOverlayComponent, AppNorowsOverlayComponent, BtnLoadingComponent, SearchComponent, CustomizerComponent];
+const customComponents = [
+  AppLoadingOverlayComponent,
+  AppNorowsOverlayComponent,
+  BtnLoadingComponent,
+  SearchComponent,
+  CustomizerComponent,
+  ZtreeComponent,
+  ZtreeSelectComponent,
+];
 
 /** layouts components */
 import { ContentLayoutComponent } from './layouts/content/content-layout.component';

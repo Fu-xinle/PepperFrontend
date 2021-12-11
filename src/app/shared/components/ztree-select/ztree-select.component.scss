@@ -1,0 +1,271 @@
+@keyframes bootstrap-ztree-select-animation-fade-in {
+  0% {
+    opacity: 0;
+  }
+}
+
+@keyframes bootstrap-ztree-select-animation-bounce {
+  0%,
+  to {
+    transform: scale(0);
+  }
+
+  50% {
+    transform: scale(1);
+  }
+}
+
+@keyframes bootstrap-ztree-select-animation-rotate {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+div.bootstrap-ztree-select {
+  position: relative;
+  box-sizing: border-box;
+  width: 300px;
+  line-height: 1.5;
+  text-align: left;
+}
+
+div.bootstrap-ztree-select svg {
+  fill: currentColor;
+}
+
+div.bootstrap-ztree-select-control {
+  display: table;
+  box-sizing: border-box;
+  width: 100%;
+  height: 36px;
+  padding-right: 5px;
+  padding-left: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: #fff;
+  table-layout: fixed;
+  transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  transition-duration: 0.2s;
+  transition-property: border-color, box-shadow, width, height, background-color, opacity;
+}
+
+div.bootstrap-ztree-select-control.bootstrap-ztree-select-control-focus {
+  border-color: #b399cc;
+  background-color: #fff;
+  color: #47404f;
+  box-shadow: 0 0 0 0.25rem rgb(102 51 153 / 25%);
+  outline: 0;
+}
+
+div.bootstrap-ztree-select-value-container {
+  position: relative;
+  display: table-cell;
+  vertical-align: middle;
+  width: 100%;
+  cursor: text;
+}
+
+div.bootstrap-ztree-select-multi-value {
+  display: inline-block;
+  vertical-align: middle;
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+div.bootstrap-ztree-select-multi-value-item-container {
+  display: inline-block;
+  vertical-align: top;
+  padding-top: 5px;
+  padding-right: 5px;
+}
+
+div.bootstrap-ztree-select-multi-value-item {
+  display: inline-table;
+  vertical-align: top;
+  padding: 2px 0;
+  border: 1px solid rgb(0 0 0 / 0%);
+  border-radius: 2px;
+  background: #e0d6eb4f;
+  color: #332e38;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+div.bootstrap-ztree-select-multi-value-label {
+  padding-right: 5px;
+  white-space: pre-line;
+  user-select: none;
+  user-select: none;
+  user-select: none;
+  user-select: none;
+}
+
+span.bootstrap-ztree-select-multi-value-label,
+span.bootstrap-ztree-select-value-remove {
+  display: table-cell;
+  vertical-align: middle;
+  padding: 0 5px;
+}
+
+div.bootstrap-ztree-select-multi-value-item:hover span.bootstrap-ztree-select-value-remove {
+  color: #e53935;
+}
+
+span.bootstrap-ztree-select-value-remove {
+  padding-left: 5px;
+  border-left: 1px solid #fff;
+  color: #332e38;
+  line-height: 0;
+}
+
+span.bootstrap-ztree-select-value-remove > svg {
+  width: 6px;
+  height: 6px;
+}
+
+div.bootstrap-ztree-select-placeholder {
+  color: #bdbdbd;
+}
+
+div.bootstrap-ztree-select-placeholder,
+div.bootstrap-ztree-select-single-value {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  padding-right: 5px;
+  padding-left: 5px;
+  line-height: 34px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  user-select: none;
+  user-select: none;
+  user-select: none;
+}
+
+div.bootstrap-ztree-select-helper-zoom-effect-off {
+  transform: none;
+  transform: none;
+}
+
+div.bootstrap-ztree-select-helper-hide {
+  display: none;
+}
+
+div.bootstrap-ztree-select-input-container {
+  display: inline-block;
+  vertical-align: top;
+  max-width: 100%;
+  padding-top: 5px;
+  padding-right: 5px;
+  padding-left: 0;
+  outline: none;
+  font-size: 12px;
+}
+
+.bootstrap-ztree-select-input {
+  vertical-align: top;
+  box-sizing: content-box;
+  width: 15px;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 5px;
+  border: 0;
+  background: none rgb(0 0 0 / 0%);
+  box-shadow: none;
+  outline: none;
+  line-height: inherit;
+}
+
+div.bootstrap-ztree-select-x-container {
+  display: table-cell;
+  vertical-align: middle;
+  width: 20px;
+  color: #ccc;
+  line-height: 0;
+  text-align: center;
+  cursor: pointer;
+  animation: bootstrap-ztree-select-animation-fade-in 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+div.bootstrap-ztree-select-x-container:hover {
+  color: #e53935;
+}
+
+div.bootstrap-ztree-select-sizer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: scroll;
+  height: 0;
+  margin: 0;
+  white-space: pre;
+  visibility: hidden;
+}
+
+.bootstrap-ztree-select-x {
+  width: 8px;
+  height: 8px;
+}
+
+div.bootstrap-ztree-select-control-arrow-container {
+  display: table-cell;
+  vertical-align: middle;
+  width: 20px;
+  line-height: 0;
+  text-align: center;
+  cursor: pointer;
+}
+
+div.bootstrap-ztree-select-control-arrow-container:hover .bootstrap-ztree-select-control-arrow {
+  color: #616161;
+}
+
+.bootstrap-ztree-select-control-arrow {
+  width: 9px;
+  height: 9px;
+  color: #ccc;
+}
+
+.bootstrap-ztree-select-control-arrow.bootstrap-ztree-select-control-arrow-rotate {
+  transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+
+div.bootstrap-ztree-select-menu-container {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 999;
+  overflow: auto;
+  box-sizing: border-box;
+  width: 100%;
+  max-height: 300px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  border-radius: 2px;
+  background-color: #fff;
+  box-shadow: 0 3px 6px -4px rgb(0 0 0 / 12%), 0 6px 16px 0 rgb(0 0 0 / 8%), 0 9px 28px 8px rgb(0 0 0 / 5%);
+  outline: none;
+  transition: 0s;
+}
+
+div.bootstrap-ztree-select-menu-container.scroll-bottom-border {
+  border-bottom: 10px solid #fff0;
+}
+
+div.bootstrap-ztree-select-menu {
+  position: relative;
+  display: none;
+}
+
+div.bootstrap-ztree-select-menu.ztree-select-menu-open {
+  display: block;
+}

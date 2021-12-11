@@ -25,7 +25,8 @@ export class SearchComponent implements OnInit {
   constructor(public searchService: SearchService) {}
 
   ngOnInit() {
-    const _a: number = 0;
+    const A: number = 0;
+    console.info(A);
     /* this.results$ = combineLatest(
       this.dl.getProducts(),
       this.searchCtrl.valueChanges.pipe(startWith(''), debounceTime(200)),

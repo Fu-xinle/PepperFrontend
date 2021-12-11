@@ -14,6 +14,8 @@ export class DropdownLinkDirective implements OnInit, OnDestroy {
    */
   protected _open: boolean = false;
 
+  public constructor(@Inject(DropdownDirective) protected nav: DropdownDirective) {}
+
   @HostBinding('class.open')
   @Input()
   get open(): boolean {
@@ -26,8 +28,6 @@ export class DropdownLinkDirective implements OnInit, OnDestroy {
       this.nav.closeOtherLinks(this);
     }
   }
-
-  public constructor(@Inject(DropdownDirective) protected nav: DropdownDirective) {}
 
   ngOnInit() {
     if (this.linkType === 'dropDown') {

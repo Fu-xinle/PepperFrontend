@@ -33,7 +33,11 @@
               { "glob": "icomoon-demo.html", "input": "src/assets/static-pages/icomoon/", "output": "/assets/static-pages/icomoon/" }
             ],
             "styles": ["src/assets/styles/index.scss", "src/styles.scss"],
-            "scripts": ["node_modules/jquery/dist/jquery.min.js", "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"]
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/@ztree/ztree_v3/js/jquery.ztree.all.min.js",
+              "node_modules/@ztree/ztree_v3/js/jquery.ztree.exhide.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -96,7 +100,11 @@
             "inlineStyleLanguage": "scss",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": ["src/assets/styles/index.scss", "src/styles.scss"],
-            "scripts": ["node_modules/jquery/dist/jquery.min.js", "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"]
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/@ztree/ztree_v3/js/jquery.ztree.all.min.js",
+              "node_modules/@ztree/ztree_v3/js/jquery.ztree.exhide.min.js"
+            ]
           }
         },
         "lint": {

@@ -224,7 +224,6 @@ export function loadStencilTreeLayout(service: RappidService,list:IStencilNode[]
     function toggleBranch(root: StencilNode): void {
         const shouldHide = !root.isCollapsed();
         root.set({ collapsed: shouldHide });
-        console.info(root)
         if(root.attributes.parentID!== "#"){
              root.setIcon(shouldHide?FOLDER_ICON:FOLDER_OPEN_ICON);
         }

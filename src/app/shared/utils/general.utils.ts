@@ -68,4 +68,38 @@ export class GeneralUtils {
     }
     return text;
   }
+
+  /**
+   * 检测数据是否是复杂对象
+   *
+   * @param {any} item 检测数据
+   * @returns {boolean} 是否是复杂对象
+   */
+  static isObject(item: any) {
+    return item && typeof item === 'object' && !Array.isArray(item);
+  }
+
+  /**
+   * 由于Object.assign是浅层对象合并，只合并一层，本函数是深层合并
+   *
+   * @param {any} target 目标对象
+   * @param {any[]} sources 合并的对象
+   * @returns {any} 合并的对象
+   */
+  static mergeDeep(target: any, ...sources: any[]): any {
+    if (!sources.length) return target;
+    const source = sources.shift();
+
+    if (this.isObject(target) && this.isObject(source)) {
+      for (const key in source) {
+        if (this.isObject(source[key])) {
+          if (!target[key]) Object.assign(target, { [key]: {} });
+          this.mergeDeep(target[key], source[key]);
+        } else {
+          Object.assign(target, { [key]: source[key] });
+        }
+      }
+    }
+    return this.mergeDeep(target, ...sources);
+  }
 }

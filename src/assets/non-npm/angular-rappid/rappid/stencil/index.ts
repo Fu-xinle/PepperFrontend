@@ -58,6 +58,7 @@ export function stencilGenerate(injectContext:{[key: string]: any},paper: dia.Pa
             },
             // Replace the stencil shape with an actual shape while dragging
             // dragStartClone: (node) => onNodeDrop((node as StencilNode))
+            // dragEndClone:(node) => onNodeDrop((node as StencilNode))
         });
     
         stencil.render();

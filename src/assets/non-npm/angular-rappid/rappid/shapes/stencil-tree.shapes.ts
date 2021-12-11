@@ -114,15 +114,15 @@ export class StencilNode extends dia.Element {
     toggleButtonSign(collapse: boolean): StencilNode {
         return this.attr('buttonSign', { d: collapse? this.MINUS_SIGN : this.PLUS_SIGN });
     }
-    getPathString(separator = '/'): string {
-        return this.get('path').join(separator);
+    getPathString(): string {
+        return this.get('path');
     }
     match(keyword: string): void {
 
         // Set path value as label and annotate text
 
         const name = this.get('name');
-        const displayName = this.getPathString(' / ');
+        const displayName = this.getPathString();
 
         const annotations: Array<Vectorizer.TextAnnotation> = [{
             // Bold Node Name
@@ -140,7 +140,7 @@ export class StencilNode extends dia.Element {
                 start: matchIndex,
                 end: matchIndex + keyword.length,
                 attrs: {
-                    'text-decoration': 'underline'
+                    'text-decoration': 'wavy underline  lime'
                 }
             });
         }

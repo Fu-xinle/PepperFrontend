@@ -20,28 +20,46 @@ import { GeoprocessingModelManageComponent } from './geoprocessing-model-manage.
   ],
   template: `
     <span class="datatable-custom-operation">
-      <a href="javascript:void(0)" (click)="editGeoprocessingModel()">
+      <a href="javascript:void(0)" (click)="designGeoprocessingModel()" *ngIf="!params.data.is_leaf">
         <i
-          class="icon-Eraser-2 text-25 text-info me-2"
+          class="icon-Add-Window text-25 text-success me-2"
           ngxTippy
           [tippyProps]="{ theme: 'light-border', hideOnClick: true }"
-          data-tippy-content="修改地理处理摸型信息"
+          [tippyName]="params.value + '-design'"
+          data-tippy-content="添加地理处理摸型或类别"
         ></i>
       </a>
-      <a href="javascript:void(0)" (click)="designGeoprocessingModel()">
+      <a href="javascript:void(0)" (click)="designGeoprocessingModel()" *ngIf="params.data.is_leaf">
         <i
           class="icon-Edit text-25 text-success me-2"
           ngxTippy
           [tippyProps]="{ theme: 'light-border', hideOnClick: true }"
+          [tippyName]="params.value + '-design'"
           data-tippy-content="地理处理摸型设计"
+        ></i>
+      </a>
+      <a href="javascript:void(0)" (click)="editGeoprocessingModel()">
+        <i
+          class="icon-Eraser-2 text-25 text-info me-2"
+          ngxTippy
+          [tippyProps]="{
+            theme: 'light-border',
+            hideOnClick: true,
+            content: params.data.is_leaf ? '修改地理处理摸型信息' : '修改地理处理摸型类别信息'
+          }"
+          [tippyName]="params.value + '-modify'"
         ></i>
       </a>
       <a href="javascript:void(0)" (click)="deleteGeoprocessingModel()">
         <i
           class="icon-Close-Window text-25 text-danger"
           ngxTippy
-          [tippyProps]="{ theme: 'light-border', hideOnClick: true }"
-          data-tippy-content="删除地理处理摸型"
+          [tippyProps]="{
+            theme: 'light-border',
+            hideOnClick: true,
+            content: params.data.is_leaf ? '删除地理处理摸型' : '删除地理处理摸型类别'
+          }"
+          [tippyName]="params.value + '-delete'"
         ></i>
       </a>
     </span>
@@ -55,6 +73,7 @@ export class GeoprocessingModelCrudOperationComponent implements AgRendererCompo
   constructor(private router: Router, public activatedRoute: ActivatedRoute) {}
 
   agInit(params: ICellRendererParams): void {
+    console.info(params);
     this.params = params;
     this.componentParent = this.params.context.componentParent;
   }

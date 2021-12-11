@@ -33,10 +33,12 @@
 @import '~ag-grid-community/dist/styles/ag-theme-material/sass/ag-theme-material-mixin';
 @import '~tippy.js/dist/tippy.css';
 @import '~tippy.js/themes/light-border.css';
+
 // 流程图的插件rappid
 @import "@clientio/rappid/rappid.scss";
 
 // 一些自定义库使用全局的混合器和函数,定义在外面
+// ztree树以及ztree-select插件,ztree的样式很少,使用自定义的，未使用库自带的
 @import 'development-theme/external-plugins/ag-grid';
 @import 'development-theme/external-plugins/rappid';
 @import 'development-theme/external-plugins/ztree';
@@ -55,6 +57,8 @@ html {
     // bulma 主题
 
     // uikit 简洁的主题
+
+    // ngx-ui 
 
   }
 

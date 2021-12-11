@@ -1,0 +1,408 @@
+// 对ztree的整个样式进行重写:不使用精灵图片,全部使用伪元素和svg完成
+.ztree * {
+  padding: 0;
+  margin: 0;
+  font-size: 14px;
+  font-family: inherit;
+}
+.ztree {
+  margin: 0;
+  padding: 5px;
+  color: #332e38;
+}
+.ztree li {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  line-height: 24px;
+  text-align: left;
+  white-space: nowrap;
+  outline: 0;
+}
+.ztree li ul {
+  margin: 0;
+  padding: 0 0 0 24px;
+  position: relative;
+}
+// 使用伪元素实现节点连线
+.ztree li ul.line::before {
+  position: absolute;
+  top: 0;
+  left: 12px;
+  bottom: -4px;
+  border-right: 1px solid #d9d9d9;
+  content: '';
+}
+
+.ztree li a {
+  min-height: 24px;
+  padding: 0 4px;
+  margin: 0;
+  cursor: pointer;
+  line-height: 24px;
+  color: #332e38;
+  background-color: transparent;
+  text-decoration: none;
+  vertical-align: top;
+  display: inline-block;
+}
+.ztree li a:hover {
+  background-color: #f5f5f5;
+}
+
+// 节点选择=>使用系统的主题色
+.ztree li a.curSelectedNode {
+  background-color: tint-color($primary, 80%) ;
+}
+
+.ztree li span {
+  line-height: 24px;
+  margin-right: 2px;
+  vertical-align: middle;
+}
+.ztree li span.button {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  vertical-align: middle;
+  border: 0 none;
+  cursor: pointer;
+  outline: none;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center,center;
+}
+
+// 定义字体图标混合器
+@mixin icomoon-font-ico {
+  font-family: 'icomoon';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 24px;
+  font-size: 18px;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+// 定义增改删除title美化
+@mixin title-beautify {
+  position: absolute;
+  left: 0; 
+  color: #333;
+  position: absolute;
+  left: 0; 
+  top: 100%;
+  white-space: nowrap; 
+  z-index: 20;
+  padding: 2px 6px;
+  border-radius: 4px;   
+  background-color: #fff;
+  background-clip: padding-box;
+  color: #333;
+  box-shadow: 0 4px 14px -2px  tint-color($primary, 80%);
+  font-size: 12px;
+}
+
+// 节点编辑-增改删按钮-按钮使用字体icomoon图标
+.ztree li span.button.add {
+  margin-left: 24px;
+  margin-right: -1px;
+  position: relative;
+  @include icomoon-font-ico;
+}
+.ztree li span.button.add::before {
+  content: "\e60b";
+}
+.ztree li span.button.add[title]:hover::after {
+  @include title-beautify;
+  content: "添加节点";
+}
+
+.ztree li span.button.edit {
+  margin-left: 2px;
+  margin-right: -1px;
+  position: relative;
+  @include icomoon-font-ico;
+}
+.ztree li span.button.edit::before {
+  content: "\eb4a";
+}
+.ztree li span.button.edit[title]:hover::after {
+  @include title-beautify;
+  content: "编辑节点名称";
+}
+
+.ztree li span.button.remove {
+  margin-left: 2px;
+  margin-right: -1px;
+  position: relative;
+  @include icomoon-font-ico;
+}
+.ztree li span.button.remove::before {
+  content: "\e773";
+}
+.ztree li span.button.remove[title]:hover::after {
+  @include title-beautify;
+  content: "删除节点";
+}
+
+.ztree li span.button.add:hover::before,
+.ztree li span.button.edit:hover::before,
+.ztree li span.button.remove:hover::before {
+  color: $primary;
+  font-weight: 600;
+}
+
+// 节点编辑状态input框
+.ztree li a.curSelectedNode_Edit {
+  background-color:transparent;
+}
+.ztree li a input.rename {
+  box-sizing: border-box;
+  height: 24px;
+  font-size: 14px;
+  width: 100%;
+  border: 1px #585956 solid;
+  //vertical-align: text-bottom;
+  border-radius: 2px;
+  border: 1px #9e9e9e94 solid;
+  outline: 0;
+}
+.ztree li a input.rename:focus-visible{
+  outline: 0;
+}
+
+// checkbox 选择框
+.ztree li span.button.chk {
+  position: relative;
+    top: 0;
+    left: 0;
+    width: 16px;
+    height: 16px;
+    direction: ltr;
+    background-color: #fff;
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+    border-collapse: separate;
+    transition: all .3s;
+}
+.ztree li span.button.chk.checkbox_false_full_focus,
+.ztree li span.button.chk.checkbox_false_part_focus,
+.ztree li span.button.chk.checkbox_true_part_focus {
+  border-color: $primary;
+}
+
+.ztree li span.button.chk.checkbox_false_part::after,
+.ztree li span.button.chk.checkbox_false_part_focus::after,
+.ztree li span.button.chk.checkbox_true_part::after,
+.ztree li span.button.chk.checkbox_true_part_focus::after{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  background-color:$primary;
+  border: 0;
+  transform: translate(-50%,-50%) scale(1);
+  opacity: 1;
+  content: " ";
+}
+.ztree li span.button.chk.checkbox_true_disable,
+.ztree li span.button.chk.checkbox_false_disable {
+  background-color: #e9ecef;
+  border-color: #d9d9d9!important;
+  cursor: not-allowed;
+}
+
+.ztree li span.button.chk.checkbox_true_disable::after,
+.ztree li span.button.chk.checkbox_true_full::after,
+.ztree li span.button.chk.checkbox_true_full_focus::after {
+  position: absolute;
+  display: table;
+  border: 2px solid #fff;
+  border-top: 0;
+  border-left: 0;
+  transform: rotate(45deg) scale(1) translate(-50%,-50%);
+  opacity: 1;
+  transition: all .2s cubic-bezier(.12,.4,.29,1.46) .1s;
+  content: " ";
+  top: 50%;
+  left: 21.5%;
+  width: 5.71428571px;
+  height: 9.14285714px;
+}
+.ztree li span.button.chk.checkbox_true_full,
+.ztree li span.button.chk.checkbox_true_full_focus {
+  background-color: $primary;
+  border-color: $primary;
+}
+
+
+// radio 选择框
+.ztree li span.button.chk.radio_false_full,
+.ztree li span.button.chk.radio_false_part,
+.ztree li span.button.chk.radio_true_full,
+.ztree li span.button.chk.radio_true_part {
+  border-radius: 50%;
+}
+
+.ztree li span.button.chk.radio_true_full{
+  border-color: $primary;
+}
+
+.ztree li span.button.chk.radio_true_full_focus,
+.ztree li span.button.chk.radio_false_full_focus,
+.ztree li span.button.chk.radio_false_part_focus,
+.ztree li span.button.chk.radio_true_part_focus {
+  border-color: $primary;
+  border-radius: 50%;
+}
+
+.ztree li span.button.chk.radio_false_part::after,
+.ztree li span.button.chk.radio_true_part::after,
+.ztree li span.button.chk.radio_true_disable::after,
+.ztree li span.button.chk.radio_true_full_focus::after,
+.ztree li span.button.chk.radio_false_part_focus::after,
+.ztree li span.button.chk.radio_true_part_focus::after,
+.ztree li span.button.chk.radio_true_full::after{
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 8px;
+  height: 8px;
+  background-color: $primary;
+  border-top: 0;
+  border-left: 0;
+  border-radius: 8px;
+  content: " ";
+  transform: scale(1);
+  opacity: 1;
+  transition: all .3s cubic-bezier(.78,.14,.15,.86);
+}
+
+.ztree li span.button.chk.radio_true_disable::after{
+  background-color: #d9d9d9;
+}
+
+.ztree li span.button.chk.radio_false_part::after,
+.ztree li span.button.chk.radio_true_part::after {
+  border-radius: 50%;
+}
+
+.ztree li span.button.chk.radio_false_disable,
+.ztree li span.button.chk.radio_true_disable {
+  border-radius: 50%;
+  background-color: #e9ecef;
+  border-color: #d9d9d9!important;
+  cursor: not-allowed;
+}
+
+// 节点之前打开收起图标Svg图标
+.ztree li span.button.switch {
+  width: 24px;
+  height: 24px;
+}
+.ztree li span.button.root_open,
+.ztree li span.button.roots_open,
+.ztree li span.button.center_open,
+.ztree li span.button.bottom_open {
+  background-image: url(../../../images/ztree/substract.svg);
+}
+.ztree li span.button.root_close,
+.ztree li span.button.roots_close,
+.ztree li span.button.center_close,
+.ztree li span.button.bottom_close {
+  background-image: url(../../../images/ztree/add.svg);
+}
+
+.ztree li span.button.noline_open {
+  background-image: url(../../../images/ztree/down.svg);
+}
+.ztree li span.button.noline_close {
+  background-image: url(../../../images/ztree/right.svg);
+}
+
+.ztree li span.button.ico_loading {
+  margin-right: 2px;
+  background: url(../../../images/ztree/loading.gif) no-repeat scroll 0 0 transparent;
+  background-repeat: no-repeat;
+  background-position: center, center;
+}
+
+// 文件夹收起打开图标
+.ztree li span.button.ico_open {
+  margin-right: 2px;
+  background-image: url(../../../images/ztree/folder-open.svg);
+}
+.ztree li span.button.ico_close {
+  margin-right: 2px;
+  background-image: url(../../../images/ztree/folder.svg);
+}
+.ztree li span.button.ico_docu {
+  margin-right: 2px;
+  background-image: url(../../../images/ztree/file.svg);
+}
+
+
+.ztree li span.button.root_docu,
+.ztree li span.button.roots_docu,
+.ztree li span.button.center_docu,
+.ztree li span.button.bottom_docu,
+.ztree li span.button.noline_docu{
+  background: none;
+  width: 24px;
+}
+
+// 拖拽部分
+// 拖拽的区域
+ul.ztree.zTreeDragUL {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  width: auto;
+  height: auto;
+  overflow: hidden;
+  background-color: #f5f5f5;
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+}
+
+// 拖拽过程中箭头
+span.tmpzTreeMove_arrow {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  border: 0 none;
+  position: absolute;
+  background-color: transparent;
+  background-image: url(../../../images/ztree/arrow.svg);
+  background-repeat: no-repeat;
+  background-position: center,center;
+}
+
+// 拖拽对应目标节点
+.ztree li a.tmpTargetNode_inner {
+  padding-top: 0px;
+  background-color: #f5f5f5;
+  height: 24px;
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+}
+
+// 从一棵树拖到另一棵树：目标树样式
+ul.tmpTargetzTree {
+  background-color: #f5f5f5;
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+}
+
+.ztreeMask {
+  z-index: 10000;
+  background-color: #cfcfcf;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  position: absolute;
+}

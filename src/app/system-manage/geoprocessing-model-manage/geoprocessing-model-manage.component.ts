@@ -36,44 +36,6 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
   /**Ag-Grid表格列配置信息 */
   public columnDefs = [
     {
-      headerName: '序号',
-      field: 'id',
-      initialWidth: 100,
-      sortable: true,
-      suppressMenu: true,
-      sort: 'asc',
-      unSortIcon: true,
-      icons: {
-        sortAscending: '<i class="icon-Up" style="font-weight: bold;"></i>',
-        sortDescending: '<i class="icon-Down" style="font-weight: bold;"></i>',
-        sortUnSort: '<i class="icon-Up--Down"></i>',
-      },
-    },
-    {
-      headerName: '名称',
-      field: 'name',
-      flex: 1,
-      minWidth: 150,
-      suppressMenu: true,
-      sortable: true,
-      unSortIcon: true,
-      icons: {
-        sortAscending: '<i class="icon-Up" style="font-weight: bold;"></i>',
-        sortDescending: '<i class="icon-Down" style="font-weight: bold;"></i>',
-        sortUnSort: '<i class="icon-Up--Down"></i>',
-      },
-      editable: true,
-      valueSetter: (params: ValueSetterParams) => {
-        if (params.newValue !== params.oldValue) {
-          params['data'][params['colDef']['field']!] = params.newValue;
-          this.onlineEdit(params);
-          return true;
-        } else {
-          return false;
-        }
-      },
-    },
-    {
       headerName: '描述',
       field: 'description',
       suppressMenu: true,
@@ -90,6 +52,20 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
           return false;
         }
       },
+    },
+    {
+      headerName: '创建者',
+      field: 'create_user',
+      initialWidth: 250,
+      sortable: false,
+      suppressMenu: true,
+    },
+    {
+      headerName: '创建时间',
+      field: 'create_time',
+      initialWidth: 300,
+      sortable: false,
+      suppressMenu: true,
     },
     {
       headerName: '',
@@ -132,6 +108,11 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
       }
     | any;
 
+  /**Ag-Grid表格,树结构数据显示 */
+  public autoGroupColumnDef;
+  public getDataPath;
+  public groupDefaultExpanded;
+
   /**搜索框搜索关键字、Ag-Grid快速搜索关键字 */
   public keySearcchValue: string = '';
   public keySearcchValue$ = new Subject<string>();
@@ -168,6 +149,42 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
     private modalService: NgbModal,
     private fb: FormBuilder
   ) {
+    /**Ag-Grid表格,树结构数据显示 */
+    this.autoGroupColumnDef = {
+      headerName: '名称',
+      minWidth: 250,
+      cellRendererParams: { suppressCount: false },
+      flex: 1,
+      suppressMenu: true,
+      sortable: true,
+      unSortIcon: true,
+      sort: 'asc',
+      icons: {
+        sortAscending: '<i class="icon-Up" style="font-weight: bold;"></i>',
+        sortDescending: '<i class="icon-Down" style="font-weight: bold;"></i>',
+        sortUnSort: '<i class="icon-Up--Down"></i>',
+      },
+      comparator: (valueA: string, valueB: string) => {
+        return valueA.localeCompare(valueB, 'zh-CN');
+      },
+      editable: true,
+      valueSetter: (params: ValueSetterParams) => {
+        if (params.newValue !== params.oldValue) {
+          params['data'][params['colDef']['field']!] = params.newValue;
+          this.onlineEdit(params);
+          return true;
+        } else {
+          return false;
+        }
+      },
+    };
+
+    this.getDataPath = (data: any) => {
+      return data.tree_name.split('~');
+    };
+
+    this.groupDefaultExpanded = 1;
+
     /**创建地理处理模型变量初始化:信息提示对象、表单对象初始化，监测Input事件 */
     this.createGeoprocessingModelNotification = {
       nameMessageShow: false,
