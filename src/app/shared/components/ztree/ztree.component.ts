@@ -99,102 +99,105 @@ export class ZtreeComponent implements OnInit {
 
   ngOnInit() {
     /** 树进行一些默认设置 */
-    this.treeSetting = GeneralUtils.mergeDeep(this.treeSetting, {
-      view: {
-        addHoverDom: this.treeSetting?.edit?.enable
-          ? (treeId: string, treeNode: ITreeNode) => {
-              var treeNodeSpan = $(`#${treeNode.tId}_span`);
-              if (treeNode.editNameFlag || $(`#addBtn_${treeNode.tId}`).length > 0) return;
-              var addSpan = `<span class='button add' id='addBtn_${treeNode.tId}' title onfocus='this.blur();'></span>`;
-              treeNodeSpan.after(addSpan);
-              var btn = $(`#addBtn_${treeNode.tId}`);
-              if (btn)
-                btn.on('click', () => {
-                  const newNodes: ITreeNode = { id: uuidv4(), pId: treeNode.id, name: `新建节点` };
-                  this.treeObj.addNodes(treeNode, -1, newNodes);
-                  return false;
-                });
-            }
-          : undefined,
-        removeHoverDom: (treeId: string, treeNode: ITreeNode) => {
-          $(`#addBtn_${treeNode.tId}`).off().remove();
-        },
-        showTitle: false,
-        showIcon: false,
-      },
-      data: {
-        simpleData: {
-          enable: true,
-          rootPId: '#',
-        },
-      },
-      edit: {
-        removeTitle: '',
-        renameTitle: '',
-      },
-      callback: {
-        onRemove: (event: Event, treeId: string, treeNode: ITreeNode) => {
-          this.remove.emit({ event, treeId, treeNode });
-        },
-        onRename: (event: Event, treeId: string, treeNode: ITreeNode, isCancel: boolean) => {
-          this.rename.emit({ event, treeId, treeNode, isCancel });
-        },
-        beforeClick: (_treeId: string, treeNode: ITreeNode, _clickFlag: number) => {
-          if (this.selectType === 'RADIO' || this.selectType === 'CHECK') {
-            this.treeObj.checkNode(treeNode, !treeNode.checked, true, true);
-            return false;
-          }
-          return true;
-        },
-        onClick: (event: Event, treeId: string, treeNode: ITreeNode, clickFlag: number) => {
-          if (this.selectType === 'NORMAL') {
-            if (this.selectMultiple) {
-              // 多选
-              if (this.checkNodes.findIndex(node => node.id === treeNode.id) === -1) {
-                this.checkNodes.push({ id: treeNode.id, pId: treeNode.pId, name: treeNode.name! });
-              } else {
-                this.checkNodes.splice(
-                  this.checkNodes.findIndex(node => node.id === treeNode.id),
-                  1
-                );
+    this.treeSetting = GeneralUtils.mergeDeep(
+      {
+        view: {
+          addHoverDom: this.treeSetting?.edit?.enable
+            ? (treeId: string, treeNode: ITreeNode) => {
+                var treeNodeSpan = $(`#${treeNode.tId}_span`);
+                if (treeNode.editNameFlag || $(`#addBtn_${treeNode.tId}`).length > 0) return;
+                var addSpan = `<span class='button add' id='addBtn_${treeNode.tId}' title onfocus='this.blur();'></span>`;
+                treeNodeSpan.after(addSpan);
+                var btn = $(`#addBtn_${treeNode.tId}`);
+                if (btn)
+                  btn.on('click', () => {
+                    const newNodes: ITreeNode = { id: uuidv4(), pId: treeNode.id, name: `新建节点` };
+                    this.treeObj.addNodes(treeNode, -1, newNodes);
+                    return false;
+                  });
               }
-              this.treeObj.cancelSelectedNode();
-              this.checkNodes.forEach((value: ITreeNode, _index: number, _array: ITreeNode[]) => {
-                this.treeObj.selectNode(
-                  this.treeObj.getNodesByFilter(node => node.id === value.id, true),
-                  true,
-                  false
-                );
-              });
-            } else {
-              // 单选
-              this.checkNodes.splice(0, this.checkNodes.length);
+            : undefined,
+          removeHoverDom: (treeId: string, treeNode: ITreeNode) => {
+            $(`#addBtn_${treeNode.tId}`).off().remove();
+          },
+          showTitle: false,
+          showIcon: false,
+        },
+        data: {
+          simpleData: {
+            enable: true,
+            rootPId: '#',
+          },
+        },
+        edit: {
+          removeTitle: '',
+          renameTitle: '',
+        },
+        callback: {
+          onRemove: (event: Event, treeId: string, treeNode: ITreeNode) => {
+            this.remove.emit({ event, treeId, treeNode });
+          },
+          onRename: (event: Event, treeId: string, treeNode: ITreeNode, isCancel: boolean) => {
+            this.rename.emit({ event, treeId, treeNode, isCancel });
+          },
+          beforeClick: (_treeId: string, treeNode: ITreeNode, _clickFlag: number) => {
+            if (this.selectType === 'RADIO' || this.selectType === 'CHECK') {
+              this.treeObj.checkNode(treeNode, !treeNode.checked, true, true);
+              return false;
+            }
+            return true;
+          },
+          onClick: (event: Event, treeId: string, treeNode: ITreeNode, clickFlag: number) => {
+            if (this.selectType === 'NORMAL') {
+              if (this.selectMultiple) {
+                // 多选
+                if (this.checkNodes.findIndex(node => node.id === treeNode.id) === -1) {
+                  this.checkNodes.push({ id: treeNode.id, pId: treeNode.pId, name: treeNode.name! });
+                } else {
+                  this.checkNodes.splice(
+                    this.checkNodes.findIndex(node => node.id === treeNode.id),
+                    1
+                  );
+                }
+                this.treeObj.cancelSelectedNode();
+                this.checkNodes.forEach((value: ITreeNode, _index: number, _array: ITreeNode[]) => {
+                  this.treeObj.selectNode(
+                    this.treeObj.getNodesByFilter(node => node.id === value.id, true),
+                    true,
+                    false
+                  );
+                });
+              } else {
+                // 单选
+                this.checkNodes.splice(0, this.checkNodes.length);
+                this.checkNodes.push({ id: treeNode.id, pId: treeNode.pId, name: treeNode.name! });
+              }
+              this.click.emit({ event, treeId, treeNode, clickFlag });
+              this.checkNodesChange.emit(this.checkNodes);
+            }
+          },
+          onCheck: (event: Event, treeId: string, treeNode: ITreeNode) => {
+            if (treeNode.checked) {
+              if (this.selectType === 'RADIO') {
+                this.checkNodes.splice(0, this.checkNodes.length);
+              }
               this.checkNodes.push({ id: treeNode.id, pId: treeNode.pId, name: treeNode.name! });
+            } else {
+              this.checkNodes.splice(
+                this.checkNodes.findIndex(node => node.id === treeNode.id),
+                1
+              );
             }
-            this.click.emit({ event, treeId, treeNode, clickFlag });
+            this.check.emit({ event, treeId, treeNode });
             this.checkNodesChange.emit(this.checkNodes);
-          }
-        },
-        onCheck: (event: Event, treeId: string, treeNode: ITreeNode) => {
-          if (treeNode.checked) {
-            if (this.selectType === 'RADIO') {
-              this.checkNodes.splice(0, this.checkNodes.length);
-            }
-            this.checkNodes.push({ id: treeNode.id, pId: treeNode.pId, name: treeNode.name! });
-          } else {
-            this.checkNodes.splice(
-              this.checkNodes.findIndex(node => node.id === treeNode.id),
-              1
-            );
-          }
-          this.check.emit({ event, treeId, treeNode });
-          this.checkNodesChange.emit(this.checkNodes);
-        },
-        onDrop: (event: Event, treeId: string, treeNodes: ITreeNode[], targetNode: object, moveType: string, isCopy: boolean) => {
-          this.drop.emit({ event, treeId, treeNodes, targetNode, moveType, isCopy });
+          },
+          onDrop: (event: Event, treeId: string, treeNodes: ITreeNode[], targetNode: object, moveType: string, isCopy: boolean) => {
+            this.drop.emit({ event, treeId, treeNodes, targetNode, moveType, isCopy });
+          },
         },
       },
-    });
+      this.treeSetting
+    );
 
     // 初始化操作
     this.treeObj = $.fn.zTree.init!($('ul.ztree'), this.treeSetting, this.treeNodes);

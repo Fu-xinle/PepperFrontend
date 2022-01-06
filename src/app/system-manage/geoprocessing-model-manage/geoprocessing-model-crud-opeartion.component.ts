@@ -73,7 +73,6 @@ export class GeoprocessingModelCrudOperationComponent implements AgRendererCompo
   constructor(private router: Router, public activatedRoute: ActivatedRoute) {}
 
   agInit(params: ICellRendererParams): void {
-    console.info(params);
     this.params = params;
     this.componentParent = this.params.context.componentParent;
   }

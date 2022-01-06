@@ -45,8 +45,10 @@ export interface IFlowNode extends ISimpleNode {}
 export interface INameDescriptionNotification {
   nameMessageShow: boolean;
   nameMessage: string;
-  descriptionMessageShow: boolean;
-  descriptionMessage: string;
+  categoryMessageShow?: boolean;
+  categoryMessage?: string;
+  descriptionMessageShow?: boolean;
+  descriptionMessage?: string;
 }
 
 /**

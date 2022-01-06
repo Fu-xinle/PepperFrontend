@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/member-ordering */
-import { Component, OnInit, ElementRef, Renderer2, ViewChild, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ElementRef, Renderer2, ViewChild, Input, forwardRef } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { fromEvent, filter, map, distinctUntilChanged, debounceTime } from 'rxjs';
 
@@ -10,8 +11,15 @@ import { ZtreeComponent } from '../ztree/ztree.component';
   selector: 'app-ztree-select',
   templateUrl: './ztree-select.component.html',
   styleUrls: ['./ztree-select.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ZtreeSelectComponent),
+      multi: true,
+    },
+  ],
 })
-export class ZtreeSelectComponent implements OnInit {
+export class ZtreeSelectComponent implements OnInit, ControlValueAccessor {
   @ViewChild('ztreeSelectMenuContainer') ztreeSelectMenuContainer!: ElementRef;
   @ViewChild('ztreeSelectMenu') ztreeSelectMenu!: ElementRef;
   @ViewChild('ztreeSelectControl') ztreeSelectControl!: ElementRef;
@@ -38,8 +46,7 @@ export class ZtreeSelectComponent implements OnInit {
     this._treeNodes = treeNodes;
   }
 
-  // 输入参数，拦截父组件中值的变化
-  @Output() readonly checkNodesChange = new EventEmitter<Array<{ id: string; pId?: string; name: string }>>();
+  // 实现ngModel以及formGroup绑定
   private _checkNodes: Array<{ id: string; pId?: string; name: string }> = [];
   @Input()
   get checkNodes(): Array<{ id: string; pId?: string; name: string }> {
@@ -47,6 +54,45 @@ export class ZtreeSelectComponent implements OnInit {
   }
   set checkNodes(checkNodes: Array<{ id: string; pId?: string; name: string }>) {
     this._checkNodes = checkNodes;
+    this.updateCheckNodes();
+  }
+  onChange: (_: any) => void = (_: any) => {};
+  onTouched: () => void = () => {};
+
+  /**
+   * 值发生变化时，发送值得变换
+   */
+  updateCheckNodes() {
+    this.onChange(this._checkNodes);
+  }
+
+  /**
+   * ngModel 赋值时
+   *
+   * @param {Array<{ id: string; pId?: string; name: string }>} value 设置的新值
+   */
+  writeValue(value: Array<{ id: string; pId?: string; name: string }>): void {
+    if (value !== undefined) {
+      this.checkNodes = value;
+    }
+  }
+
+  /**
+   * 控件值发生变化的回调函数
+   *
+   * @param {(_: any) => void} fn 回调函数
+   */
+  registerOnChange(fn: (_: any) => void): void {
+    this.onChange = fn;
+  }
+
+  /**
+   * 控件失去焦点时的回调函数
+   *
+   * @param {() => void} fn 回调函数
+   */
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
   }
 
   constructor(private renderer: Renderer2, private element: ElementRef) {}
@@ -159,7 +205,7 @@ export class ZtreeSelectComponent implements OnInit {
       1
     );
     this.checkNodes = selectNodeCopy;
-    this.checkNodesChange.emit(this.checkNodes);
+    this.updateCheckNodes();
   }
 
   /**
@@ -169,7 +215,7 @@ export class ZtreeSelectComponent implements OnInit {
    */
   clearSelectAll(_event: Event) {
     this.checkNodes = [];
-    this.checkNodesChange.emit(this.checkNodes);
+    this.updateCheckNodes();
   }
 
   /**
@@ -196,7 +242,7 @@ export class ZtreeSelectComponent implements OnInit {
    */
   treeNodeClick(_event: { event: Event; treeId: string; treeNode: ITreeNode; clickFlag: number }) {
     if (this.selectType === 'NORMAL') {
-      this.checkNodesChange.emit(this.checkNodes);
+      this.updateCheckNodes();
       if (!this.selectMultiple) {
         this.dropdownCloseCSSUpdate();
         this.ztreeSelectSearchInput.nativeElement.value = '';
@@ -216,7 +262,7 @@ export class ZtreeSelectComponent implements OnInit {
    */
   treeNodeCheck(_event: { event: Event; treeId: string; treeNode: ITreeNode }) {
     if (this.selectType === 'RADIO' || this.selectType === 'CHECK') {
-      this.checkNodesChange.emit(this.checkNodes);
+      this.updateCheckNodes();
     }
     if (this.selectType === 'RADIO') {
       this.dropdownCloseCSSUpdate();

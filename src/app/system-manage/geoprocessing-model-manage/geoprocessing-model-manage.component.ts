@@ -139,6 +139,13 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
   public deleteGeoprocessingModelLoading: boolean = false;
   public deleteGeoprocessingModelLoadingText: string = '';
 
+  /** ztreeselect 配置项 */
+  public rootNodeId = '99fb71e8-a794-47c2-a9c6-dc0a6e36248f';
+  public selectType: 'NORMAL' | 'RADIO' | 'CHECK' = 'RADIO';
+  public selectMultiple: true | false = false;
+  public treeSetting: ISetting = {};
+  public zNodes: any[] = [];
+
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -214,18 +221,27 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
     this.editGeoprocessingModelNotification = {
       nameMessageShow: false,
       nameMessage: '请输入地理处理摸型名称',
+      categoryMessage: '请选择地理模型类别',
+      categoryMessageShow: false,
       descriptionMessageShow: false,
       descriptionMessage: '请输入地理处理摸型描述',
     };
 
     this.editGeoprocessingModelGroup = this.fb.group({
       name: [''],
+      category: [[]],
       description: [''],
     });
 
     this.subscriptions.push(
       this.editGeoprocessingModelGroup.controls['name'].valueChanges.subscribe((_value: string) => {
         this.editGeoprocessingModelNotification.nameMessageShow = false;
+      })
+    );
+
+    this.subscriptions.push(
+      this.editGeoprocessingModelGroup.controls['category'].valueChanges.subscribe((_value: string) => {
+        this.editGeoprocessingModelNotification.categoryMessageShow = false;
       })
     );
 
@@ -255,6 +271,12 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
       this.geoprocessingModelService.getAllGeoprocessingModels().subscribe({
         next: res => {
           this.geoprocessingModelData = res.geoprocessingModelData;
+          this.zNodes = [
+            { id: this.rootNodeId, pId: '#', name: '地理处理模型', chkDisabled: false, open: true },
+            ...res.geoprocessingModelData.map((item: any) => {
+              return { id: item.guid, pId: item.parent_guid, name: item.name, chkDisabled: item.is_leaf, open: !item.is_leaf };
+            }),
+          ];
         },
         error: err => {
           console.error(err);
@@ -265,6 +287,19 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
         },
       })
     );
+
+    // ztreeselect树的初始化配置
+    this.treeSetting = {
+      view: {
+        dblClickExpand: false,
+        showIcon: true,
+      },
+      data: {
+        simpleData: {
+          enable: true,
+        },
+      },
+    };
   }
 
   ngOnInit() {
@@ -363,6 +398,7 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
   editGeoprocessingModel(rowNode: RowNode) {
     this.editGeoprocessingModelGroup.controls['name'].setValue(rowNode.data.name);
     this.editGeoprocessingModelGroup.controls['description'].setValue(rowNode.data.description);
+    this.editGeoprocessingModelGroup.controls['category'].setValue(this.zNodes.filter(item => item.id === rowNode.data.parent_guid));
 
     this.editRowNode = rowNode;
 

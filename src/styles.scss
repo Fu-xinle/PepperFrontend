@@ -58,3 +58,8 @@
 ::-webkit-scrollbar-thumb:hover {
   background: rgb(0 0 0 / 30%);
 }
+
+.value-invalid {
+  border: 1px solid #d22346;
+  box-shadow: 0 0 0 0.2rem rgb(210 35 70 / 50%);
+}

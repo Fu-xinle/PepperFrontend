@@ -20,7 +20,6 @@ import { InspectorComponent } from '../../assets/non-npm/angular-rappid/inspecto
 import { LabelInspectorComponent } from '../../assets/non-npm/angular-rappid/inspector/label-inspector/label-inspector.component';
 import { LinkInspectorComponent } from '../../assets/non-npm/angular-rappid/inspector/link-inspector/link-inspector.component';
 import { EventBusService } from '../../assets/non-npm/angular-rappid/services/event-bus.service';
-// ztree
 // component
 import { SharedModule } from '../shared/shared.module';
 import { AuthorizeComponent } from './authorize/authorize.component';
