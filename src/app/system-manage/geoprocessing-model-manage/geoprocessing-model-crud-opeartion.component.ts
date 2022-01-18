@@ -25,7 +25,7 @@ import { GeoprocessingModelManageComponent } from './geoprocessing-model-manage.
           class="icon-Add text-25 text-success me-2"
           ngxTippy
           [tippyProps]="{ theme: 'light-border', hideOnClick: true }"
-          [tippyName]="params.value + '-design'"
+          [tippyName]="params.value + '-create'"
           data-tippy-content="添加地理处理摸型或类别"
         ></i>
       </a>

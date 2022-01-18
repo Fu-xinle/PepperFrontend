@@ -33,7 +33,6 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
       suppressMenu: true,
       flex: 2,
       minWidth: 450,
-      cellEditor: 'agLargeTextCellEditor',
     },
     {
       headerName: '创建者',
@@ -168,7 +167,7 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
     this.createGeoprocessingModelNotification = {
       name: { message: '请输入地理处理摸型名称', show: false },
       isLeaf: { message: '请选择类别', show: false },
-      category: { message: '请选择地理模型类别', show: false },
+      category: { message: '请选择地理处理模型类别', show: false },
       description: { message: '请输入地理处理摸型描述', show: false },
     };
 
@@ -192,7 +191,7 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
     /**编辑地理处理模型变量初始化:信息提示对象、表单对象初始化，监测Input事件 */
     this.editGeoprocessingModelNotification = {
       name: { message: '请输入地理处理摸型名称', show: false },
-      category: { message: '请选择地理模型类别', show: false },
+      category: { message: '请选择地理处理模型类别', show: false },
       description: { message: '请输入地理处理摸型描述', show: false },
     };
 
@@ -303,10 +302,10 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
    *
    * @param {RowNode} rowNode 新建地理处理模型的表格的父行
    */
-  createGeoprocessingModel(rowNode: RowNode) {
+  createGeoprocessingModel(rowNode: RowNode | null) {
     this.createGeoprocessingModelGroup.controls['name'].setValue('');
     this.createGeoprocessingModelGroup.controls['description'].setValue('');
-    this.createGeoprocessingModelGroup.controls['category'].setValue(this.zNodes.filter(item => item.id === rowNode.data.guid));
+    this.createGeoprocessingModelGroup.controls['category'].setValue(this.zNodes.filter(item => item.id === rowNode?.data?.guid));
     this.createGeoprocessingModelGroup.controls['isLeaf'].setValue(1);
 
     const modalReference = this.modalService.open(this.createGeoprocessingModelContent, { centered: true, backdrop: 'static' });
@@ -318,7 +317,7 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
         Object.assign(this.createGeoprocessingModelNotification, {
           name: { message: '请输入地理处理摸型名称', show: false },
           isLeaf: { message: '请选择类别', show: false },
-          category: { message: '请选择地理模型类别', show: false },
+          category: { message: '请选择地理处理模型类别', show: false },
           description: { message: '请输入地理处理摸型描述', show: false },
         });
       }
@@ -420,7 +419,7 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
         this.editGeoprocessingModelLoading = false;
         Object.assign(this.editGeoprocessingModelNotification, {
           name: { message: '请输入地理处理摸型名称', show: false },
-          category: { message: '请选择地理模型类别', show: false },
+          category: { message: '请选择地理处理模型类别', show: false },
           description: { message: '请输入地理处理摸型描述', show: false },
         });
       }
@@ -530,14 +529,11 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
           /**更新Ag-Grid(由于删除一行，ID序号需要修改)、表单对象、关闭对话框、toastr提示 */
           this.gridApi.applyTransaction({ remove: [rowNode.data] });
 
-          const updateRows: RowNode[] = [];
-          this.gridApi.forEachNode((node, _index) => {
-            if (parseInt(node.data.id, 10) > parseInt(rowNode.data.id, 10)) {
-              node.data.id = parseInt(node.data.id, 10);
-              updateRows.push(node);
-            }
-          });
-          this.gridApi.applyTransaction({ update: updateRows });
+          // ztree删除对应的树节点
+          this.zNodes.splice(
+            this.zNodes.findIndex(treeNode => treeNode.id === rowNode.data.guid),
+            1
+          );
 
           this.deleteGeoprocessingModelLoading = false;
           modelRef.close();
@@ -586,6 +582,24 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
       return this.eGui;
     };
     return nameCellRenderer;
+  }
+
+  /**
+   * 表格中弹出的上下文菜单
+   *
+   * @param {any} params 上下文参数
+   * @returns {[]} 上下文菜单
+   */
+  getContextMenuItems(params: any) {
+    return [
+      {
+        name: '添加地理处理模型或者类别',
+        action: () => {
+          params.context.componentParent.createGeoprocessingModel(null);
+        },
+        icon: '<i class="icon-Add text-16"></i>',
+      },
+    ];
   }
 
   /**

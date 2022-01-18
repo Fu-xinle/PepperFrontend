@@ -18,7 +18,7 @@
     style="height: 100%; width: 100%"
     class="ag-theme-material"
     [rowData]="geoprocessingModelData"
-    [suppressContextMenu]="true"
+    [suppressContextMenu]="false"
     [columnDefs]="columnDefs"
     [context]="context"
     [quickFilterText]="quickFilterText"
@@ -30,10 +30,11 @@
     [groupDefaultExpanded]="groupDefaultExpanded"
     [autoGroupColumnDef]="autoGroupColumnDef"
     [getRowNodeId]="getRowNodeId"
-    [components]="{ fileCellRenderer: getNameCellRenderer() }"
+    [components]="{ nameCellRenderer: getNameCellRenderer() }"
     [treeData]="true"
     [animateRows]="true"
     [getDataPath]="getDataPath"
+    [getContextMenuItems]="getContextMenuItems"
     (gridReady)="onGridReady($event)"
   >
   </ag-grid-angular>
@@ -79,7 +80,7 @@
       <div class="mb-2">
         <label for="category" class="form-label">所属目录</label>
         <app-ztree-select
-          id="category"
+          id="create-category"
           class="form-control form-control-rounded"
           formControlName="category"
           [treeSetting]="treeSetting"
@@ -148,7 +149,7 @@
       <div class="mb-2">
         <label for="category" class="form-label">所属目录</label>
         <app-ztree-select
-          id="category"
+          id="edit-category"
           class="form-control form-control-rounded"
           formControlName="category"
           [treeSetting]="treeSetting"

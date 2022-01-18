@@ -8,14 +8,14 @@
     placeholder="搜索"
     type="text"
   />
-  <button class="btn btn-primary btn-iconmind btn-rounded" (click)="createFlow()"> <i class="icon-Add text-17 me-2"></i>新建流程 </button>
+  <button class="btn btn-primary btn-iconmind btn-rounded" (click)="newFlow()"> <i class="icon-Add text-17 me-2"></i>新建流程 </button>
 </div>
 <div class="shadow rounded-3 full-height-container">
   <ag-grid-angular
     style="height: 100%; width: 100%"
     class="ag-theme-material"
     [rowData]="flowData"
-    [suppressContextMenu]="true"
+    [suppressContextMenu]="false"
     [columnDefs]="columnDefs"
     [context]="context"
     [quickFilterText]="quickFilterText"
@@ -24,10 +24,101 @@
     [loadingOverlayComponentParams]="loadingOverlayComponentParams"
     [noRowsOverlayComponent]="noRowsOverlayComponent"
     [noRowsOverlayComponentParams]="noRowsOverlayComponentParams"
+    [groupDefaultExpanded]="groupDefaultExpanded"
+    [autoGroupColumnDef]="autoGroupColumnDef"
+    [getRowNodeId]="getRowNodeId"
+    [components]="{ nameCellRenderer: getNameCellRenderer() }"
+    [treeData]="true"
+    [animateRows]="true"
+    [getDataPath]="getDataPath"
+    [getContextMenuItems]="getContextMenuItems"
     (gridReady)="onGridReady($event)"
   >
   </ag-grid-angular>
 </div>
+
+<ng-template #createFlowContent let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">创建新流程</h5>
+    <button type="button" class="btn-close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.dismiss('关闭')">
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="createFlowGroup" class="ms-4 me-4">
+      <div class="mb-2">
+        <label for="name" class="form-label">名称</label>
+        <input
+          id="name"
+          class="form-control form-control-rounded"
+          [ngClass]="{ 'value-invalid': createFlowNotification['name'].show }"
+          formControlName="name"
+          type="text"
+          autocomplete="off"
+        />
+        <p *ngIf="createFlowNotification['name'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ createFlowNotification['name'].message }}</span>
+        </p>
+      </div>
+      <div class="mb-2">
+        <label for="category" class="form-label">类别</label>
+        <div class="d-block">
+          <label class="radio radio-primary d-inline-block mb-0">
+            <input type="radio" name="isLeaf" [value]="1" formControlName="isLeaf" />
+            <span>流程</span>
+            <span class="checkmark"></span>
+          </label>
+          <label class="radio radio-primary d-inline-block mb-0 ms-4">
+            <input type="radio" name="isLeaf" [value]="0" formControlName="isLeaf" />
+            <span>流程目录</span>
+            <span class="checkmark"></span>
+          </label>
+        </div>
+      </div>
+      <div class="mb-2">
+        <label for="category" class="form-label">所属目录</label>
+        <app-ztree-select
+          id="create-category"
+          class="form-control form-control-rounded"
+          formControlName="category"
+          [treeSetting]="treeSetting"
+          [selectType]="selectType"
+          [selectMultiple]="selectMultiple"
+          [ngClass]="{ 'value-invalid': createFlowNotification['category'].show }"
+          [treeNodes]="zNodes"
+        ></app-ztree-select>
+        <p *ngIf="createFlowNotification['category'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ createFlowNotification['category'].message }}</span>
+        </p>
+      </div>
+
+      <div class="mb-2">
+        <label for="description" class="form-label">描述</label>
+        <textarea
+          id="description"
+          class="form-control form-control-rounded"
+          [ngClass]="{ 'value-invalid': createFlowNotification['description'].show }"
+          formControlName="description"
+          rows="3"
+        ></textarea>
+        <p *ngIf="createFlowNotification['description'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ createFlowNotification['description'].message }}</span>
+        </p>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary btn-rounded" (click)="modal.dismiss('取消')">取 消</button>
+    <app-btn-loading
+      [btnClass]="'btn-primary btn-rounded'"
+      (click)="createFlowSave(modal)"
+      [type]="'button'"
+      [loadingText]="createFlowLoadingText"
+      [loading]="createFlowLoading"
+    >
+      保 存
+    </app-btn-loading>
+  </div>
+</ng-template>
 
 <ng-template #editFlowContent let-modal>
   <div class="modal-header">
@@ -36,19 +127,35 @@
     </button>
   </div>
   <div class="modal-body">
-    <form [formGroup]="editFlowForm" class="ms-4 me-4">
+    <form [formGroup]="editFlowGroup" class="ms-4 me-4">
       <div class="mb-2">
         <label for="name" class="form-label">名称</label>
         <input
           id="name"
           class="form-control form-control-rounded"
-          [ngClass]="{ 'value-invalid': editFlowNotification.nameMessageShow }"
+          [ngClass]="{ 'value-invalid': editFlowNotification['name'].show }"
           formControlName="name"
           type="text"
           autocomplete="off"
         />
-        <p *ngIf="editFlowNotification.nameMessageShow" class="pt-1 mb-0">
-          <span class="text-danger">{{ editFlowNotification.nameMessage }}</span>
+        <p *ngIf="editFlowNotification['name'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ editFlowNotification['name'].message }}</span>
+        </p>
+      </div>
+      <div class="mb-2">
+        <label for="category" class="form-label">所属目录</label>
+        <app-ztree-select
+          id="edit-category"
+          class="form-control form-control-rounded"
+          formControlName="category"
+          [treeSetting]="treeSetting"
+          [selectType]="selectType"
+          [selectMultiple]="selectMultiple"
+          [ngClass]="{ 'value-invalid': editFlowNotification['category'].show }"
+          [treeNodes]="zNodes"
+        ></app-ztree-select>
+        <p *ngIf="editFlowNotification['category'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ editFlowNotification['category'].message }}</span>
         </p>
       </div>
       <div class="mb-2">
@@ -56,12 +163,12 @@
         <textarea
           id="description"
           class="form-control form-control-rounded"
-          [ngClass]="{ 'value-invalid': editFlowNotification.descriptionMessageShow }"
+          [ngClass]="{ 'value-invalid': editFlowNotification['description'].show }"
           formControlName="description"
           rows="3"
         ></textarea>
-        <p *ngIf="editFlowNotification.descriptionMessageShow" class="pt-1 mb-0">
-          <span class="text-danger">{{ editFlowNotification.descriptionMessage }}</span>
+        <p *ngIf="editFlowNotification['description'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ editFlowNotification['description'].message }}</span>
         </p>
       </div>
     </form>

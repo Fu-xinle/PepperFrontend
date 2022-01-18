@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { IFlowModel, IFlowNode } from '../../shared/interface/system-manage.interface';
+import { IFlowModel, IFlowNode, IOperatorInformationModel } from '../../shared/interface/system-manage.interface';
 
 @Injectable()
 export class FlowManageService {
@@ -19,13 +19,25 @@ export class FlowManageService {
   }
 
   /**
+   * 新建流程，仅仅保存流程的信息，不包含流程图
+   *
+   * @param {IFlowModel} newFlowInfo  新建的流程信息
+   * @returns {IOperatorInformationModel} 操作成功，返回操作者信息以及操作时间信息
+   */
+  addFlow(newFlowInfo: IFlowModel): Observable<IOperatorInformationModel> {
+    return this.http.post<IOperatorInformationModel>('/system_manage_api/flow_manage/add_flow', {
+      newFlowInfo,
+    });
+  }
+
+  /**
    * 用户编辑流程信息，不包括设计流程图
    *
    * @param {IFlowModel} editFlowInfo  编辑的流程信息
-   * @returns {{}} 操作成功，返回空对象
+   * @returns {IOperatorInformationModel} 操作成功，返回操作者信息以及操作时间信息
    */
-  editFlow(editFlowInfo: IFlowModel): Observable<{}> {
-    return this.http.post<{}>('/system_manage_api/flow_manage/edit_flow', {
+  editFlow(editFlowInfo: IFlowModel): Observable<IOperatorInformationModel> {
+    return this.http.post<IOperatorInformationModel>('/system_manage_api/flow_manage/edit_flow', {
       editFlowInfo,
     });
   }
@@ -43,6 +55,18 @@ export class FlowManageService {
   }
 
   /**
+   * 根据 guid 获取流程图信息
+   *
+   * @param {string} guid 流程的唯一标识
+   * @returns {{ diagramJson: string }}  流程图json表示
+   */
+  getFlowDiagram(guid: string): Observable<{ diagramJson: string }> {
+    return this.http.post<{ diagramJson: string }>('/system_manage_api/flow_manage/flow_diagram', {
+      guid,
+    });
+  }
+
+  /**
    * 新建流程以及流程另存为操作，包含保存流程图
    *
    * @param {IFlowModel} flowInfo 流程信息
@@ -55,18 +79,6 @@ export class FlowManageService {
       flowInfo,
       nodes,
       diagramJson,
-    });
-  }
-
-  /**
-   * 根据 guid 获取流程图信息
-   *
-   * @param {string} guid 流程的唯一标识
-   * @returns {{ diagramJson: string }}  流程图json表示
-   */
-  getFlowDiagram(guid: string): Observable<{ diagramJson: string }> {
-    return this.http.post<{ diagramJson: string }>('/system_manage_api/flow_manage/flow_diagram', {
-      guid,
     });
   }
 

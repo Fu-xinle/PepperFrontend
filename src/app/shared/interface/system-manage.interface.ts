@@ -3,8 +3,11 @@ interface ISimpleInformationModel {
   guid: string;
   name: string;
   description: string;
-  createUser?: string;
-  createTime?: string;
+  create_user?: string;
+  create_time?: string;
+  is_leaf?: boolean;
+  tree_name?: string;
+  parent_guid?: string;
 }
 
 /**
@@ -21,6 +24,14 @@ export interface IFlowModel extends ISimpleInformationModel {}
  * 表单对象接口
  */
 export interface IFormModel extends ISimpleInformationModel {}
+
+/**
+ * 流程、表单、地理处理模型添加或者更新时，返回服务器端操作者和操作时间信息
+ */
+export interface IOperatorInformationModel {
+  create_user: string;
+  create_time: string;
+}
 
 interface ISimpleNode {
   guid: string;

@@ -9,14 +9,14 @@
     placeholder="搜索"
     type="text"
   />
-  <button class="btn btn-primary btn-iconmind btn-rounded" (click)="createForm()"> <i class="icon-Add text-17 me-2"></i>新建表单 </button>
+  <button class="btn btn-primary btn-iconmind btn-rounded" (click)="newForm()"> <i class="icon-Add text-17 me-2"></i>新建表单 </button>
 </div>
 <div class="shadow rounded-3 full-height-container">
   <ag-grid-angular
     style="height: 100%; width: 100%"
     class="ag-theme-material"
     [rowData]="formData"
-    [suppressContextMenu]="true"
+    [suppressContextMenu]="false"
     [columnDefs]="columnDefs"
     [context]="context"
     [quickFilterText]="quickFilterText"
@@ -25,6 +25,14 @@
     [loadingOverlayComponentParams]="loadingOverlayComponentParams"
     [noRowsOverlayComponent]="noRowsOverlayComponent"
     [noRowsOverlayComponentParams]="noRowsOverlayComponentParams"
+    [groupDefaultExpanded]="groupDefaultExpanded"
+    [autoGroupColumnDef]="autoGroupColumnDef"
+    [getRowNodeId]="getRowNodeId"
+    [components]="{ nameCellRenderer: getNameCellRenderer() }"
+    [treeData]="true"
+    [animateRows]="true"
+    [getDataPath]="getDataPath"
+    [getContextMenuItems]="getContextMenuItems"
     (gridReady)="onGridReady($event)"
   >
   </ag-grid-angular>
@@ -43,13 +51,44 @@
         <input
           id="name"
           class="form-control form-control-rounded"
-          [ngClass]="{ 'value-invalid': createFormNotification.nameMessageShow }"
+          [ngClass]="{ 'value-invalid': createFormNotification['name'].show }"
           formControlName="name"
           type="text"
           autocomplete="off"
         />
-        <p *ngIf="createFormNotification.nameMessageShow" class="pt-1 mb-0">
-          <span class="text-danger">{{ createFormNotification.nameMessage }}</span>
+        <p *ngIf="createFormNotification['name'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ createFormNotification['name'].message }}</span>
+        </p>
+      </div>
+      <div class="mb-2">
+        <label for="category" class="form-label">类别</label>
+        <div class="d-block">
+          <label class="radio radio-primary d-inline-block mb-0">
+            <input type="radio" name="isLeaf" [value]="1" formControlName="isLeaf" />
+            <span>模型</span>
+            <span class="checkmark"></span>
+          </label>
+          <label class="radio radio-primary d-inline-block mb-0 ms-4">
+            <input type="radio" name="isLeaf" [value]="0" formControlName="isLeaf" />
+            <span>模型目录</span>
+            <span class="checkmark"></span>
+          </label>
+        </div>
+      </div>
+      <div class="mb-2">
+        <label for="category" class="form-label">所属目录</label>
+        <app-ztree-select
+          id="create-category"
+          class="form-control form-control-rounded"
+          formControlName="category"
+          [treeSetting]="treeSetting"
+          [selectType]="selectType"
+          [selectMultiple]="selectMultiple"
+          [ngClass]="{ 'value-invalid': createFormNotification['category'].show }"
+          [treeNodes]="zNodes"
+        ></app-ztree-select>
+        <p *ngIf="createFormNotification['category'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ createFormNotification['category'].message }}</span>
         </p>
       </div>
       <div class="mb-2">
@@ -57,12 +96,12 @@
         <textarea
           id="description"
           class="form-control form-control-rounded"
-          [ngClass]="{ 'value-invalid': createFormNotification.descriptionMessageShow }"
+          [ngClass]="{ 'value-invalid': createFormNotification['description'].show }"
           formControlName="description"
           rows="3"
         ></textarea>
-        <p *ngIf="createFormNotification.descriptionMessageShow" class="pt-1 mb-0">
-          <span class="text-danger">{{ createFormNotification.descriptionMessage }}</span>
+        <p *ngIf="createFormNotification['description'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ createFormNotification['description'].message }}</span>
         </p>
       </div>
     </form>
@@ -94,13 +133,29 @@
         <input
           id="name"
           class="form-control form-control-rounded"
-          [ngClass]="{ 'value-invalid': editFormNotification.nameMessageShow }"
+          [ngClass]="{ 'value-invalid': editFormNotification['name'].show }"
           formControlName="name"
           type="text"
           autocomplete="off"
         />
-        <p *ngIf="editFormNotification.nameMessageShow" class="pt-1 mb-0">
-          <span class="text-danger">{{ editFormNotification.nameMessage }}</span>
+        <p *ngIf="editFormNotification['name'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ editFormNotification['name'].message }}</span>
+        </p>
+      </div>
+      <div class="mb-2">
+        <label for="category" class="form-label">所属目录</label>
+        <app-ztree-select
+          id="edit-category"
+          class="form-control form-control-rounded"
+          formControlName="category"
+          [treeSetting]="treeSetting"
+          [selectType]="selectType"
+          [selectMultiple]="selectMultiple"
+          [ngClass]="{ 'value-invalid': editFormNotification['category'].show }"
+          [treeNodes]="zNodes"
+        ></app-ztree-select>
+        <p *ngIf="editFormNotification['category'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ editFormNotification['category'].message }}</span>
         </p>
       </div>
       <div class="mb-2">
@@ -108,12 +163,12 @@
         <textarea
           id="description"
           class="form-control form-control-rounded"
-          [ngClass]="{ 'value-invalid': editFormNotification.descriptionMessageShow }"
+          [ngClass]="{ 'value-invalid': editFormNotification['description'].show }"
           formControlName="description"
           rows="3"
         ></textarea>
-        <p *ngIf="editFormNotification.descriptionMessageShow" class="pt-1 mb-0">
-          <span class="text-danger">{{ editFormNotification.descriptionMessage }}</span>
+        <p *ngIf="editFormNotification['description'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ editFormNotification['description'].message }}</span>
         </p>
       </div>
     </form>

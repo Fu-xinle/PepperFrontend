@@ -20,28 +20,38 @@ import { FormManageComponent } from './form-manage.component';
   ],
   template: `
     <span class="datatable-custom-operation">
-      <a href="javascript:void(0)" (click)="editForm()">
+      <a href="javascript:void(0)" (click)="createForm()" *ngIf="!params.data.is_leaf">
         <i
-          class="icon-Eraser-2 text-25 text-info me-2"
+          class="icon-Add text-25 text-success me-2"
           ngxTippy
           [tippyProps]="{ theme: 'light-border', hideOnClick: true }"
-          data-tippy-content="修改表单信息"
+          [tippyName]="params.value + '-create'"
+          data-tippy-content="添加表单或表单类别"
         ></i>
       </a>
-      <a href="javascript:void(0)" (click)="designForm()">
+      <a href="javascript:void(0)" (click)="designForm()" *ngIf="params.data.is_leaf">
         <i
-          class="icon-Edit text-25 text-success me-2"
+          class="icon-Network-Window text-25 text-success me-2"
           ngxTippy
           [tippyProps]="{ theme: 'light-border', hideOnClick: true }"
+          [tippyName]="params.value + '-design'"
           data-tippy-content="表单设计"
+        ></i>
+      </a>
+      <a href="javascript:void(0)" (click)="editForm()">
+        <i
+          class="icon-Pencil text-25 text-info me-2"
+          ngxTippy
+          [tippyProps]="{ theme: 'light-border', hideOnClick: true, content: params.data.is_leaf ? '修改表单信息' : '修改表单类别信息' }"
+          [tippyName]="params.value + '-modify'"
         ></i>
       </a>
       <a href="javascript:void(0)" (click)="deleteForm()">
         <i
           class="icon-Close-Window text-25 text-danger"
           ngxTippy
-          [tippyProps]="{ theme: 'light-border', hideOnClick: true }"
-          data-tippy-content="删除表单"
+          [tippyProps]="{ theme: 'light-border', hideOnClick: true, content: params.data.is_leaf ? '删除表单' : '删除表单类别' }"
+          [tippyName]="params.value + '-delete'"
         ></i>
       </a>
     </span>
@@ -61,6 +71,10 @@ export class FormCrudOperationComponent implements AgRendererComponent {
 
   refresh(_params: ICellRendererParams): boolean {
     return false;
+  }
+
+  createForm() {
+    this.componentParent.createForm(this.params.node);
   }
 
   editForm() {

@@ -20,28 +20,38 @@ import { FlowManageComponent } from './flow-manage.component';
   ],
   template: `
     <span class="datatable-custom-operation">
-      <a href="javascript:void(0)" (click)="editFlow()">
+      <a href="javascript:void(0)" (click)="createFlow()" *ngIf="!params.data.is_leaf">
         <i
-          class="icon-Eraser-2 text-25 text-info me-2"
+          class="icon-Add text-25 text-success me-2"
           ngxTippy
           [tippyProps]="{ theme: 'light-border', hideOnClick: true }"
-          data-tippy-content="修改流程信息"
+          [tippyName]="params.value + '-create'"
+          data-tippy-content="添加流程或流程类别"
         ></i>
       </a>
-      <a href="javascript:void(0)" (click)="designFlow()">
+      <a href="javascript:void(0)" (click)="designFlow()" *ngIf="params.data.is_leaf">
         <i
-          class="icon-Edit text-25 text-success me-2"
+          class="icon-Network-Window text-25 text-success me-2"
           ngxTippy
           [tippyProps]="{ theme: 'light-border', hideOnClick: true }"
+          [tippyName]="params.value + '-design'"
           data-tippy-content="流程图设计"
+        ></i>
+      </a>
+      <a href="javascript:void(0)" (click)="editFlow()">
+        <i
+          class="icon-Pencil text-25 text-info me-2"
+          ngxTippy
+          [tippyProps]="{ theme: 'light-border', hideOnClick: true, content: params.data.is_leaf ? '修改流程信息' : '修改流程类别信息' }"
+          [tippyName]="params.value + '-modify'"
         ></i>
       </a>
       <a href="javascript:void(0)" (click)="deleteFlow()">
         <i
           class="icon-Close-Window text-25 text-danger"
           ngxTippy
-          [tippyProps]="{ theme: 'light-border', hideOnClick: true }"
-          data-tippy-content="删除流程"
+          [tippyProps]="{ theme: 'light-border', hideOnClick: true, content: params.data.is_leaf ? '删除流程' : '删除流程类别' }"
+          [tippyName]="params.value + '-delete'"
         ></i>
       </a>
     </span>
@@ -61,6 +71,10 @@ export class FlowCrudOperationComponent implements AgRendererComponent {
 
   refresh(_params: ICellRendererParams): boolean {
     return false;
+  }
+
+  createFlow() {
+    this.componentParent.createFlow(this.params.node);
   }
 
   editFlow() {
