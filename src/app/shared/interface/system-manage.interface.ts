@@ -3,6 +3,8 @@ interface ISimpleInformationModel {
   guid: string;
   name: string;
   description: string;
+  createUser?: string;
+  createTime?: string;
 }
 
 /**
@@ -27,7 +29,7 @@ interface ISimpleNode {
 }
 
 /**
- *程图解析的连线对象接口
+ *流程图解析的连线对象接口
  */
 export interface IFlowLink {
   sourceGuid: string;
@@ -38,6 +40,16 @@ export interface IFlowLink {
  * 流程图解析的节点对象接口
  */
 export interface IFlowNode extends ISimpleNode {}
+
+/**
+ * 表单的提示对象接口
+ */
+export interface IFormNotification {
+  [key: string]: {
+    message: string;
+    show: boolean;
+  };
+}
 
 /**
  * 名称和描述的信息验证提示对象

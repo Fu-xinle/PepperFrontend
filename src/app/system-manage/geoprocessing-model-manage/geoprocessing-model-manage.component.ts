@@ -3,22 +3,14 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import {
-  RowNode,
-  GridApi,
-  GridReadyEvent,
-  ValueSetterParams,
-  GetQuickFilterTextParams,
-  ILoadingOverlayComp,
-  INoRowsOverlayComp,
-} from 'ag-grid-community';
+import { RowNode, GridApi, GridReadyEvent, GetQuickFilterTextParams, ILoadingOverlayComp, INoRowsOverlayComp } from 'ag-grid-community';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 
 import { AppLoadingOverlayComponent } from '../../shared/components/ag-grid/app-loading-overlay.component';
 import { AppNorowsOverlayComponent } from '../../shared/components/ag-grid/app-no-rows-overlay.component';
-import { IGeoprocessingModel, INameDescriptionNotification } from '../../shared/interface/system-manage.interface';
+import { IGeoprocessingModel, IFormNotification } from '../../shared/interface/system-manage.interface';
 import { GeoprocessingModelService } from '../service/geoprocessing-model.service';
 import { GeoprocessingModelCrudOperationComponent } from './geoprocessing-model-crud-opeartion.component';
 
@@ -28,7 +20,7 @@ import { GeoprocessingModelCrudOperationComponent } from './geoprocessing-model-
   styleUrls: ['./geoprocessing-model-manage.component.scss'],
 })
 export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
-  /**对话框模板引用,利用ngbModal创建对话框，创建地理模型、编辑地理模型信息、删除地理模型 */
+  /**对话框模板引用,利用ngbModal创建对话框，编辑地理模型信息、删除地理模型 */
   @ViewChild('createGeoprocessingModelContent') createGeoprocessingModelContent!: TemplateRef<void>;
   @ViewChild('editGeoprocessingModelContent') editGeoprocessingModelContent!: TemplateRef<void>;
   @ViewChild('deleteGeoprocessingModelContent') deleteGeoprocessingModelContent!: TemplateRef<void>;
@@ -39,19 +31,9 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
       headerName: '描述',
       field: 'description',
       suppressMenu: true,
-      editable: true,
       flex: 2,
       minWidth: 450,
       cellEditor: 'agLargeTextCellEditor',
-      valueSetter: (params: ValueSetterParams) => {
-        if (params.newValue !== params.oldValue) {
-          params['data'][params['colDef']['field']!] = params.newValue;
-          this.onlineEdit(params);
-          return true;
-        } else {
-          return false;
-        }
-      },
     },
     {
       headerName: '创建者',
@@ -123,14 +105,14 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
 
   /**创建地理处理模型:表单组件、表单信息提示、保存信息提示 */
   public createGeoprocessingModelGroup: FormGroup;
-  public createGeoprocessingModelNotification: INameDescriptionNotification;
+  public createGeoprocessingModelNotification: IFormNotification;
   public createGeoprocessingModelLoading: boolean = false;
   public createGeoprocessingModelLoadingText: string = '';
 
   /**编辑地理处理模型:编辑的模型信息(表中一行)、表单组件、表单信息提示、保存信息提示 */
   public editRowNode!: RowNode;
   public editGeoprocessingModelGroup: FormGroup;
-  public editGeoprocessingModelNotification: INameDescriptionNotification;
+  public editGeoprocessingModelNotification: IFormNotification;
   public editGeoprocessingModelLoading: boolean = false;
   public editGeoprocessingModelLoadingText: string = '';
 
@@ -160,7 +142,7 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
     this.autoGroupColumnDef = {
       headerName: '名称',
       minWidth: 250,
-      cellRendererParams: { suppressCount: false },
+      cellRendererParams: { suppressCount: false, innerRenderer: 'nameCellRenderer' },
       flex: 1,
       suppressMenu: true,
       sortable: true,
@@ -174,16 +156,6 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
       comparator: (valueA: string, valueB: string) => {
         return valueA.localeCompare(valueB, 'zh-CN');
       },
-      editable: true,
-      valueSetter: (params: ValueSetterParams) => {
-        if (params.newValue !== params.oldValue) {
-          params['data'][params['colDef']['field']!] = params.newValue;
-          this.onlineEdit(params);
-          return true;
-        } else {
-          return false;
-        }
-      },
     };
 
     this.getDataPath = (data: any) => {
@@ -194,37 +166,34 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
 
     /**创建地理处理模型变量初始化:信息提示对象、表单对象初始化，监测Input事件 */
     this.createGeoprocessingModelNotification = {
-      nameMessageShow: false,
-      nameMessage: '请输入地理处理摸型名称',
-      descriptionMessageShow: false,
-      descriptionMessage: '请输入地理处理摸型描述',
+      name: { message: '请输入地理处理摸型名称', show: false },
+      isLeaf: { message: '请选择类别', show: false },
+      category: { message: '请选择地理模型类别', show: false },
+      description: { message: '请输入地理处理摸型描述', show: false },
     };
 
     this.createGeoprocessingModelGroup = this.fb.group({
       name: [''],
+      isLeaf: [1],
+      category: [[]],
       description: [''],
     });
 
-    this.subscriptions.push(
-      this.createGeoprocessingModelGroup.controls['name'].valueChanges.subscribe((_value: string) => {
-        this.createGeoprocessingModelNotification.nameMessageShow = false;
-      })
-    );
-
-    this.subscriptions.push(
-      this.createGeoprocessingModelGroup.controls['description'].valueChanges.subscribe((_value: string) => {
-        this.createGeoprocessingModelNotification.descriptionMessageShow = false;
-      })
-    );
+    for (const key in this.createGeoprocessingModelGroup.controls) {
+      if (this.createGeoprocessingModelGroup.controls.hasOwnProperty(key)) {
+        this.subscriptions.push(
+          this.createGeoprocessingModelGroup.controls[key].valueChanges.subscribe((_value: string) => {
+            this.createGeoprocessingModelNotification[key].show = false;
+          })
+        );
+      }
+    }
 
     /**编辑地理处理模型变量初始化:信息提示对象、表单对象初始化，监测Input事件 */
     this.editGeoprocessingModelNotification = {
-      nameMessageShow: false,
-      nameMessage: '请输入地理处理摸型名称',
-      categoryMessage: '请选择地理模型类别',
-      categoryMessageShow: false,
-      descriptionMessageShow: false,
-      descriptionMessage: '请输入地理处理摸型描述',
+      name: { message: '请输入地理处理摸型名称', show: false },
+      category: { message: '请选择地理模型类别', show: false },
+      description: { message: '请输入地理处理摸型描述', show: false },
     };
 
     this.editGeoprocessingModelGroup = this.fb.group({
@@ -233,23 +202,15 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
       description: [''],
     });
 
-    this.subscriptions.push(
-      this.editGeoprocessingModelGroup.controls['name'].valueChanges.subscribe((_value: string) => {
-        this.editGeoprocessingModelNotification.nameMessageShow = false;
-      })
-    );
-
-    this.subscriptions.push(
-      this.editGeoprocessingModelGroup.controls['category'].valueChanges.subscribe((_value: string) => {
-        this.editGeoprocessingModelNotification.categoryMessageShow = false;
-      })
-    );
-
-    this.subscriptions.push(
-      this.editGeoprocessingModelGroup.controls['description'].valueChanges.subscribe((_value: string) => {
-        this.editGeoprocessingModelNotification.descriptionMessageShow = false;
-      })
-    );
+    for (const key in this.editGeoprocessingModelGroup.controls) {
+      if (this.editGeoprocessingModelGroup.controls.hasOwnProperty(key)) {
+        this.subscriptions.push(
+          this.editGeoprocessingModelGroup.controls[key].valueChanges.subscribe((_value: string) => {
+            this.editGeoprocessingModelNotification[key].show = false;
+          })
+        );
+      }
+    }
 
     /**Ag-Grid表格的加载显示和空数据显示,自定义重载*/
     this.frameworkComponents = {
@@ -274,7 +235,14 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
           this.zNodes = [
             { id: this.rootNodeId, pId: '#', name: '地理处理模型', chkDisabled: false, open: true },
             ...res.geoprocessingModelData.map((item: any) => {
-              return { id: item.guid, pId: item.parent_guid, name: item.name, chkDisabled: item.is_leaf, open: !item.is_leaf };
+              return {
+                id: item.guid,
+                pId: item.parent_guid,
+                name: item.name,
+                chkDisabled: item.is_leaf,
+                isParent: !item.is_leaf,
+                open: !item.is_leaf,
+              };
             }),
           ];
         },
@@ -318,25 +286,40 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
     this.keySearcchValue$.complete();
   }
 
+  // 指定Row的id标识
+  getRowNodeId(data: any) {
+    return data.guid;
+  }
+
+  /**
+   * 新建地理处理模型时,直接跳转到模型设计页面,用户设计模型然后保存、另存为
+   */
+  newGeoprocessingModel() {
+    this.router.navigate(['../../system-manage/geoprocessing-model-design', { guid: '' }], { relativeTo: this.activatedRoute });
+  }
+
   /**
    * 利用ngbModal弹出创建地理处理模型对话框
+   *
+   * @param {RowNode} rowNode 新建地理处理模型的表格的父行
    */
-  createGeoprocessingModel() {
-    this.router.navigate(['../../system-manage/geoprocessing-model-design', { guid: '' }], { relativeTo: this.activatedRoute });
-    return;
-    const modalReference = this.modalService.open(this.createGeoprocessingModelContent, { centered: true, backdrop: 'static' });
+  createGeoprocessingModel(rowNode: RowNode) {
+    this.createGeoprocessingModelGroup.controls['name'].setValue('');
+    this.createGeoprocessingModelGroup.controls['description'].setValue('');
+    this.createGeoprocessingModelGroup.controls['category'].setValue(this.zNodes.filter(item => item.id === rowNode.data.guid));
+    this.createGeoprocessingModelGroup.controls['isLeaf'].setValue(1);
 
+    const modalReference = this.modalService.open(this.createGeoprocessingModelContent, { centered: true, backdrop: 'static' });
     modalReference.result.then(
       _result => {},
       _reason => {
         this.createGeoprocessingModelLoading = false;
-        this.createGeoprocessingModelGroup.controls['name'].setValue('');
-        this.createGeoprocessingModelGroup.controls['description'].setValue('');
+
         Object.assign(this.createGeoprocessingModelNotification, {
-          nameMessageShow: false,
-          nameMessage: '请输入地理处理摸型名称',
-          descriptionMessageShow: false,
-          descriptionMessage: '请输入地理处理摸型描述',
+          name: { message: '请输入地理处理摸型名称', show: false },
+          isLeaf: { message: '请选择类别', show: false },
+          category: { message: '请选择地理模型类别', show: false },
+          description: { message: '请输入地理处理摸型描述', show: false },
         });
       }
     );
@@ -348,11 +331,20 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
    * @param {NgbModalRef} modelRef Paramater 对话框对象引用
    */
   createGeoprocessingModelSave(modelRef: NgbModalRef) {
-    /**判断名称不能为空，描述暂时不判断、可以为空 */
-    const name: string = this.createGeoprocessingModelGroup.value.name.toString().trim();
-    if (name.length === 0) {
-      this.createGeoprocessingModelNotification.nameMessageShow = true;
-      this.createGeoprocessingModelNotification.nameMessage = '请输入地理处理摸型名称';
+    /**空字段判断,不能是单独的空格 */
+    if (
+      !['name', 'category', 'description'].every(item => {
+        if (
+          (Array.isArray(this.createGeoprocessingModelGroup.value[item]) && this.createGeoprocessingModelGroup.value[item].length === 0) ||
+          (!Array.isArray(this.createGeoprocessingModelGroup.value[item]) &&
+            !this.createGeoprocessingModelGroup.value[item].toString().trim())
+        ) {
+          this.createGeoprocessingModelNotification[item].show = true;
+          return false;
+        }
+        return true;
+      })
+    ) {
       return;
     }
 
@@ -360,21 +352,39 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
     this.createGeoprocessingModelLoadingText = '提交中...';
 
     /**保存到数据库 */
-    const newGeoprocessingModelInfo = {
+    const newGeoprocessingModelInfo: any = {
       id: this.geoprocessingModelData.length + 1,
       guid: uuidv4(),
       name: this.createGeoprocessingModelGroup.value.name.toString().trim(),
       description: this.createGeoprocessingModelGroup.value.description.toString().trim(),
+      isLeaf: this.createGeoprocessingModelGroup.value.isLeaf === 1,
+      parentGuid: this.createGeoprocessingModelGroup.value.category[0].id,
     };
+    newGeoprocessingModelInfo['tree_name'] =
+      newGeoprocessingModelInfo.parentGuid === this.rootNodeId
+        ? newGeoprocessingModelInfo.name
+        : `${this.gridApi.getRowNode(newGeoprocessingModelInfo.parentGuid)!.data['tree_name']}~${newGeoprocessingModelInfo.name}`;
+
     this.subscriptions.push(
       this.geoprocessingModelService.addGeoprocessingModel(newGeoprocessingModelInfo).subscribe({
         next: _res => {
+          newGeoprocessingModelInfo['create_user'] = _res['create_user'];
+          newGeoprocessingModelInfo['create_time'] = _res['create_time'];
+
           /**更新Ag-Grid、表单对象、关闭对话框、toastr提示 */
           this.gridApi.applyTransaction({ add: [newGeoprocessingModelInfo] });
 
+          // ztree-select 添加节点
+          this.zNodes.push({
+            id: newGeoprocessingModelInfo.guid,
+            pId: newGeoprocessingModelInfo.parentGuid,
+            name: newGeoprocessingModelInfo.name,
+            chkDisabled: newGeoprocessingModelInfo.isLeaf,
+            isParent: !newGeoprocessingModelInfo.isLeaf,
+            open: !newGeoprocessingModelInfo.isLeaf,
+          });
+
           this.createGeoprocessingModelLoading = false;
-          this.createGeoprocessingModelGroup.controls['name'].setValue('');
-          this.createGeoprocessingModelGroup.controls['description'].setValue('');
 
           modelRef.close();
           this.toastr.success('新地理处理摸型添加成功!');
@@ -396,6 +406,7 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
    * @param {RowNode} rowNode Parameter Ag-Grid表格中行数据,即编辑的地理处理模型信息
    */
   editGeoprocessingModel(rowNode: RowNode) {
+    // 对话框值填充
     this.editGeoprocessingModelGroup.controls['name'].setValue(rowNode.data.name);
     this.editGeoprocessingModelGroup.controls['description'].setValue(rowNode.data.description);
     this.editGeoprocessingModelGroup.controls['category'].setValue(this.zNodes.filter(item => item.id === rowNode.data.parent_guid));
@@ -407,13 +418,10 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
       _result => {},
       _reason => {
         this.editGeoprocessingModelLoading = false;
-        this.editGeoprocessingModelGroup.controls['name'].setValue('');
-        this.editGeoprocessingModelGroup.controls['description'].setValue('');
         Object.assign(this.editGeoprocessingModelNotification, {
-          nameMessageShow: false,
-          nameMessage: '请输入地理处理摸型名称',
-          descriptionMessageShow: false,
-          descriptionMessage: '请输入地理处理摸型描述',
+          name: { message: '请输入地理处理摸型名称', show: false },
+          category: { message: '请选择地理模型类别', show: false },
+          description: { message: '请输入地理处理摸型描述', show: false },
         });
       }
     );
@@ -425,11 +433,19 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
    * @param {NgbModalRef} modelRef Paramater 对话框对象引用
    */
   editGeoprocessingModelSave(modelRef: NgbModalRef) {
-    /**判断名称不能为空，描述暂时不判断、可以为空 */
-    const name: string = this.editGeoprocessingModelGroup.value.name.toString().trim();
-    if (name.length === 0) {
-      this.editGeoprocessingModelNotification.nameMessageShow = true;
-      this.editGeoprocessingModelNotification.nameMessage = '请输入地理处理摸型名称';
+    /**空字段判断,不能是单独的空格 */
+    if (
+      !['name', 'category', 'description'].every(item => {
+        if (
+          (Array.isArray(this.editGeoprocessingModelGroup.value[item]) && this.editGeoprocessingModelGroup.value[item].length === 0) ||
+          (!Array.isArray(this.editGeoprocessingModelGroup.value[item]) && !this.editGeoprocessingModelGroup.value[item].toString().trim())
+        ) {
+          this.editGeoprocessingModelNotification[item].show = true;
+          return false;
+        }
+        return true;
+      })
+    ) {
       return;
     }
 
@@ -439,16 +455,31 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
     /**保存到数据库 */
     const rowNode = this.editRowNode;
     rowNode.data.name = this.editGeoprocessingModelGroup.value.name.toString().trim();
+    rowNode.data['parent_guid'] = this.editGeoprocessingModelGroup.value.category[0].id;
     rowNode.data.description = this.editGeoprocessingModelGroup.value.description.toString().trim();
     this.subscriptions.push(
       this.geoprocessingModelService.editGeoprocessingModel(rowNode.data).subscribe({
         next: _res => {
-          /**更新Ag-Grid、表单对象、关闭对话框、toastr提示 */
-          this.gridApi.applyTransaction({ update: [rowNode.data] });
+          rowNode.data['create_user'] = _res['create_user'];
+          rowNode.data['create_time'] = _res['create_time'];
 
+          /**更新Ag-Grid、表单对象、关闭对话框、toastr提示 */
+          var rowsToUpdate = this.getRowsToUpdate(
+            rowNode,
+            rowNode.data['parent_guid'] === this.rootNodeId ? '' : this.gridApi.getRowNode(rowNode.data['parent_guid'])!.data['tree_name']
+          );
+          this.gridApi.applyTransaction({ update: rowsToUpdate });
+
+          // ztree-select 对应的节点也更新
+          this.zNodes.some(treeNode => {
+            if (treeNode.id === rowNode.data.guid) {
+              treeNode.name = rowNode.data.name;
+              treeNode.pId = rowNode.data['parent_guid'];
+              return true;
+            }
+            return false;
+          });
           this.editGeoprocessingModelLoading = false;
-          this.editGeoprocessingModelGroup.controls['name'].setValue('');
-          this.editGeoprocessingModelGroup.controls['description'].setValue('');
 
           modelRef.close();
           this.toastr.success('地理处理摸型信息修改成功!');
@@ -524,31 +555,56 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Ag-Grid表格单元格在线编辑，将修改信息保存到数据库
-   *
-   * @param {ValueSetterParams} params params.data是表格行信息，还包含编辑前的值、编辑后的值等信息
-   */
-  onlineEdit(params: ValueSetterParams) {
-    this.subscriptions.push(
-      this.geoprocessingModelService.editGeoprocessingModel(params.data).subscribe({
-        next: _res => {},
-        error: err => {
-          console.error(err);
-          this.toastr.error([err.url, err.error.errMessage, err.error.traceMessage].join('\n'), '错误');
-        },
-        complete: () => {
-          /*Completed*/
-        },
-      })
-    );
-  }
-
-  /**
    * Ag-Grid初始化完成后回调函数
    *
    * @param {GridReadyEvent} params Paramater Ag-Grid对象
    */
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api!;
+  }
+
+  /**
+   * 树形表格中类别列添加图标
+   *
+   * @returns {()=>{}} 表格单元格渲染函数
+   */
+  getNameCellRenderer() {
+    /**
+     *
+     */
+    function nameCellRenderer() {}
+    nameCellRenderer.prototype.init = function (params: any) {
+      var tempDiv = document.createElement('div');
+      var value = params.value;
+      var icon = params.data.is_leaf ? 'icon-File' : 'icon-Folder';
+      tempDiv.innerHTML = icon
+        ? `<span><i class="${icon} me-1 text-primary fw-bold"></i>` + `<span class="filename"></span>${value}</span>`
+        : value;
+      this.eGui = tempDiv.firstChild;
+    };
+    nameCellRenderer.prototype.getGui = function () {
+      return this.eGui;
+    };
+    return nameCellRenderer;
+  }
+
+  /**
+   * 树形表格信息修改设计所属类别移动
+   *
+   * @param {RowNode} node 表格中修改的当前行
+   * @param {string} parenTreeName 表格中父行的tree_name
+   * @returns {any[]} 需要更新的行
+   */
+  private getRowsToUpdate(node: RowNode, parenTreeName: string) {
+    var res: any[] = [];
+    var newTreeName = parenTreeName ? `${parenTreeName}~${node.data['name']}` : node.data['name'];
+    if (node.data) {
+      node.data['tree_name'] = newTreeName;
+    }
+    for (var i = 0; i < node.childrenAfterGroup!.length; i++) {
+      var updatedChildRowData = this.getRowsToUpdate(node.childrenAfterGroup![i], newTreeName);
+      res = res.concat(updatedChildRowData);
+    }
+    return node.data ? res.concat([node.data]) : res;
   }
 }

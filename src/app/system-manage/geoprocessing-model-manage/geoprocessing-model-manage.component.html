@@ -8,7 +8,7 @@
     placeholder="搜索"
     type="text"
   />
-  <button class="btn btn-primary btn-iconmind btn-rounded" (click)="createGeoprocessingModel()">
+  <button class="btn btn-primary btn-iconmind btn-rounded" (click)="newGeoprocessingModel()">
     <i class="icon-Add text-17 me-2"></i>新建地理处理摸型
   </button>
 </div>
@@ -29,6 +29,8 @@
     [noRowsOverlayComponentParams]="noRowsOverlayComponentParams"
     [groupDefaultExpanded]="groupDefaultExpanded"
     [autoGroupColumnDef]="autoGroupColumnDef"
+    [getRowNodeId]="getRowNodeId"
+    [components]="{ fileCellRenderer: getNameCellRenderer() }"
     [treeData]="true"
     [animateRows]="true"
     [getDataPath]="getDataPath"
@@ -50,26 +52,59 @@
         <input
           id="name"
           class="form-control form-control-rounded"
-          [ngClass]="{ 'value-invalid': createGeoprocessingModelNotification.nameMessageShow }"
+          [ngClass]="{ 'value-invalid': createGeoprocessingModelNotification['name'].show }"
           formControlName="name"
           type="text"
           autocomplete="off"
         />
-        <p *ngIf="createGeoprocessingModelNotification.nameMessageShow" class="pt-1 mb-0">
-          <span class="text-danger">{{ createGeoprocessingModelNotification.nameMessage }}</span>
+        <p *ngIf="createGeoprocessingModelNotification['name'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ createGeoprocessingModelNotification['name'].message }}</span>
+        </p>
+      </div>
+      <div class="mb-2">
+        <label for="category" class="form-label">类别</label>
+        <div class="d-block">
+          <label class="radio radio-primary d-inline-block mb-0">
+            <input type="radio" name="isLeaf" [value]="1" formControlName="isLeaf" />
+            <span>模型</span>
+            <span class="checkmark"></span>
+          </label>
+          <label class="radio radio-primary d-inline-block mb-0 ms-4">
+            <input type="radio" name="isLeaf" [value]="0" formControlName="isLeaf" />
+            <span>模型目录</span>
+            <span class="checkmark"></span>
+          </label>
+        </div>
+      </div>
+      <div class="mb-2">
+        <label for="category" class="form-label">所属目录</label>
+        <app-ztree-select
+          id="category"
+          class="form-control form-control-rounded"
+          formControlName="category"
+          [treeSetting]="treeSetting"
+          [selectType]="selectType"
+          [selectMultiple]="selectMultiple"
+          [ngClass]="{ 'value-invalid': createGeoprocessingModelNotification['category'].show }"
+          [treeNodes]="zNodes"
+        ></app-ztree-select>
+        <p *ngIf="createGeoprocessingModelNotification['category'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ createGeoprocessingModelNotification['category'].message }}</span>
         </p>
       </div>
       <div class="mb-2">
         <label for="description" class="form-label">描述</label>
-        <textarea
-          id="description"
-          class="form-control form-control-rounded"
-          [ngClass]="{ 'value-invalid': createGeoprocessingModelNotification.descriptionMessageShow }"
-          formControlName="description"
-          rows="3"
-        ></textarea>
-        <p *ngIf="createGeoprocessingModelNotification.descriptionMessageShow" class="pt-1 mb-0">
-          <span class="text-danger">{{ createGeoprocessingModelNotification.descriptionMessage }}</span>
+        <div class="textarea-container textarea-container-round">
+          <textarea
+            id="description"
+            class="form-control form-control-rounded"
+            [ngClass]="{ 'value-invalid': createGeoprocessingModelNotification['description'].show }"
+            formControlName="description"
+            rows="3"
+          ></textarea>
+        </div>
+        <p *ngIf="createGeoprocessingModelNotification['description'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ createGeoprocessingModelNotification['description'].message }}</span>
         </p>
       </div>
     </form>
@@ -101,17 +136,17 @@
         <input
           id="name"
           class="form-control form-control-rounded"
-          [ngClass]="{ 'value-invalid': editGeoprocessingModelNotification.nameMessageShow }"
+          [ngClass]="{ 'value-invalid': editGeoprocessingModelNotification['name'].show }"
           formControlName="name"
           type="text"
           autocomplete="off"
         />
-        <p *ngIf="editGeoprocessingModelNotification.nameMessageShow" class="pt-1 mb-0">
-          <span class="text-danger">{{ editGeoprocessingModelNotification.nameMessage }}</span>
+        <p *ngIf="editGeoprocessingModelNotification['name'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ editGeoprocessingModelNotification['name'].message }}</span>
         </p>
       </div>
       <div class="mb-2">
-        <label for="category" class="form-label">模型类别</label>
+        <label for="category" class="form-label">所属目录</label>
         <app-ztree-select
           id="category"
           class="form-control form-control-rounded"
@@ -119,24 +154,26 @@
           [treeSetting]="treeSetting"
           [selectType]="selectType"
           [selectMultiple]="selectMultiple"
-          [ngClass]="{ 'value-invalid': editGeoprocessingModelNotification.categoryMessageShow }"
+          [ngClass]="{ 'value-invalid': editGeoprocessingModelNotification['category'].show }"
           [treeNodes]="zNodes"
         ></app-ztree-select>
-        <p *ngIf="editGeoprocessingModelNotification.categoryMessageShow" class="pt-1 mb-0">
-          <span class="text-danger">{{ editGeoprocessingModelNotification.categoryMessage }}</span>
+        <p *ngIf="editGeoprocessingModelNotification['category'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ editGeoprocessingModelNotification['category'].message }}</span>
         </p>
       </div>
       <div class="mb-2">
         <label for="description" class="form-label">描述</label>
-        <textarea
-          id="description"
-          class="form-control form-control-rounded"
-          [ngClass]="{ 'value-invalid': editGeoprocessingModelNotification.descriptionMessageShow }"
-          formControlName="description"
-          rows="3"
-        ></textarea>
-        <p *ngIf="editGeoprocessingModelNotification.descriptionMessageShow" class="pt-1 mb-0">
-          <span class="text-danger">{{ editGeoprocessingModelNotification.descriptionMessage }}</span>
+        <div class="textarea-container textarea-container-round">
+          <textarea
+            id="description"
+            class="form-control form-control-rounded"
+            [ngClass]="{ 'value-invalid': editGeoprocessingModelNotification['description'].show }"
+            formControlName="description"
+            rows="3"
+          ></textarea>
+        </div>
+        <p *ngIf="editGeoprocessingModelNotification['description'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ editGeoprocessingModelNotification['description'].message }}</span>
         </p>
       </div>
     </form>

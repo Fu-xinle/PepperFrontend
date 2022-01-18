@@ -20,9 +20,9 @@ import { GeoprocessingModelManageComponent } from './geoprocessing-model-manage.
   ],
   template: `
     <span class="datatable-custom-operation">
-      <a href="javascript:void(0)" (click)="designGeoprocessingModel()" *ngIf="!params.data.is_leaf">
+      <a href="javascript:void(0)" (click)="createGeoprocessingModel()" *ngIf="!params.data.is_leaf">
         <i
-          class="icon-Add-Window text-25 text-success me-2"
+          class="icon-Add text-25 text-success me-2"
           ngxTippy
           [tippyProps]="{ theme: 'light-border', hideOnClick: true }"
           [tippyName]="params.value + '-design'"
@@ -31,7 +31,7 @@ import { GeoprocessingModelManageComponent } from './geoprocessing-model-manage.
       </a>
       <a href="javascript:void(0)" (click)="designGeoprocessingModel()" *ngIf="params.data.is_leaf">
         <i
-          class="icon-Edit text-25 text-success me-2"
+          class="icon-Network-Window text-25 text-success me-2"
           ngxTippy
           [tippyProps]="{ theme: 'light-border', hideOnClick: true }"
           [tippyName]="params.value + '-design'"
@@ -40,7 +40,7 @@ import { GeoprocessingModelManageComponent } from './geoprocessing-model-manage.
       </a>
       <a href="javascript:void(0)" (click)="editGeoprocessingModel()">
         <i
-          class="icon-Eraser-2 text-25 text-info me-2"
+          class="icon-Pencil text-25 text-info me-2"
           ngxTippy
           [tippyProps]="{
             theme: 'light-border',
@@ -79,6 +79,10 @@ export class GeoprocessingModelCrudOperationComponent implements AgRendererCompo
 
   refresh(_params: ICellRendererParams): boolean {
     return false;
+  }
+
+  createGeoprocessingModel() {
+    this.componentParent.createGeoprocessingModel(this.params.node);
   }
 
   editGeoprocessingModel() {
