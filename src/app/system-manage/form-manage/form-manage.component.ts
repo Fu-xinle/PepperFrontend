@@ -518,10 +518,16 @@ export class FormManageComponent implements OnInit, OnDestroy {
    * @param {NgbModalRef} modelRef Paramater 对话框对象引用
    */
   deleteFormSave(modelRef: NgbModalRef) {
+    const rowNode = this.deleteRowNode;
+
+    if (rowNode.childrenAfterGroup!.length > 0) {
+      modelRef.close();
+      this.toastr.error('表单类别包含子项', '错误');
+      return;
+    }
+
     this.deleteFormLoading = true;
     this.deleteFormLoadingText = '删除中...';
-
-    const rowNode = this.deleteRowNode;
 
     /**保存到数据库 */
     this.subscriptions.push(

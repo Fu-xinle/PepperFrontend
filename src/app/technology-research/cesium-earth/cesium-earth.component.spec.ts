@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HomeMapComponent } from './home-map.component';
+import { CesiumEarthComponent } from './cesium-earth.component';
 
-describe('HomeMapComponent', () => {
-  let component: HomeMapComponent;
-  let fixture: ComponentFixture<HomeMapComponent>;
+describe('CesiumEarthComponent', () => {
+  let component: CesiumEarthComponent;
+  let fixture: ComponentFixture<CesiumEarthComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HomeMapComponent],
+      declarations: [CesiumEarthComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HomeMapComponent);
+    fixture = TestBed.createComponent(CesiumEarthComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

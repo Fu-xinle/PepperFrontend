@@ -18,4 +18,9 @@ export const DEVELOPMENT_ROUTES: Routes = [
     loadChildren: () => import('../../technology-research/technology-research.module').then(m => m.TechnologyResearchModule),
     canLoad: [AuthGuard],
   },
+  {
+    path: 'development-operations',
+    loadChildren: () => import('../../development-operations/development-operations.module').then(m => m.DevelopmentOperationsModule),
+    canLoad: [AuthGuard],
+  },
 ];

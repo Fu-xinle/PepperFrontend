@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DataMiningComponent } from './data-mining.component';
+import { ArcgisMapComponent } from './arcgis-map.component';
 
-describe('DataMiningComponent', () => {
-  let component: DataMiningComponent;
-  let fixture: ComponentFixture<DataMiningComponent>;
+describe('ArcgisMapComponent', () => {
+  let component: ArcgisMapComponent;
+  let fixture: ComponentFixture<ArcgisMapComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DataMiningComponent],
+      declarations: [ArcgisMapComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DataMiningComponent);
+    fixture = TestBed.createComponent(ArcgisMapComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

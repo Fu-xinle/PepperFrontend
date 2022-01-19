@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HomeChatComponent } from './home-chat.component';
+import { CssSecretsComponent } from './css-secrets.component';
 
-describe('HomeChatComponent', () => {
-  let component: HomeChatComponent;
-  let fixture: ComponentFixture<HomeChatComponent>;
+describe('CssSecretsComponent', () => {
+  let component: CssSecretsComponent;
+  let fixture: ComponentFixture<CssSecretsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HomeChatComponent],
+      declarations: [CssSecretsComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HomeChatComponent);
+    fixture = TestBed.createComponent(CssSecretsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

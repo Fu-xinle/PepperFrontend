@@ -517,10 +517,16 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
    * @param {NgbModalRef} modelRef Paramater 对话框对象引用
    */
   deleteGeoprocessingModelSave(modelRef: NgbModalRef) {
+    const rowNode = this.deleteRowNode;
+
+    if (rowNode.childrenAfterGroup!.length > 0) {
+      modelRef.close();
+      this.toastr.error('地理处理摸型类别包含子项', '错误');
+      return;
+    }
+
     this.deleteGeoprocessingModelLoading = true;
     this.deleteGeoprocessingModelLoadingText = '删除中...';
-
-    const rowNode = this.deleteRowNode;
 
     /**保存到数据库 */
     this.subscriptions.push(
@@ -537,7 +543,7 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
 
           this.deleteGeoprocessingModelLoading = false;
           modelRef.close();
-          this.toastr.success('地理处理摸型模型删除成功!');
+          this.toastr.success('地理处理摸型删除成功!');
         },
         error: err => {
           console.error(err);

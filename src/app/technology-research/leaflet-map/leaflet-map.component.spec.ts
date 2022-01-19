@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HomeEarthComponent } from './home-earth.component';
+import { LeafletMapComponent } from './leaflet-map.component';
 
-describe('HomeEarthComponent', () => {
-  let component: HomeEarthComponent;
-  let fixture: ComponentFixture<HomeEarthComponent>;
+describe('LeafletMapComponent', () => {
+  let component: LeafletMapComponent;
+  let fixture: ComponentFixture<LeafletMapComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HomeEarthComponent],
+      declarations: [LeafletMapComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HomeEarthComponent);
+    fixture = TestBed.createComponent(LeafletMapComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
