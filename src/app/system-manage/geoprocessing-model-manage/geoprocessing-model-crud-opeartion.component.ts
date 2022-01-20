@@ -20,7 +20,7 @@ import { GeoprocessingModelManageComponent } from './geoprocessing-model-manage.
   ],
   template: `
     <span class="datatable-custom-operation">
-      <a href="javascript:void(0)" (click)="createGeoprocessingModel()" *ngIf="!params.data.is_leaf">
+      <a href="javascript:void(0)" (click)="createGeoprocessingModel()" *ngIf="!params.data.isLeaf">
         <i
           class="icon-Add text-25 text-success me-2"
           ngxTippy
@@ -29,7 +29,7 @@ import { GeoprocessingModelManageComponent } from './geoprocessing-model-manage.
           data-tippy-content="添加地理处理摸型或类别"
         ></i>
       </a>
-      <a href="javascript:void(0)" (click)="designGeoprocessingModel()" *ngIf="params.data.is_leaf">
+      <a href="javascript:void(0)" (click)="designGeoprocessingModel()" *ngIf="params.data.isLeaf">
         <i
           class="icon-Network-Window text-25 text-success me-2"
           ngxTippy
@@ -45,7 +45,7 @@ import { GeoprocessingModelManageComponent } from './geoprocessing-model-manage.
           [tippyProps]="{
             theme: 'light-border',
             hideOnClick: true,
-            content: params.data.is_leaf ? '修改地理处理摸型信息' : '修改地理处理摸型类别信息'
+            content: params.data.isLeaf ? '修改地理处理摸型信息' : '修改地理处理摸型类别信息'
           }"
           [tippyName]="params.value + '-modify'"
         ></i>
@@ -57,7 +57,7 @@ import { GeoprocessingModelManageComponent } from './geoprocessing-model-manage.
           [tippyProps]="{
             theme: 'light-border',
             hideOnClick: true,
-            content: params.data.is_leaf ? '删除地理处理摸型' : '删除地理处理摸型类别'
+            content: params.data.isLeaf ? '删除地理处理摸型' : '删除地理处理摸型类别'
           }"
           [tippyName]="params.value + '-delete'"
         ></i>

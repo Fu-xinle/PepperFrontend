@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ArcgisMapComponent } from './arcgis-map/arcgis-map.component';
 import { CesiumEarthComponent } from './cesium-earth/cesium-earth.component';
 import { ChatComponent } from './chat/chat.component';
+import { CloudOptimizedGeotiffComponent } from './cloud-optimized-geotiff/cloud-optimized-geotiff.component';
 import { CssSecretsComponent } from './css-secrets/css-secrets.component';
 import { LeafletMapComponent } from './leaflet-map/leaflet-map.component';
 import { RelevanceSearchComponent } from './relevance-search/relevance-search.component';
@@ -57,6 +58,13 @@ const routes: Routes = [
     component: RelevanceSearchComponent,
     data: {
       title: '相关性搜索',
+    },
+  },
+  {
+    path: 'cloud-optimized-geotiff',
+    component: CloudOptimizedGeotiffComponent,
+    data: {
+      title: 'COG技术',
     },
   },
 ];

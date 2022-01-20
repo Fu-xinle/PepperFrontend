@@ -7,11 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 
 import { sharedAnimations } from '../../shared/animations/shared-animations';
-import {
-  IUsernamePassword,
-  ILoginInputValue,
-  INamePasswordCaptchaNotification,
-} from '../../shared/interface/system-manage-authorize.interface';
+import { IFormNotification } from '../../shared/interface/system-manage-authorize.interface';
 import { AuthService } from '../../shared/services/auth/auth.service';
 import { SystemManageAuthorizeService } from '../system-manage-authorize.service';
 
@@ -23,8 +19,8 @@ import { SystemManageAuthorizeService } from '../system-manage-authorize.service
 })
 export class LoginComponent implements OnInit, OnDestroy {
   /**登录信息对象reactForm以及登录过程中错误提示 */
-  public loginForm: FormGroup;
-  public loginNotification: INamePasswordCaptchaNotification;
+  public loginGroup: FormGroup;
+  public loginNotification: IFormNotification;
 
   /**登录验证完毕后,加载主页的提示 */
   public loading: boolean = false;
@@ -47,49 +43,39 @@ export class LoginComponent implements OnInit, OnDestroy {
   ) {
     /**初始化登录提示信息对象 */
     this.loginNotification = {
-      userMessageShow: false,
-      userMessage: '请输入用户名',
-      passMessageShow: false,
-      passMessage: '密码错误',
-      captchaMessageShow: false,
-      captchaMessage: '验证码错误',
+      userName: { message: '请输入用户名', show: false },
+      password: { message: '密码错误', show: false },
+      captcha: { message: '验证码错误', show: false },
+      remember: { message: '', show: false },
     };
 
     /**获取localStorage存储用户名和密码 */
     if (localStorage[this.storeKey]) {
-      this.loginForm = this.formBuilder.group({
-        inputName: [this.aesDecrypt()['userName']],
-        inputPass: [this.aesDecrypt()['password']],
-        inputCaptcha: [''],
+      this.loginGroup = this.formBuilder.group({
+        userName: [this.aesDecrypt()['userName']],
+        password: [this.aesDecrypt()['password']],
+        captcha: [''],
         remember: [true],
       });
     } else {
-      this.loginForm = this.formBuilder.group({
-        inputName: [''],
-        inputPass: [''],
-        inputCaptcha: [''],
+      this.loginGroup = this.formBuilder.group({
+        userName: [''],
+        password: [''],
+        captcha: [''],
         remember: [true],
       });
     }
 
     /**监测Input事件 */
-    this.subscriptions.push(
-      this.loginForm.controls['inputName'].valueChanges.subscribe((_value: string) => {
-        this.loginNotification.userMessageShow = false;
-      })
-    );
-
-    this.subscriptions.push(
-      this.loginForm.controls['inputPass'].valueChanges.subscribe((_value: string) => {
-        this.loginNotification.passMessageShow = false;
-      })
-    );
-
-    this.subscriptions.push(
-      this.loginForm.controls['inputCaptcha'].valueChanges.subscribe((_value: string) => {
-        this.loginNotification.captchaMessageShow = false;
-      })
-    );
+    for (const key in this.loginGroup.controls) {
+      if (this.loginGroup.controls.hasOwnProperty(key)) {
+        this.subscriptions.push(
+          this.loginGroup.controls[key].valueChanges.subscribe((_value: string) => {
+            this.loginNotification[key].show = false;
+          })
+        );
+      }
+    }
   }
 
   ngOnInit() {
@@ -117,18 +103,18 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.generateCaptcha();
   }
 
-  onSubmit(value: ILoginInputValue) {
+  onSubmit(value: { userName: string; password: string; captcha: string; remember: boolean }) {
     /**检查用户名为是否空 */
-    if (!value.inputName.toString().trim()) {
-      this.loginNotification.userMessageShow = true;
-      this.loginNotification.userMessage = '请输入用户名';
+    if (!value.userName.toString().trim()) {
+      this.loginNotification.userName.show = true;
+      this.loginNotification.userName.message = '请输入用户名';
       return;
     }
 
     /**检查验证码错误是否错误 */
-    if (value.inputCaptcha.toString().trim() !== this.captcha.join('')) {
-      this.loginNotification.captchaMessageShow = true;
-      this.loginNotification.captchaMessage = '验证码错误';
+    if (value.captcha.toString().trim() !== this.captcha.join('')) {
+      this.loginNotification.captcha.show = true;
+      this.loginNotification.captcha.message = '验证码错误';
       this.captcha = [];
       this.generateCaptcha();
       return;
@@ -139,15 +125,15 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     /**后台验证用户信息，同时获取用户相关的权限、角色等信息,注入全局服务中 */
     this.subscriptions.push(
-      this.systemManageAuthorizeService.login(value.inputName.toString().trim(), value.inputPass.toString().trim()).subscribe({
+      this.systemManageAuthorizeService.login(value.userName.toString().trim(), value.password.toString().trim()).subscribe({
         next: res => {
           //!/**验证用户输入的是初始密码?如果是初始密码，弹出对话框，必须修改密码 */
-          this.loginNotification = res;
+          this.loginNotification = { userName: res.userName, password: res.password };
           if (!this.loginNotification.userMessageShow && !this.loginNotification.passMessageShow) {
             if (value.remember) {
               this.aesEncrypt({
-                userName: value.inputName.toString().trim(),
-                password: value.inputPass.toString().trim(),
+                userName: value.userName.toString().trim(),
+                password: value.password.toString().trim(),
               });
             } else {
               localStorage.removeItem(this.storeKey);
@@ -256,18 +242,20 @@ export class LoginComponent implements OnInit, OnDestroy {
   /**
    * 用户名和密码加密存储在localStorage中
    *
-   * @param {IUsernamePassword}  mMessage  Parameter 用户名和密码对象
+   * @param {{ userName: string; password: string }}  mMessage  Parameter 用户名和密码对象
+   * @param {string} mMessage.userName  用户名
+   * @param {string} mMessage.password  密码
    */
-  private aesEncrypt(mMessage: IUsernamePassword): void {
+  private aesEncrypt(mMessage: { userName: string; password: string }): void {
     localStorage[this.storeKey] = CryptoJS.AES.encrypt(JSON.stringify(mMessage), this.secretKey).toString();
   }
 
   /**
    * localStorage中的用户名和密码解密
    *
-   * @returns {IUsernamePassword} Return 用户名和密码对象
+   * @returns {{ userName: string; password: string } }  用户名和密码对象
    */
-  private aesDecrypt(): IUsernamePassword {
+  private aesDecrypt(): { userName: string; password: string } {
     const bytes = CryptoJS.AES.decrypt(localStorage[this.storeKey], this.secretKey);
     const originalText = bytes.toString(CryptoJS.enc.Utf8);
     return JSON.parse(originalText);

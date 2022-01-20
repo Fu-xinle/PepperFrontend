@@ -1,29 +1,62 @@
 /**
- * 名称、密码以及验证码的信息验证提示对象
+ * 用户基本信息
  */
-export interface INamePasswordCaptchaNotification {
-  userMessageShow: boolean;
-  userMessage: string;
-  passMessageShow: boolean;
-  passMessage: string;
-  captchaMessageShow: boolean;
-  captchaMessage: string;
-}
-
-/**
- * 用户名和密码，存储在localstorage中的对象
- */
-export interface IUsernamePassword {
+export interface IUserInformation {
+  [key: string]: string;
+  userGuid: string;
   userName: string;
-  password: string;
+  realName: string;
+  gender: string;
+  phoneNumber: string;
+  birthday: string;
+  email: string;
+  address: string;
+  academicDegree: string;
+  graduatedSchool: string;
+  workPlace: string;
+  photo: string;
 }
 
 /**
- * 用户登录输入的验证信息
+ * 用户信息对象字段是否处于编辑状态
  */
-export interface ILoginInputValue {
-  inputName: string;
-  inputPass: string;
-  inputCaptcha: string;
-  remember: boolean;
+export interface IUserInformationEditMark {
+  [key: string]: boolean;
+  realName: boolean;
+  gender: boolean;
+  phoneNumber: boolean;
+  birthday: boolean;
+  email: boolean;
+  address: boolean;
+  academicDegree: boolean;
+  graduatedSchool: boolean;
+  workPlace: boolean;
+}
+
+/**
+ * 用户信息对象，根据需要扩充
+ */
+export interface IUserLoginInformation {
+  userName: {
+    message: string;
+    show: boolean;
+  };
+  password: {
+    message: string;
+    show: boolean;
+  };
+  token: string;
+  userInfo: IUserInformation;
+  permissions: string[];
+  role: string[];
+}
+
+/**
+ * 表单的提示对象接口
+ */
+export interface IFormNotification {
+  [key: string]: {
+    message: string;
+    show: boolean;
+  };
 }

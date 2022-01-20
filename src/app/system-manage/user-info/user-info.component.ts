@@ -7,7 +7,7 @@ import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 
-import { IUserInformation, IUserInformationEditMark, IUserInformationNotification } from '../../shared/interface/system-manage.interface';
+import { IUserInformation, IUserInformationEditMark, IFormNotification } from '../../shared/interface/system-manage-authorize.interface';
 import { AuthService } from '../../shared/services/auth/auth.service';
 import { EventListenerService } from '../../shared/services/event-listener.service';
 import { I18n, CustomDatepickerI18n, CustomAdapter, CustomDateParserFormatter } from '../../shared/services/i18n/datepicker';
@@ -28,13 +28,13 @@ import { PersonalCenterService } from '../service/personal-center.service';
 export class UserInfoComponent implements OnInit, OnDestroy {
   /** 用户信息对象、用户信息编辑信息通知对象、用户信息编辑标志对象 */
   public userInfo: IUserInformation;
-  public userInfoNotification: IUserInformationNotification;
+  public userInfoNotification: IFormNotification;
   public editState: IUserInformationEditMark;
 
   /**Select控件的Option选项 */
   public selectOptionsConfig = {
-    gender: [],
-    academicDegree: [],
+    gender: [] as Array<{ code: string; name: string }>,
+    academicDegree: [] as Array<{ code: string; name: string }>,
   };
 
   /** 当前日期对象，设置ngbDate最大日期为当前日期  */
@@ -72,10 +72,8 @@ export class UserInfoComponent implements OnInit, OnDestroy {
 
     /** 用户信息编辑信息通知对象初始化 */
     this.userInfoNotification = {
-      phoneNumberMessageShow: false,
-      phoneNumberMessage: '请输入正确格式的手机号码',
-      emailMessageShow: false,
-      emailMessage: '请输入正确格式的邮箱地址',
+      phoneNumber: { message: '请输入正确格式的手机号码', show: false },
+      email: { message: '请输入正确格式的邮箱地址', show: false },
     };
 
     /** 照片裁切初始化 */
@@ -133,12 +131,12 @@ export class UserInfoComponent implements OnInit, OnDestroy {
   saveEditInformation(fieldName: string, dbFieldName: string, fieldValue: string) {
     /** 手机号和邮箱的格式验证 */
     if (dbFieldName === 'phone_number' && !/^1[3456789]\d{9}$/.test(fieldValue)) {
-      this.userInfoNotification.phoneNumberMessageShow = true;
+      this.userInfoNotification.phoneNumber.show = true;
       return;
     }
 
     if (dbFieldName === 'email' && !/^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/.test(fieldValue)) {
-      this.userInfoNotification.emailMessageShow = true;
+      this.userInfoNotification.email.show = true;
       return;
     }
 
@@ -169,10 +167,10 @@ export class UserInfoComponent implements OnInit, OnDestroy {
   cancelEditInformation(fieldName: string) {
     /** 取消用户信息编辑信息通知 */
     if (fieldName === 'phoneNumber') {
-      this.userInfoNotification.phoneNumberMessageShow = false;
+      this.userInfoNotification.phoneNumber.show = false;
     }
     if (fieldName === 'email') {
-      this.userInfoNotification.emailMessageShow = false;
+      this.userInfoNotification.email.show = false;
     }
 
     /** 值赋值为原值 */

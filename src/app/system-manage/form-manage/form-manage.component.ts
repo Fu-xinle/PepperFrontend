@@ -36,14 +36,14 @@ export class FormManageComponent implements OnInit, OnDestroy {
     },
     {
       headerName: '创建者',
-      field: 'create_user',
+      field: 'createUser',
       initialWidth: 250,
       sortable: false,
       suppressMenu: true,
     },
     {
       headerName: '创建时间',
-      field: 'create_time',
+      field: 'createTime',
       initialWidth: 300,
       sortable: false,
       suppressMenu: true,
@@ -158,7 +158,7 @@ export class FormManageComponent implements OnInit, OnDestroy {
     };
 
     this.getDataPath = (data: any) => {
-      return data.tree_name.split('~');
+      return data.treeName.split('~');
     };
 
     this.groupDefaultExpanded = 1;
@@ -236,11 +236,11 @@ export class FormManageComponent implements OnInit, OnDestroy {
             ...res.formData.map((item: any) => {
               return {
                 id: item.guid,
-                pId: item.parent_guid,
+                pId: item.parentGuid,
                 name: item.name,
-                chkDisabled: item.is_leaf,
-                isParent: !item.is_leaf,
-                open: !item.is_leaf,
+                chkDisabled: item.isLeaf,
+                isParent: !item.isLeaf,
+                open: !item.isLeaf,
               };
             }),
           ];
@@ -360,16 +360,16 @@ export class FormManageComponent implements OnInit, OnDestroy {
       isLeaf: this.createFormGroup.value.isLeaf === 1,
       parentGuid: this.createFormGroup.value.category[0].id,
     };
-    newFormInfo['tree_name'] =
+    newFormInfo['treeName'] =
       newFormInfo.parentGuid === this.rootNodeId
         ? newFormInfo.name
-        : `${this.gridApi.getRowNode(newFormInfo.parentGuid)!.data['tree_name']}~${newFormInfo.name}`;
+        : `${this.gridApi.getRowNode(newFormInfo.parentGuid)!.data['treeName']}~${newFormInfo.name}`;
 
     this.subscriptions.push(
       this.formManageService.addForm(newFormInfo).subscribe({
         next: _res => {
-          newFormInfo['create_user'] = _res['create_user'];
-          newFormInfo['create_time'] = _res['create_time'];
+          newFormInfo['createUser'] = _res['createUser'];
+          newFormInfo['createTime'] = _res['createTime'];
 
           /**更新Ag-Grid、表单对象、关闭对话框、toastr提示 */
           this.gridApi.applyTransaction({ add: [newFormInfo] });
@@ -408,7 +408,7 @@ export class FormManageComponent implements OnInit, OnDestroy {
   editForm(rowNode: RowNode) {
     this.editFormGroup.controls['name'].setValue(rowNode.data.name);
     this.editFormGroup.controls['description'].setValue(rowNode.data.description);
-    this.editFormGroup.controls['category'].setValue(this.zNodes.filter(item => item.id === rowNode.data.parent_guid));
+    this.editFormGroup.controls['category'].setValue(this.zNodes.filter(item => item.id === rowNode.data.parentGuid));
 
     this.editRowNode = rowNode;
 
@@ -455,18 +455,18 @@ export class FormManageComponent implements OnInit, OnDestroy {
     /**保存到数据库 */
     const rowNode = this.editRowNode;
     rowNode.data.name = this.editFormGroup.value.name.toString().trim();
-    rowNode.data['parent_guid'] = this.editFormGroup.value.category[0].id;
+    rowNode.data['parentGuid'] = this.editFormGroup.value.category[0].id;
     rowNode.data.description = this.editFormGroup.value.description.toString().trim();
     this.subscriptions.push(
       this.formManageService.editForm(rowNode.data).subscribe({
         next: _res => {
-          rowNode.data['create_user'] = _res['create_user'];
-          rowNode.data['create_time'] = _res['create_time'];
+          rowNode.data['createUser'] = _res['createUser'];
+          rowNode.data['createTime'] = _res['createTime'];
 
           /**更新Ag-Grid、表单对象、关闭对话框、toastr提示 */
           var rowsToUpdate = this.getRowsToUpdate(
             rowNode,
-            rowNode.data['parent_guid'] === this.rootNodeId ? '' : this.gridApi.getRowNode(rowNode.data['parent_guid'])!.data['tree_name']
+            rowNode.data['parentGuid'] === this.rootNodeId ? '' : this.gridApi.getRowNode(rowNode.data['parentGuid'])!.data['treeName']
           );
           this.gridApi.applyTransaction({ update: rowsToUpdate });
 
@@ -474,7 +474,7 @@ export class FormManageComponent implements OnInit, OnDestroy {
           this.zNodes.some(treeNode => {
             if (treeNode.id === rowNode.data.guid) {
               treeNode.name = rowNode.data.name;
-              treeNode.pId = rowNode.data['parent_guid'];
+              treeNode.pId = rowNode.data['parentGuid'];
               return true;
             }
             return false;
@@ -579,7 +579,7 @@ export class FormManageComponent implements OnInit, OnDestroy {
     nameCellRenderer.prototype.init = function (params: any) {
       var tempDiv = document.createElement('div');
       var value = params.value;
-      var icon = params.data.is_leaf ? 'icon-File' : 'icon-Folder';
+      var icon = params.data.isLeaf ? 'icon-File' : 'icon-Folder';
       tempDiv.innerHTML = icon
         ? `<span><i class="${icon} me-1 text-primary fw-bold"></i>` + `<span class="filename"></span>${value}</span>`
         : value;
@@ -613,14 +613,14 @@ export class FormManageComponent implements OnInit, OnDestroy {
    * 树形表格信息修改设计所属类别移动
    *
    * @param {RowNode} node 表格中修改的当前行
-   * @param {string} parenTreeName 表格中父行的tree_name
+   * @param {string} parenTreeName 表格中父行的treeName
    * @returns {any[]} 需要更新的行
    */
   private getRowsToUpdate(node: RowNode, parenTreeName: string) {
     var res: any[] = [];
     var newTreeName = parenTreeName ? `${parenTreeName}~${node.data['name']}` : node.data['name'];
     if (node.data) {
-      node.data['tree_name'] = newTreeName;
+      node.data['treeName'] = newTreeName;
     }
     for (var i = 0; i < node.childrenAfterGroup!.length; i++) {
       var updatedChildRowData = this.getRowsToUpdate(node.childrenAfterGroup![i], newTreeName);

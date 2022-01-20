@@ -20,7 +20,7 @@ import { FlowManageComponent } from './flow-manage.component';
   ],
   template: `
     <span class="datatable-custom-operation">
-      <a href="javascript:void(0)" (click)="createFlow()" *ngIf="!params.data.is_leaf">
+      <a href="javascript:void(0)" (click)="createFlow()" *ngIf="!params.data.isLeaf">
         <i
           class="icon-Add text-25 text-success me-2"
           ngxTippy
@@ -29,7 +29,7 @@ import { FlowManageComponent } from './flow-manage.component';
           data-tippy-content="添加流程或流程类别"
         ></i>
       </a>
-      <a href="javascript:void(0)" (click)="designFlow()" *ngIf="params.data.is_leaf">
+      <a href="javascript:void(0)" (click)="designFlow()" *ngIf="params.data.isLeaf">
         <i
           class="icon-Network-Window text-25 text-success me-2"
           ngxTippy
@@ -42,7 +42,7 @@ import { FlowManageComponent } from './flow-manage.component';
         <i
           class="icon-Pencil text-25 text-info me-2"
           ngxTippy
-          [tippyProps]="{ theme: 'light-border', hideOnClick: true, content: params.data.is_leaf ? '修改流程信息' : '修改流程类别信息' }"
+          [tippyProps]="{ theme: 'light-border', hideOnClick: true, content: params.data.isLeaf ? '修改流程信息' : '修改流程类别信息' }"
           [tippyName]="params.value + '-modify'"
         ></i>
       </a>
@@ -50,7 +50,7 @@ import { FlowManageComponent } from './flow-manage.component';
         <i
           class="icon-Close-Window text-25 text-danger"
           ngxTippy
-          [tippyProps]="{ theme: 'light-border', hideOnClick: true, content: params.data.is_leaf ? '删除流程' : '删除流程类别' }"
+          [tippyProps]="{ theme: 'light-border', hideOnClick: true, content: params.data.isLeaf ? '删除流程' : '删除流程类别' }"
           [tippyName]="params.value + '-delete'"
         ></i>
       </a>

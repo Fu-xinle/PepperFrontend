@@ -20,7 +20,7 @@ import { FormManageComponent } from './form-manage.component';
   ],
   template: `
     <span class="datatable-custom-operation">
-      <a href="javascript:void(0)" (click)="createForm()" *ngIf="!params.data.is_leaf">
+      <a href="javascript:void(0)" (click)="createForm()" *ngIf="!params.data.isLeaf">
         <i
           class="icon-Add text-25 text-success me-2"
           ngxTippy
@@ -29,7 +29,7 @@ import { FormManageComponent } from './form-manage.component';
           data-tippy-content="添加表单或表单类别"
         ></i>
       </a>
-      <a href="javascript:void(0)" (click)="designForm()" *ngIf="params.data.is_leaf">
+      <a href="javascript:void(0)" (click)="designForm()" *ngIf="params.data.isLeaf">
         <i
           class="icon-Network-Window text-25 text-success me-2"
           ngxTippy
@@ -42,7 +42,7 @@ import { FormManageComponent } from './form-manage.component';
         <i
           class="icon-Pencil text-25 text-info me-2"
           ngxTippy
-          [tippyProps]="{ theme: 'light-border', hideOnClick: true, content: params.data.is_leaf ? '修改表单信息' : '修改表单类别信息' }"
+          [tippyProps]="{ theme: 'light-border', hideOnClick: true, content: params.data.isLeaf ? '修改表单信息' : '修改表单类别信息' }"
           [tippyName]="params.value + '-modify'"
         ></i>
       </a>
@@ -50,7 +50,7 @@ import { FormManageComponent } from './form-manage.component';
         <i
           class="icon-Close-Window text-25 text-danger"
           ngxTippy
-          [tippyProps]="{ theme: 'light-border', hideOnClick: true, content: params.data.is_leaf ? '删除表单' : '删除表单类别' }"
+          [tippyProps]="{ theme: 'light-border', hideOnClick: true, content: params.data.isLeaf ? '删除表单' : '删除表单类别' }"
           [tippyName]="params.value + '-delete'"
         ></i>
       </a>

@@ -25,7 +25,7 @@ export class NavigationService implements OnDestroy {
         { icon: 'icon-Home-3', name: '主页', state: '/development/home', type: 'link' },
         {
           icon: 'icon-Bar-Chart',
-          name: 'Kan主页',
+          name: 'BI主页',
           state: '/development/home/home-bi',
           type: 'link',
         },
@@ -127,6 +127,12 @@ export class NavigationService implements OnDestroy {
           icon: 'icon-File-Search',
           name: '相关性搜索',
           state: '/development/technology-research/relevance-search',
+          type: 'link',
+        },
+        {
+          icon: 'icon-Cloud-Picture',
+          name: 'COG技术',
+          state: '/development/technology-research/cloud-optimized-geotiff',
           type: 'link',
         },
       ],

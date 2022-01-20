@@ -15,52 +15,52 @@
             </div>
             <h1 class="3 text-18 align-self-start">登录</h1>
             <form
-              (ngSubmit)="onSubmit(loginForm.value)"
-              [formGroup]="loginForm"
+              (ngSubmit)="onSubmit(loginGroup.value)"
+              [formGroup]="loginGroup"
               class="justify-content-center d-flex flex-column flex-fill"
             >
               <div class="mb-2">
-                <label class="form-label" for="inputName">账号</label>
+                <label class="form-label" for="userName">账号</label>
                 <input
-                  id="inputName"
+                  id="userName"
                   class="form-control form-control-rounded"
-                  [ngClass]="{ 'value-invalid': loginNotification.userMessageShow }"
-                  formControlName="inputName"
+                  [ngClass]="{ 'value-invalid': loginNotification.userName.show }"
+                  formControlName="userName"
                   type="text"
                   autocomplete="off"
                 />
-                <p *ngIf="loginNotification.userMessageShow" class="pt-1 mb-0">
-                  <span class="text-danger">{{ loginNotification.userMessage }}</span>
+                <p *ngIf="loginNotification.userName.show" class="pt-1 mb-0">
+                  <span class="text-danger">{{ loginNotification.userName.message }}</span>
                 </p>
               </div>
               <div class="mb-2">
-                <label class="form-label" for="inputPass">密码</label>
+                <label class="form-label" for="password">密码</label>
                 <input
-                  id="inputPass"
+                  id="password"
                   class="form-control form-control-rounded"
-                  [ngClass]="{ 'value-invalid': loginNotification.passMessageShow }"
-                  formControlName="inputPass"
+                  [ngClass]="{ 'value-invalid': loginNotification.password.show }"
+                  formControlName="password"
                   type="password"
                   autocomplete="off"
                 />
-                <p *ngIf="loginNotification.passMessageShow" class="pt-1 mb-0">
-                  <span class="text-danger">{{ loginNotification.passMessage }}</span>
+                <p *ngIf="loginNotification.password.show" class="pt-1 mb-0">
+                  <span class="text-danger">{{ loginNotification.password.message }}</span>
                 </p>
               </div>
               <div class="mb-2">
-                <label class="form-label" for="inputCaptcha">验证码</label>
+                <label class="form-label" for="captcha">验证码</label>
                 <div class="row row-xs">
                   <div class="col-md-6 pe-0">
                     <input
-                      id="inputCaptcha"
+                      id="captcha"
                       class="form-control form-control-rounded"
-                      [ngClass]="{ 'value-invalid': loginNotification.captchaMessageShow }"
-                      formControlName="inputCaptcha"
+                      [ngClass]="{ 'value-invalid': loginNotification.captcha.show }"
+                      formControlName="captcha"
                       type="text"
                       autocomplete="off"
                     />
-                    <p *ngIf="loginNotification.captchaMessageShow" class="pt-1 mb-0">
-                      <span class="text-danger">{{ loginNotification.captchaMessage }}</span>
+                    <p *ngIf="loginNotification.captcha.show" class="pt-1 mb-0">
+                      <span class="text-danger">{{ loginNotification.captcha.message }}</span>
                     </p>
                   </div>
                   <div class="col-md-6">

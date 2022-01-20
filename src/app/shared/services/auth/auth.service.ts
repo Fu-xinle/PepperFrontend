@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { IUserInformation } from '../../interface/system-manage.interface';
+import { IUserInformation } from '../../interface/system-manage-authorize.interface';
 
 @Injectable({
   providedIn: 'root',

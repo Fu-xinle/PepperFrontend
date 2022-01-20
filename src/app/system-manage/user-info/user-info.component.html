@@ -173,13 +173,13 @@
                         <input
                           type="email"
                           name="email"
-                          [ngClass]="{ 'value-invalid': userInfoNotification.emailMessageShow }"
-                          (ngModelChange)="this.userInfoNotification.emailMessageShow = false"
+                          [ngClass]="{ 'value-invalid': userInfoNotification.email.show }"
+                          (ngModelChange)="this.userInfoNotification.email.show = false"
                           [(ngModel)]="userInfo.email"
                           class="form-control form-control-rounded me-1"
                         />
-                        <p *ngIf="userInfoNotification.emailMessageShow" class="pt-1 mt-1">
-                          <span class="text-danger">{{ userInfoNotification.emailMessage }}</span>
+                        <p *ngIf="userInfoNotification.email.show" class="pt-1 mt-1">
+                          <span class="text-danger">{{ userInfoNotification.email.message }}</span>
                         </p>
                       </div>
                       <div class="col-md-4 mt-3 mt-md-0 pt-1 ps-0">
@@ -244,12 +244,12 @@
                           type="tel"
                           class="form-control form-control-rounded"
                           name="phoneNumber"
-                          [ngClass]="{ 'value-invalid': userInfoNotification.phoneNumberMessageShow }"
-                          (ngModelChange)="this.userInfoNotification.phoneNumberMessageShow = false"
+                          [ngClass]="{ 'value-invalid': userInfoNotification.phoneNumber.show }"
+                          (ngModelChange)="this.userInfoNotification.phoneNumber.show = false"
                           [(ngModel)]="userInfo.phoneNumber"
                         />
-                        <p *ngIf="userInfoNotification.phoneNumberMessageShow" class="pt-1 mt-1">
-                          <span class="text-danger">{{ userInfoNotification.phoneNumberMessage }}</span>
+                        <p *ngIf="userInfoNotification.phoneNumber.show" class="pt-1 mt-1">
+                          <span class="text-danger">{{ userInfoNotification.phoneNumber.message }}</span>
                         </p>
                       </div>
                       <div class="col-md-4 mt-3 mt-md-0 pt-1 ps-0">

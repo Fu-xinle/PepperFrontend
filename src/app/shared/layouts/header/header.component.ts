@@ -10,7 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 
 import { SystemManageAuthorizeService } from '../../../system-manage-authorize/system-manage-authorize.service';
-import { IUserInformation, IConfirmPasswordNotification, IConfirmPasswordValue } from '../../interface/system-manage.interface';
+import { IUserInformation, IFormNotification } from '../../interface/system-manage-authorize.interface';
 import { AuthService } from '../../services/auth/auth.service';
 import { EventListenerService } from '../../services/event-listener.service';
 import { NavigationService } from '../../services/navigation.service';
@@ -42,8 +42,8 @@ export class HeaderComponent implements OnDestroy {
   };
 
   // 修改密码对话框
-  public changePasswordNotification: IConfirmPasswordNotification;
-  public changePasswordForm: FormGroup;
+  public changePasswordNotification: IFormNotification;
+  public changePasswordGroup: FormGroup;
   public loading: boolean = false;
   public loadingText: string = '';
   public modalReference!: NgbModalRef;
@@ -72,28 +72,24 @@ export class HeaderComponent implements OnDestroy {
   ) {
     /** 修改密码对话框:表单信息通知、表单对象以及Input变化监测 */
     this.changePasswordNotification = {
-      newPasswordMessageShow: false,
-      newPasswordMessage: '请输入用户名',
-      confirmNewPasswordMessageShow: false,
-      confirmNewPasswordMessage: '密码输入不一致',
+      newPassword: { message: '请输入用户名', show: false },
+      confirmNewPassword: { message: '密码输入不一致', show: false },
     };
 
-    this.changePasswordForm = this.formBuilder.group({
+    this.changePasswordGroup = this.formBuilder.group({
       newPassword: [''],
       confirmNewPassword: [''],
     });
 
-    this.subscriptions.push(
-      this.changePasswordForm.controls['newPassword'].valueChanges.subscribe((_value: string) => {
-        this.changePasswordNotification.newPasswordMessageShow = false;
-      })
-    );
-
-    this.subscriptions.push(
-      this.changePasswordForm.controls['confirmNewPassword'].valueChanges.subscribe((_value: string) => {
-        this.changePasswordNotification.confirmNewPasswordMessageShow = false;
-      })
-    );
+    for (const key in this.changePasswordGroup.controls) {
+      if (this.changePasswordGroup.controls.hasOwnProperty(key)) {
+        this.subscriptions.push(
+          this.changePasswordGroup.controls[key].valueChanges.subscribe((_value: string) => {
+            this.changePasswordNotification[key].show = false;
+          })
+        );
+      }
+    }
 
     /** //!!网站个人通知初始化,后台获取 */
     this.notifications = [
@@ -211,13 +207,11 @@ export class HeaderComponent implements OnDestroy {
       _reason => {
         /** 关闭对话框,关于控件的值需要重新初始化 */
         this.loading = false;
-        this.changePasswordForm.controls['newPassword'].setValue('');
-        this.changePasswordForm.controls['confirmNewPassword'].setValue('');
+        this.changePasswordGroup.controls['newPassword'].setValue('');
+        this.changePasswordGroup.controls['confirmNewPassword'].setValue('');
         Object.assign(this.changePasswordNotification, {
-          newPasswordMessageShow: false,
-          newPasswordMessage: '请输入用户名',
-          confirmNewPasswordMessageShow: false,
-          confirmNewPasswordMessage: '密码输入不一致',
+          newPassword: { message: '请输入用户名', show: false },
+          confirmNewPassword: { message: '密码输入不一致', show: false },
         });
       }
     );
@@ -226,25 +220,27 @@ export class HeaderComponent implements OnDestroy {
   /**
    * 用户修改密码，新密码保存到数据库
    *
-   * @param {IConfirmPasswordValue} value Parameter 用户输入的新密码以及确认密码（第二次输入）
-   * @returns {void} Retunr
+   * @param {{ newPassword: string; confirmNewPassword: string }} value Parameter 用户输入的新密码以及确认密码（第二次输入）
+   * @param {string} value.newPassword  用户新密码
+   * @param {string} value.confirmNewPassword 用户确认新密码
+   * @returns {void} Return  返回空
    */
-  onSubmit(value: IConfirmPasswordValue) {
+  onSubmit(value: { newPassword: string; confirmNewPassword: string }) {
     /** 新密码一些判断:字符和数字5-30个，两次密码输入一致 */
     const newPassword: string = value.newPassword.toString().trim();
     if (!/^[0-9a-zA-Z]*$/g.test(newPassword)) {
-      this.changePasswordNotification.newPasswordMessageShow = true;
-      this.changePasswordNotification.newPasswordMessage = '密码只能包含字母或数字';
+      this.changePasswordNotification.newPassword.show = true;
+      this.changePasswordNotification.newPassword.message = '密码只能包含字母或数字';
       return;
     }
     if (newPassword.length < 5 || newPassword.length > 30) {
-      this.changePasswordNotification.newPasswordMessageShow = true;
-      this.changePasswordNotification.newPasswordMessage = '5-30个字母或数字';
+      this.changePasswordNotification.newPassword.show = true;
+      this.changePasswordNotification.newPassword.message = '5-30个字母或数字';
       return;
     }
     if (value.newPassword.toString().trim() !== value.confirmNewPassword.toString().trim()) {
-      this.changePasswordNotification.confirmNewPasswordMessageShow = true;
-      this.changePasswordNotification.confirmNewPasswordMessage = '密码输入不一致';
+      this.changePasswordNotification.confirmNewPassword.show = true;
+      this.changePasswordNotification.confirmNewPassword.message = '密码输入不一致';
       return;
     }
 

@@ -129,18 +129,18 @@
     <button type="button" class="btn-close" aria-label="关闭按钮" aria-describedby="标题" (click)="modal.dismiss('Cross click')"> </button>
   </div>
   <div class="modal-body">
-    <form [formGroup]="changePasswordForm" class="ms-4 me-4">
+    <form [formGroup]="changePasswordGroup" class="ms-4 me-4">
       <div class="mb-2">
         <label for="newPassword" class="form-label">新密码</label>
         <input
           id="newPassword"
           class="form-control form-control-rounded"
-          [ngClass]="{ 'value-invalid': changePasswordNotification.newPasswordMessageShow }"
+          [ngClass]="{ 'value-invalid': changePasswordNotification.newPassword.show }"
           formControlName="newPassword"
           type="password"
         />
-        <p *ngIf="changePasswordNotification.newPasswordMessageShow" class="pt-1 mb-0">
-          <span class="text-danger">{{ changePasswordNotification.newPasswordMessage }}</span>
+        <p *ngIf="changePasswordNotification.newPassword.show" class="pt-1 mb-0">
+          <span class="text-danger">{{ changePasswordNotification.newPassword.message }}</span>
         </p>
       </div>
       <div class="mb-2">
@@ -148,12 +148,12 @@
         <input
           id="confirmNewPassword"
           class="form-control form-control-rounded"
-          [ngClass]="{ 'value-invalid': changePasswordNotification.confirmNewPasswordMessageShow }"
+          [ngClass]="{ 'value-invalid': changePasswordNotification.confirmNewPassword.show }"
           formControlName="confirmNewPassword"
           type="password"
         />
-        <p *ngIf="changePasswordNotification.confirmNewPasswordMessageShow" class="pt-1 mb-0">
-          <span class="text-danger">{{ changePasswordNotification.confirmNewPasswordMessage }}</span>
+        <p *ngIf="changePasswordNotification.confirmNewPassword.show" class="pt-1 mb-0">
+          <span class="text-danger">{{ changePasswordNotification.confirmNewPassword.message }}</span>
         </p>
       </div>
     </form>
@@ -162,7 +162,7 @@
     <button type="button" class="btn btn-outline-secondary btn-rounded" (click)="modal.dismiss('cancel')">取 消</button>
     <app-btn-loading
       [btnClass]="'btn-primary btn-rounded'"
-      (click)="onSubmit(changePasswordForm.value)"
+      (click)="onSubmit(changePasswordGroup.value)"
       [type]="'button'"
       [loadingText]="loadingText"
       [loading]="loading"

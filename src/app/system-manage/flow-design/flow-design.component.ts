@@ -22,7 +22,7 @@ import { STENCIL_WIDTH } from '../../../assets/non-npm/angular-rappid/config/the
 import { importGraphFromJSON, loadStencilShapes } from '../../../assets/non-npm/angular-rappid/rappid/actions';
 import { EventBusService } from '../../../assets/non-npm/angular-rappid/services/event-bus.service';
 import RappidService from '../../../assets/non-npm/angular-rappid/services/rappid.service';
-import { IFlowLink, IFlowNode, INameDescriptionNotification } from '../../shared/interface/system-manage.interface';
+import { IFlowLink, IFlowNode } from '../../shared/interface/system-manage.interface';
 import { FlowManageService } from '../service/flow-manage.service';
 
 @Component({
@@ -43,7 +43,7 @@ export class FlowDesignComponent implements AfterViewInit, OnDestroy {
 
   /**保存或者另存为对话框:表单组件、表单信息提示、保存信息提示 */
   public saveFlowForm: FormGroup;
-  public saveFlowNotification: INameDescriptionNotification;
+  public saveFlowNotification: any;
   public saveFlowLoading: boolean = false;
   public saveFlowLoadingText: string = '';
 
