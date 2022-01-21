@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 
 import { sharedAnimations } from '../../shared/animations/shared-animations';
-import { IFormNotification } from '../../shared/interface/system-manage-authorize.interface';
+import { IFormNotification } from '../../shared/interface/system-manage.interface';
 import { AuthService } from '../../shared/services/auth/auth.service';
 import { SystemManageAuthorizeService } from '../system-manage-authorize.service';
 

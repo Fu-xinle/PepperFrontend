@@ -10,7 +10,8 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 
 import { SystemManageAuthorizeService } from '../../../system-manage-authorize/system-manage-authorize.service';
-import { IUserInformation, IFormNotification } from '../../interface/system-manage-authorize.interface';
+import { IUserInformation } from '../../interface/system-manage-authorize.interface';
+import { IFormNotification } from '../../interface/system-manage.interface';
 import { AuthService } from '../../services/auth/auth.service';
 import { EventListenerService } from '../../services/event-listener.service';
 import { NavigationService } from '../../services/navigation.service';

@@ -232,7 +232,7 @@ export class FlowManageComponent implements OnInit, OnDestroy {
         next: res => {
           this.flowData = res.flowData;
           this.zNodes = [
-            { id: this.rootNodeId, pId: '#', name: '流程', chkDisabled: false, open: true },
+            { id: this.rootNodeId, pId: '#', name: '流程', chkDisabled: false, open: true, isParent: true },
             ...res.flowData.map((item: any) => {
               return {
                 id: item.guid,

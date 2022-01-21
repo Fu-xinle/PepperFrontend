@@ -1,1 +1,222 @@
-<p>word-chinese-english works!</p>
+<div class="bg-white align-items-start py-2 mb-3 rounded-pill toolbar d-flex justify-content-between">
+  <input
+    class="form-control form-control-rounded search-input"
+    (ngModelChange)="keySearcchValue$.next(keySearcchValue)"
+    [(ngModel)]="keySearcchValue"
+    name="key-searcch"
+    autocomplete="off"
+    placeholder="搜索"
+    type="text"
+  />
+  <button class="btn btn-primary btn-iconmind btn-rounded" (click)="createWordChineseEnglish(null)">
+    <i class="icon-Add text-17 me-2"></i>新建词汇项
+  </button>
+</div>
+
+<div class="shadow rounded-3 full-height-container">
+  <ag-grid-angular
+    style="height: 100%; width: 100%"
+    class="ag-theme-material"
+    [rowData]="wordChineseEnglishData"
+    [suppressContextMenu]="false"
+    [columnDefs]="columnDefs"
+    [context]="context"
+    [quickFilterText]="quickFilterText"
+    [frameworkComponents]="frameworkComponents"
+    [loadingOverlayComponent]="loadingOverlayComponent"
+    [loadingOverlayComponentParams]="loadingOverlayComponentParams"
+    [noRowsOverlayComponent]="noRowsOverlayComponent"
+    [noRowsOverlayComponentParams]="noRowsOverlayComponentParams"
+    [groupDefaultExpanded]="groupDefaultExpanded"
+    [autoGroupColumnDef]="autoGroupColumnDef"
+    [getRowNodeId]="getRowNodeId"
+    [components]="{ nameCellRenderer: getNameCellRenderer() }"
+    [treeData]="true"
+    [animateRows]="true"
+    [getDataPath]="getDataPath"
+    [getContextMenuItems]="getContextMenuItems"
+    (gridReady)="onGridReady($event)"
+  >
+  </ag-grid-angular>
+</div>
+
+<ng-template #createWordChineseEnglishContent let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">创建新词汇项</h5>
+    <button type="button" class="btn-close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.dismiss('关闭')">
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="createWordChineseEnglishGroup" class="ms-4 me-4">
+      <div class="mb-2">
+        <label for="chineseName" class="form-label">中文名称</label>
+        <input
+          id="chineseName"
+          class="form-control form-control-rounded"
+          [ngClass]="{ 'value-invalid': createWordChineseEnglishNotification['chineseName'].show }"
+          formControlName="chineseName"
+          type="text"
+          autocomplete="off"
+        />
+        <p *ngIf="createWordChineseEnglishNotification['chineseName'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ createWordChineseEnglishNotification['chineseName'].message }}</span>
+        </p>
+      </div>
+      <div class="mb-2">
+        <label for="englishName" class="form-label">英文名称</label>
+        <input
+          id="englishName"
+          class="form-control form-control-rounded"
+          [ngClass]="{ 'value-invalid': createWordChineseEnglishNotification['englishName'].show }"
+          formControlName="englishName"
+          type="text"
+          autocomplete="off"
+        />
+        <p *ngIf="createWordChineseEnglishNotification['englishName'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ createWordChineseEnglishNotification['englishName'].message }}</span>
+        </p>
+      </div>
+      <div class="mb-2">
+        <label for="category" class="form-label">类别</label>
+        <div class="d-block">
+          <label class="radio radio-primary d-inline-block mb-0">
+            <input type="radio" name="isLeaf" [value]="1" formControlName="isLeaf" />
+            <span>词汇</span>
+            <span class="checkmark"></span>
+          </label>
+          <label class="radio radio-primary d-inline-block mb-0 ms-4">
+            <input type="radio" name="isLeaf" [value]="0" formControlName="isLeaf" />
+            <span>词汇类别</span>
+            <span class="checkmark"></span>
+          </label>
+        </div>
+      </div>
+      <div class="mb-2">
+        <label for="category" class="form-label">所属目录</label>
+        <app-ztree-select
+          id="create-category"
+          class="form-control form-control-rounded"
+          formControlName="category"
+          [treeSetting]="treeSetting"
+          [selectType]="selectType"
+          [selectMultiple]="selectMultiple"
+          [ngClass]="{ 'value-invalid': createWordChineseEnglishNotification['category'].show }"
+          [treeNodes]="zNodes"
+        ></app-ztree-select>
+        <p *ngIf="createWordChineseEnglishNotification['category'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ createWordChineseEnglishNotification['category'].message }}</span>
+        </p>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary btn-rounded" (click)="modal.dismiss('取消')">取 消</button>
+    <app-btn-loading
+      [btnClass]="'btn-primary btn-rounded'"
+      (click)="createWordChineseEnglishSave(modal)"
+      [type]="'button'"
+      [loadingText]="createWordChineseEnglishLoadingText"
+      [loading]="createWordChineseEnglishLoading"
+    >
+      保 存
+    </app-btn-loading>
+  </div>
+</ng-template>
+
+<ng-template #editWordChineseEnglishContent let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">编辑词汇项信息</h5>
+    <button type="button" class="btn-close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.dismiss('关闭')">
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="editWordChineseEnglishGroup" class="ms-4 me-4">
+      <div class="mb-2">
+        <label for="chineseName" class="form-label">中文名称</label>
+        <input
+          id="chineseName"
+          class="form-control form-control-rounded"
+          [ngClass]="{ 'value-invalid': editWordChineseEnglishNotification['chineseName'].show }"
+          formControlName="chineseName"
+          type="text"
+          autocomplete="off"
+        />
+        <p *ngIf="editWordChineseEnglishNotification['chineseName'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ editWordChineseEnglishNotification['chineseName'].message }}</span>
+        </p>
+      </div>
+      <div class="mb-2">
+        <label for="englishName" class="form-label">英文名称</label>
+        <input
+          id="englishName"
+          class="form-control form-control-rounded"
+          [ngClass]="{ 'value-invalid': editWordChineseEnglishNotification['englishName'].show }"
+          formControlName="englishName"
+          type="text"
+          autocomplete="off"
+        />
+        <p *ngIf="editWordChineseEnglishNotification['englishName'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ editWordChineseEnglishNotification['englishName'].message }}</span>
+        </p>
+      </div>
+      <div class="mb-2">
+        <label for="category" class="form-label">所属目录</label>
+        <app-ztree-select
+          id="edit-category"
+          class="form-control form-control-rounded"
+          formControlName="category"
+          [treeSetting]="treeSetting"
+          [selectType]="selectType"
+          [selectMultiple]="selectMultiple"
+          [ngClass]="{ 'value-invalid': editWordChineseEnglishNotification['category'].show }"
+          [treeNodes]="zNodes"
+        ></app-ztree-select>
+        <p *ngIf="editWordChineseEnglishNotification['category'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ editWordChineseEnglishNotification['category'].message }}</span>
+        </p>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary btn-rounded" (click)="modal.dismiss('取消')">取 消</button>
+    <app-btn-loading
+      [btnClass]="'btn-primary btn-rounded'"
+      (click)="editWordChineseEnglishSave(modal)"
+      [type]="'button'"
+      [loadingText]="editWordChineseEnglishLoadingText"
+      [loading]="editWordChineseEnglishLoading"
+    >
+      保 存
+    </app-btn-loading>
+  </div>
+</ng-template>
+
+<ng-template #deleteWordChineseEnglishContent let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">删除词汇项</h5>
+    <button type="button" class="btn-close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>
+      <strong>
+        <i class="icon-Danger text-danger me-1"></i>
+        确认删除
+        <span class="text-danger px-1">{{ deleteRowNode.data.chineseName }}</span>
+        词汇项 ?
+      </strong>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary btn-rounded" (click)="modal.dismiss('取消')">取 消</button>
+    <app-btn-loading
+      [btnClass]="'btn-danger btn-rounded'"
+      (click)="deleteWordChineseEnglishSave(modal)"
+      [type]="'button'"
+      [loadingText]="deleteWordChineseEnglishLoadingText"
+      [loading]="deleteWordChineseEnglishLoading"
+    >
+      确 认
+    </app-btn-loading>
+  </div>
+</ng-template>

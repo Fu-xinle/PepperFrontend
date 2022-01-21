@@ -63,7 +63,7 @@ export class NavigationService implements OnDestroy {
         },
         {
           icon: 'icon-Wacom-Tablet',
-          name: '工作流管理',
+          name: '业务工作流管理',
           state: '/development/system-manage/workflow-manage',
           type: 'link',
         },

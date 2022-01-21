@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
+import { KanBanDetailComponent } from './kan-ban-detail/kan-ban-detail.component';
 import { KanBanComponent } from './kan-ban/kan-ban.component';
 import { WordChineseEnglishComponent } from './word-chinese-english/word-chinese-english.component';
 
@@ -10,6 +11,13 @@ const routes: Routes = [
     component: KanBanComponent,
     data: {
       title: 'KanBan任务',
+    },
+  },
+  {
+    path: 'kan-ban-detail',
+    component: KanBanDetailComponent,
+    data: {
+      title: 'KanBan详细信息',
     },
   },
   {

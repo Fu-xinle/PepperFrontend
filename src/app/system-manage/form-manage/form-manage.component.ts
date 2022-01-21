@@ -232,7 +232,7 @@ export class FormManageComponent implements OnInit, OnDestroy {
         next: res => {
           this.formData = res.formData;
           this.zNodes = [
-            { id: this.rootNodeId, pId: '#', name: '表单', chkDisabled: false, open: true },
+            { id: this.rootNodeId, pId: '#', name: '表单', chkDisabled: false, open: true, isParent: true },
             ...res.formData.map((item: any) => {
               return {
                 id: item.guid,

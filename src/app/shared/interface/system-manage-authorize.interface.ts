@@ -50,13 +50,3 @@ export interface IUserLoginInformation {
   permissions: string[];
   role: string[];
 }
-
-/**
- * 表单的提示对象接口
- */
-export interface IFormNotification {
-  [key: string]: {
-    message: string;
-    show: boolean;
-  };
-}

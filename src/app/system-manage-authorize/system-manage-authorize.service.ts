@@ -32,7 +32,7 @@ export class SystemManageAuthorizeService {
    * @returns  {{}} 操作成功，返回空对象
    */
   resetPassword(userGuid: string, newPassword: string): Observable<{}> {
-    return this.http.post<{}>('/system_manage_authorize_api/personal_center/reset_password', {
+    return this.http.post<{}>('/system_manage_authorize_api/login_registration/reset_password', {
       userGuid,
       newPassword,
     });

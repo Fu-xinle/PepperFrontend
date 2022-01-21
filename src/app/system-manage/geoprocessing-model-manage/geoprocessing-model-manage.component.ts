@@ -232,7 +232,7 @@ export class GeoprocessingModelManageComponent implements OnInit, OnDestroy {
         next: res => {
           this.geoprocessingModelData = res.geoprocessingModelData;
           this.zNodes = [
-            { id: this.rootNodeId, pId: '#', name: '地理处理模型', chkDisabled: false, open: true },
+            { id: this.rootNodeId, pId: '#', name: '地理处理模型', chkDisabled: false, open: true, isParent: true },
             ...res.geoprocessingModelData.map((item: any) => {
               return {
                 id: item.guid,

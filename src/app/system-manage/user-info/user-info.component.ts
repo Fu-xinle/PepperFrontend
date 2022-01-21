@@ -7,7 +7,8 @@ import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 
-import { IUserInformation, IUserInformationEditMark, IFormNotification } from '../../shared/interface/system-manage-authorize.interface';
+import { IUserInformation, IUserInformationEditMark } from '../../shared/interface/system-manage-authorize.interface';
+import { IFormNotification } from '../../shared/interface/system-manage.interface';
 import { AuthService } from '../../shared/services/auth/auth.service';
 import { EventListenerService } from '../../shared/services/event-listener.service';
 import { I18n, CustomDatepickerI18n, CustomAdapter, CustomDateParserFormatter } from '../../shared/services/i18n/datepicker';
