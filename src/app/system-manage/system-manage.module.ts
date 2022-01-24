@@ -46,6 +46,7 @@ import { SystemManageRoutingModule } from './system-manage-routing.module';
 import { UserInfoComponent } from './user-info/user-info.component';
 import { UserLogComponent } from './user-log/user-log.component';
 import { UserComponent } from './user/user.component';
+import { WorkflowCrudOperationComponent } from './workflow-manage/workflow-crud-opeartion.component';
 import { WorkflowManageComponent } from './workflow-manage/workflow-manage.component';
 
 @NgModule({
@@ -63,6 +64,7 @@ import { WorkflowManageComponent } from './workflow-manage/workflow-manage.compo
     FormDesignComponent,
     FormCrudOperationComponent,
     GeoprocessingModelCrudOperationComponent,
+    WorkflowCrudOperationComponent,
     GeoprocessingModelManageComponent,
     GeoprocessingModelDesignComponent,
     InspectorComponent,

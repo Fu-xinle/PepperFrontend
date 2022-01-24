@@ -68,7 +68,7 @@ const routes: Routes = [
     path: 'workflow-manage',
     component: WorkflowManageComponent,
     data: {
-      title: '工作流管理',
+      title: '业务工作流管理',
     },
   },
   {

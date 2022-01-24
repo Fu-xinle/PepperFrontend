@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/member-ordering */
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, AfterViewInit, Input, EventEmitter, Output } from '@angular/core';
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -10,8 +10,9 @@ import { GeneralUtils } from '../../utils/general.utils';
   templateUrl: './ztree.component.html',
   styleUrls: ['./ztree.component.scss'],
 })
-export class ZtreeComponent implements OnInit {
+export class ZtreeComponent implements AfterViewInit {
   public treeObj!: IzTreeObj;
+  public treeId: string = uuidv4();
   // 输出事件
   @Output() readonly remove = new EventEmitter<{ event: Event; treeId: string; treeNode: ITreeNode }>();
   @Output() readonly rename = new EventEmitter<{ event: Event; treeId: string; treeNode: ITreeNode; isCancel: boolean }>();
@@ -91,13 +92,13 @@ export class ZtreeComponent implements OnInit {
   set treeNodes(treeNodes: Array<{ id: string; pId?: string; name: string }>) {
     this._treeNodes = treeNodes;
     if (this.treeObj) {
-      this.treeObj = $.fn.zTree.init!($('ul.ztree'), this.treeSetting, this.treeNodes);
+      this.treeObj = $.fn.zTree.init!($(`#${this.treeId}`), this.treeSetting, this.treeNodes);
     }
   }
 
   constructor() {}
 
-  ngOnInit() {
+  ngAfterViewInit() {
     /** 树进行一些默认设置 */
     this.treeSetting = GeneralUtils.mergeDeep(
       {
@@ -200,7 +201,7 @@ export class ZtreeComponent implements OnInit {
     );
 
     // 初始化操作
-    this.treeObj = $.fn.zTree.init!($('ul.ztree'), this.treeSetting, this.treeNodes);
+    this.treeObj = $.fn.zTree.init!($(`#${this.treeId}`), this.treeSetting, this.treeNodes);
 
     // 选中初始节点
     if (this.checkNodes) {

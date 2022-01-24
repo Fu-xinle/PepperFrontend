@@ -26,6 +26,16 @@ export interface IFlowModel extends ISimpleInformationModel {}
 export interface IFormModel extends ISimpleInformationModel {}
 
 /**
+ * 业务工作流对象接口
+ */
+export interface IWorkflowModel extends ISimpleInformationModel {
+  flowGuid: string;
+  flowName: string;
+  formGuid: string;
+  formName: string;
+}
+
+/**
  * 流程、表单、地理处理模型添加或者更新时，返回服务器端操作者和操作时间信息
  */
 export interface IOperatorInformationModel {

@@ -3,104 +3,53 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
+import { IWorkflowModel, IOperatorInformationModel } from '../../shared/interface/system-manage.interface';
 @Injectable()
 export class WorkflowManageService {
   constructor(private http: HttpClient) {}
 
-  genderOption(): Observable<any> {
-    return this.http.get<any>('/system_manage_api/personal_center/gender_option');
+  /**
+   *  获取所有的业务工作流信息数组
+   *
+   * @returns {{ workflowData: IWorkflowModel[] } } 业务工作流信息数组
+   */
+  getAllWorkflows(): Observable<{ workflowData: IWorkflowModel[] }> {
+    return this.http.get<{ workflowData: IWorkflowModel[] }>('/system_manage_api/workflow_manage/all_workflows', {});
   }
 
-  academicDegreeOption(): Observable<any> {
-    return this.http.get<any>('/system_manage_api/personal_center/academic_degree_option');
-  }
-
-  userInfoFieldSave(userGuid: string, fieldName: string, fieldValue: string): Observable<any> {
-    return this.http.post<any>('/system_manage_api/personal_center/user_info_field_save', {
-      userGuid,
-      fieldName,
-      fieldValue,
+  /**
+   * 新建业务工作流，仅仅保存业务工作流的信息
+   *
+   * @param {IWorkflowModel} newWorkflowInfo  新建的业务工作流信息
+   * @returns  {IWorkflowModel} 操作成功，返回操作者信息以及操作时间信息
+   */
+  addWorkflow(newWorkflowInfo: IWorkflowModel): Observable<IOperatorInformationModel> {
+    return this.http.post<IOperatorInformationModel>('/system_manage_api/workflow_manage/add_workflow', {
+      newWorkflowInfo,
     });
   }
 
-  updatePhoto(userGuid: string, photoString: string): Observable<any> {
-    return this.http.post<any>('/system_manage_api/personal_center/update_photo', {
-      userGuid,
-      photoString,
+  /**
+   * 用户编辑业务工作流信息
+   *
+   * @param {IWorkflowModel} editWorkflowInfo  编辑的业务工作流信息
+   * @returns  {IOperatorInformationModel} 操作成功，返回操作者信息以及操作时间信息
+   */
+  editWorkflow(editWorkflowInfo: IWorkflowModel): Observable<IOperatorInformationModel> {
+    return this.http.post<IOperatorInformationModel>('/system_manage_api/workflow_manage/edit_workflow', {
+      editWorkflowInfo,
     });
   }
 
-  getAllFlows(): Observable<any> {
-    return this.http.get<any>('/system_manage_api/flow_manage/all_flows', {});
-  }
-
-  addFlow(newFlowInfo: any): Observable<any> {
-    return this.http.post<any>('/system_manage_api/flow_manage/add_flow', {
-      newFlowInfo,
-    });
-  }
-
-  editFlow(editFlowInfo: any): Observable<any> {
-    return this.http.post<any>('/system_manage_api/flow_manage/edit_flow', {
-      editFlowInfo,
-    });
-  }
-
-  deleteFlow(guid: string): Observable<any> {
-    return this.http.post<any>('/system_manage_api/flow_manage/delete_flow', {
+  /**
+   * 用户删除业务工作流信息
+   *
+   * @param {string} guid  业务工作流的唯一标识
+   * @returns  {{}} 操作成功，返回空对象
+   */
+  deleteWorkflow(guid: string): Observable<{}> {
+    return this.http.post<any>('/system_manage_api/workflow_manage/delete_workflow', {
       guid,
-    });
-  }
-
-  getAllForms(): Observable<any> {
-    return this.http.get<any>('/system_manage_api/form_manage/all_forms', {});
-  }
-
-  addForm(newFormInfo: any): Observable<any> {
-    return this.http.post<any>('/system_manage_api/form_manage/add_form', {
-      newFormInfo,
-    });
-  }
-
-  editForm(editFormInfo: any): Observable<any> {
-    return this.http.post<any>('/system_manage_api/form_manage/edit_form', {
-      editFormInfo,
-    });
-  }
-
-  deleteForm(guid: string): Observable<any> {
-    return this.http.post<any>('/system_manage_api/form_manage/delete_form', {
-      guid,
-    });
-  }
-
-  getAllGeoprocessingModels(): Observable<any> {
-    return this.http.get<any>('/system_manage_api/geoprocessing_model/all_geoprocessing_model', {});
-  }
-
-  addGeoprocessingModel(newGeoprocessingModelInfo: any): Observable<any> {
-    return this.http.post<any>('/system_manage_api/geoprocessing_model/add_geoprocessing_model', {
-      newGeoprocessingModelInfo,
-    });
-  }
-
-  editGeoprocessingModel(editGeoprocessingModelInfo: any): Observable<any> {
-    return this.http.post<any>('/system_manage_api/geoprocessing_model/edit_geoprocessing_model', {
-      editGeoprocessingModelInfo,
-    });
-  }
-
-  deleteGeoprocessingModel(guid: string): Observable<any> {
-    return this.http.post<any>('/system_manage_api/geoprocessing_model/delete_geoprocessing_model', {
-      guid,
-    });
-  }
-
-  userLogServerSideData(totalCount: number | null, searchText: string, requestParams: any): Observable<any> {
-    return this.http.post<any>('/system_manage_api/log_manage/user_log_server_side_data', {
-      totalCount,
-      searchText,
-      requestParams,
     });
   }
 }

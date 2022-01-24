@@ -1,1 +1,288 @@
-<p>workflow-manage works!</p>
+<div class="bg-white align-items-start py-2 mb-3 rounded-pill toolbar d-flex justify-content-between">
+  <input
+    class="form-control form-control-rounded search-input"
+    (ngModelChange)="keySearcchValue$.next(keySearcchValue)"
+    [(ngModel)]="keySearcchValue"
+    name="key-searcch"
+    autocomplete="off"
+    placeholder="搜索"
+    type="text"
+  />
+  <button class="btn btn-primary btn-iconmind btn-rounded" (click)="createWorkflow(null)">
+    <i class="icon-Add text-17 me-2"></i>新建业务工作流
+  </button>
+</div>
+
+<div class="shadow rounded-3 full-height-container">
+  <ag-grid-angular
+    style="height: 100%; width: 100%"
+    class="ag-theme-material"
+    [rowData]="workflowData"
+    [suppressContextMenu]="false"
+    [columnDefs]="columnDefs"
+    [context]="context"
+    [quickFilterText]="quickFilterText"
+    [frameworkComponents]="frameworkComponents"
+    [loadingOverlayComponent]="loadingOverlayComponent"
+    [loadingOverlayComponentParams]="loadingOverlayComponentParams"
+    [noRowsOverlayComponent]="noRowsOverlayComponent"
+    [noRowsOverlayComponentParams]="noRowsOverlayComponentParams"
+    [groupDefaultExpanded]="groupDefaultExpanded"
+    [autoGroupColumnDef]="autoGroupColumnDef"
+    [getRowNodeId]="getRowNodeId"
+    [components]="{ nameCellRenderer: getNameCellRenderer() }"
+    [treeData]="true"
+    [animateRows]="true"
+    [getDataPath]="getDataPath"
+    [getContextMenuItems]="getContextMenuItems"
+    (gridReady)="onGridReady($event)"
+  >
+  </ag-grid-angular>
+</div>
+
+<ng-template #createWorkflowContent let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">创建新业务工作流</h5>
+    <button type="button" class="btn-close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.dismiss('关闭')">
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="createWorkflowGroup" class="ms-4 me-4">
+      <div class="mb-2">
+        <label for="name" class="form-label">名称</label>
+        <input
+          id="name"
+          class="form-control form-control-rounded"
+          [ngClass]="{ 'value-invalid': createWorkflowNotification['name'].show }"
+          formControlName="name"
+          type="text"
+          autocomplete="off"
+        />
+        <p *ngIf="createWorkflowNotification['name'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ createWorkflowNotification['name'].message }}</span>
+        </p>
+      </div>
+      <div class="mb-2">
+        <label for="category" class="form-label">类别</label>
+        <div class="d-block">
+          <label class="radio radio-primary d-inline-block mb-0">
+            <input type="radio" name="isLeaf" [value]="1" formControlName="isLeaf" />
+            <span>业务工作流</span>
+            <span class="checkmark"></span>
+          </label>
+          <label class="radio radio-primary d-inline-block mb-0 ms-4">
+            <input type="radio" name="isLeaf" [value]="0" formControlName="isLeaf" />
+            <span>业务工作流目录</span>
+            <span class="checkmark"></span>
+          </label>
+        </div>
+      </div>
+      <div class="mb-2">
+        <label for="create-category" class="form-label">所属目录</label>
+        <app-ztree-select
+          id="create-category"
+          class="form-control form-control-rounded"
+          formControlName="category"
+          [treeSetting]="treeWorkflowSetting"
+          [selectType]="selectType"
+          [selectMultiple]="selectMultiple"
+          [ngClass]="{ 'value-invalid': createWorkflowNotification['category'].show }"
+          [treeNodes]="zWorkflowNodes"
+        ></app-ztree-select>
+        <p *ngIf="createWorkflowNotification['category'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ createWorkflowNotification['category'].message }}</span>
+        </p>
+      </div>
+      <div class="mb-2">
+        <label for="description" class="form-label">描述</label>
+        <div class="textarea-container textarea-container-round">
+          <textarea
+            id="description"
+            class="form-control form-control-rounded"
+            [ngClass]="{ 'value-invalid': createWorkflowNotification['description'].show }"
+            formControlName="description"
+            rows="3"
+          ></textarea>
+        </div>
+        <p *ngIf="createWorkflowNotification['description'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ createWorkflowNotification['description'].message }}</span>
+        </p>
+      </div>
+      <div class="mb-2" *ngIf="createWorkflowGroup.value.isLeaf">
+        <label for="create-flow" class="form-label">关联的工作流</label>
+        <app-ztree-select
+          id="create-flow"
+          class="form-control form-control-rounded"
+          formControlName="flow"
+          [treeSetting]="treeFlowSetting"
+          [selectType]="selectType"
+          [selectMultiple]="selectMultiple"
+          [ngClass]="{ 'value-invalid': createWorkflowNotification['flow'].show }"
+          [treeNodes]="zFlowNodes"
+        ></app-ztree-select>
+        <p *ngIf="createWorkflowNotification['flow'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ createWorkflowNotification['flow'].message }}</span>
+        </p>
+      </div>
+      <div class="mb-2" *ngIf="createWorkflowGroup.value.isLeaf">
+        <label for="create-form" class="form-label">关联的表单</label>
+        <app-ztree-select
+          id="create-form"
+          class="form-control form-control-rounded"
+          formControlName="form"
+          [treeSetting]="treeFormSetting"
+          [selectType]="selectType"
+          [selectMultiple]="selectMultiple"
+          [ngClass]="{ 'value-invalid': createWorkflowNotification['form'].show }"
+          [treeNodes]="zFormNodes"
+        ></app-ztree-select>
+        <p *ngIf="createWorkflowNotification['form'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ createWorkflowNotification['form'].message }}</span>
+        </p>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary btn-rounded" (click)="modal.dismiss('取消')">取 消</button>
+    <app-btn-loading
+      [btnClass]="'btn-primary btn-rounded'"
+      (click)="createWorkflowSave(modal)"
+      [type]="'button'"
+      [loadingText]="createWorkflowLoadingText"
+      [loading]="createWorkflowLoading"
+    >
+      保 存
+    </app-btn-loading>
+  </div>
+</ng-template>
+
+<ng-template #editWorkflowContent let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">编辑业务工作流信息</h5>
+    <button type="button" class="btn-close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.dismiss('关闭')">
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="editWorkflowGroup" class="ms-4 me-4">
+      <div class="mb-2">
+        <label for="name" class="form-label">名称</label>
+        <input
+          id="name"
+          class="form-control form-control-rounded"
+          [ngClass]="{ 'value-invalid': editWorkflowNotification['name'].show }"
+          formControlName="name"
+          type="text"
+          autocomplete="off"
+        />
+        <p *ngIf="editWorkflowNotification['name'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ editWorkflowNotification['name'].message }}</span>
+        </p>
+      </div>
+      <div class="mb-2">
+        <label for="edit-category" class="form-label">所属目录</label>
+        <app-ztree-select
+          id="edit-category"
+          class="form-control form-control-rounded"
+          formControlName="category"
+          [treeSetting]="treeWorkflowSetting"
+          [selectType]="selectType"
+          [selectMultiple]="selectMultiple"
+          [ngClass]="{ 'value-invalid': editWorkflowNotification['category'].show }"
+          [treeNodes]="zWorkflowNodes"
+        ></app-ztree-select>
+        <p *ngIf="editWorkflowNotification['category'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ editWorkflowNotification['category'].message }}</span>
+        </p>
+      </div>
+      <div class="mb-2">
+        <label for="description" class="form-label">描述</label>
+        <div class="textarea-container textarea-container-round">
+          <textarea
+            id="description"
+            class="form-control form-control-rounded"
+            [ngClass]="{ 'value-invalid': editWorkflowNotification['description'].show }"
+            formControlName="description"
+            rows="3"
+          ></textarea>
+        </div>
+        <p *ngIf="editWorkflowNotification['description'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ editWorkflowNotification['description'].message }}</span>
+        </p>
+      </div>
+      <div class="mb-2" *ngIf="editWorkflowGroup.value.isLeaf">
+        <label for="edit-flow" class="form-label">关联的流程</label>
+        <app-ztree-select
+          id="edit-flow"
+          class="form-control form-control-rounded"
+          formControlName="flow"
+          [treeSetting]="treeFlowSetting"
+          [selectType]="selectType"
+          [selectMultiple]="selectMultiple"
+          [ngClass]="{ 'value-invalid': editWorkflowNotification['flow'].show }"
+          [treeNodes]="zFlowNodes"
+        ></app-ztree-select>
+        <p *ngIf="editWorkflowNotification['flow'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ editWorkflowNotification['flow'].message }}</span>
+        </p>
+      </div>
+      <div class="mb-2" *ngIf="editWorkflowGroup.value.isLeaf">
+        <label for="edit-form" class="form-label">关联的表单</label>
+        <app-ztree-select
+          id="edit-form"
+          class="form-control form-control-rounded"
+          formControlName="form"
+          [treeSetting]="treeFormSetting"
+          [selectType]="selectType"
+          [selectMultiple]="selectMultiple"
+          [ngClass]="{ 'value-invalid': editWorkflowNotification['form'].show }"
+          [treeNodes]="zFormNodes"
+        ></app-ztree-select>
+        <p *ngIf="editWorkflowNotification['form'].show" class="pt-1 mb-0">
+          <span class="text-danger">{{ editWorkflowNotification['form'].message }}</span>
+        </p>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary btn-rounded" (click)="modal.dismiss('取消')">取 消</button>
+    <app-btn-loading
+      [btnClass]="'btn-primary btn-rounded'"
+      (click)="editWorkflowSave(modal)"
+      [type]="'button'"
+      [loadingText]="editWorkflowLoadingText"
+      [loading]="editWorkflowLoading"
+    >
+      保 存
+    </app-btn-loading>
+  </div>
+</ng-template>
+
+<ng-template #deleteWorkflowContent let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">删除业务工作流</h5>
+    <button type="button" class="btn-close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>
+      <strong>
+        <i class="icon-Danger text-danger me-1"></i>
+        确认删除
+        <span class="text-danger px-1">{{ deleteRowNode.data.name }}</span>
+        ?
+      </strong>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary btn-rounded" (click)="modal.dismiss('取消')">取 消</button>
+    <app-btn-loading
+      [btnClass]="'btn-danger btn-rounded'"
+      (click)="deleteWorkflowSave(modal)"
+      [type]="'button'"
+      [loadingText]="deleteWorkflowLoadingText"
+      [loading]="deleteWorkflowLoading"
+    >
+      确 认
+    </app-btn-loading>
+  </div>
+</ng-template>
