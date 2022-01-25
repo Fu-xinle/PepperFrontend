@@ -37,6 +37,12 @@
 // 流程图的插件rappid
 @import "@clientio/rappid/rappid.scss";
 
+// esri arcgis的样式文件
+$icomoon-font-path: "/assets/arcgis-js/esri/themes/base/icons/fonts" !default; // Override for esri/themes/base/icons/style.scss
+$calcite-fonts-path: "/assets/arcgis-js/esri/themes/base/fonts/fonts/" !default;
+@import "../arcgis-js/esri/themes/light/main.scss";
+
+
 // 一些自定义库使用全局的混合器和函数,定义在外面
 // ztree树以及ztree-select插件,ztree的样式很少,使用自定义的，未使用库自带的
 @import 'development-theme/external-plugins/ag-grid';

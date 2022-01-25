@@ -49,7 +49,7 @@
 
   .toast-success {
     background-color: $background;
-    background-image: url('../../../images/custom-toast/checkmark.svg');
+    background-image: url('/assets/images/custom-toast/checkmark.svg');
     box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.1), inset 0 2px 0 0 $success;
     .toast-progress {
       background: $success;
@@ -60,7 +60,7 @@
   }
   .toast-warning {
     background-color: $background;
-    background-image: url('../../../images/custom-toast/danger.svg');
+    background-image: url('/assets/images/custom-toast/danger.svg');
     box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.1), inset 0 2px 0 0 $warning;
     .toast-progress {
       background: $warning;
@@ -71,7 +71,7 @@
   }
   .toast-info {
     background-color: $background;
-    background-image: url('../../../images/custom-toast/info.svg');
+    background-image: url('/assets/images/custom-toast/info.svg');
     box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.1), inset 0 2px 0 0 $info;
     .toast-progress {
       background: $info;
@@ -82,7 +82,7 @@
   }
   .toast-error {
     background-color: $background;
-    background-image: url('../../../images/custom-toast/close.svg');
+    background-image: url('/assets/images/custom-toast/close.svg');
     box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.1), inset 0 2px 0 0 $danger;
     .toast-progress {
       background: $danger;

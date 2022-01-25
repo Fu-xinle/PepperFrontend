@@ -27,11 +27,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets",
-              { "glob": "icomoon-demo.html", "input": "src/assets/static-pages/icomoon/", "output": "/assets/static-pages/icomoon/" }
-            ],
+            "assets": ["src/favicon.ico", "src/assets/arcgis-js", "src/assets/font-icons", "src/assets/images"],
             "styles": ["src/assets/styles/index.scss", "src/styles.scss"],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
@@ -45,12 +41,12 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumError": "10mb"
                 },
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumError": "8kb"
                 }
               ],
               "fileReplacements": [
