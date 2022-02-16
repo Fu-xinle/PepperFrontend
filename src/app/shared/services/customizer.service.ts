@@ -9,39 +9,39 @@ import { NavigationService } from '../services/navigation.service';
 export class CustomizerService {
   public layouts: ICustomizerLayout[] = [
     {
-      title: '门户网站',
-      name: 'portal',
-      img: 'assets/images/customizer/layout-portal.png',
-    },
-    {
       title: '开发测试系统',
       name: 'development',
       img: 'assets/images/customizer/layout-development.png',
     },
     {
-      title: '自然资源审计系统',
-      name: 'audit',
-      img: 'assets/images/customizer/layout-audit.png',
+      title: '遥感影像智能识别与监测系统',
+      name: 'imagesAI',
+      img: 'assets/images/customizer/layout-imagesAI.jpg',
     },
     {
-      title: '国土空间规划系统',
-      name: 'spatial-planning',
-      img: 'assets/images/customizer/layout-spatial-planning.png',
+      title: '遥感影像统筹数据共享平台',
+      name: 'image-server',
+      img: 'assets/images/customizer/layout-image-server.jpg',
     },
     {
-      title: '深度学习系统',
-      name: 'deep-learning',
-      img: 'assets/images/customizer/layout-deep-learning.png',
+      title: '天府新区变化监测服务系统',
+      name: 'change-monitor',
+      img: 'assets/images/customizer/layout-change-monitor.png',
     },
     {
       title: '信息化测绘生产管理系统',
       name: 'productOA',
-      img: 'assets/images/customizer/layout-productOA.png',
+      img: 'assets/images/customizer/layout-productOA.jpg',
     },
     {
-      title: '督察成果管理系统',
-      name: 'supervision',
-      img: 'assets/images/customizer/layout-supervision.png',
+      title: '自然资源督察成果管理系统',
+      name: 'supervisionRMS',
+      img: 'assets/images/customizer/layout-supervisionRMS.jpg',
+    },
+    {
+      title: '门户网站',
+      name: 'portal',
+      img: 'assets/images/customizer/layout-portal.png',
     },
   ];
   public selectedLayout!: ICustomizerLayout;

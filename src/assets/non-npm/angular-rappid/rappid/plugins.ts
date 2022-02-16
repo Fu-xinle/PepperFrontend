@@ -136,11 +136,11 @@ const stencilNodes = {
     dir: true,
     children: [{
         name: 'Favorites',
-        icon: 'assets/non-npm/angular-rappid/rappid/stencil/icon/favorite.svg',
+        icon: 'assets/images/rappid/stencil/favorite.svg',
         dir: true,
         children: [{
             name: 'svg',
-            icon: 'assets/non-npm/angular-rappid/rappid/stencil/icon/link.svg'
+            icon: 'assets/images/rappid/stencil/link.svg'
         }],
     }, {
         name: 'Document metadata',

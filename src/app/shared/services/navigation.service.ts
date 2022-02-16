@@ -15,6 +15,8 @@ export class NavigationService implements OnDestroy {
   public selectedItem!: IMenuItem;
 
   /** 预设值各系统路由菜单 */
+
+  /**默认新技术研究探索开发集成 */
   public developmentMenu: IMenuItem[] = [
     {
       name: '主页',
@@ -159,17 +161,23 @@ export class NavigationService implements OnDestroy {
     },
   ];
 
+  /**信息化测绘生产管理系统 */
   public productOAMenu: IMenuItem[] = [];
 
-  public supervisionMenu: IMenuItem[] = [];
+  /**自然资源督察成果管理系统 */
+  public supervisionRMSMenu: IMenuItem[] = [];
 
-  public deepLearningMenu: IMenuItem[] = [];
+  /**遥感影像智能识别与监测系统 */
+  public imagesAIMenu: IMenuItem[] = [];
 
+  /**门户网站 */
   public portalMenu: IMenuItem[] = [];
 
-  public auditMenu: IMenuItem[] = [];
+  /**遥感影像统筹数据共享平台 */
+  public imageServerMenu: IMenuItem[] = [];
 
-  public spatialPlanningMenu: IMenuItem[] = [];
+  /**天府新区变化监测服务系统 */
+  public changeMonitorMenu: IMenuItem[] = [];
 
   /**利用Observable,在其它组件动态切换不同的导航栏 */
   public menuItems = new BehaviorSubject<IMenuItem[]>([]);
@@ -191,17 +199,17 @@ export class NavigationService implements OnDestroy {
       case 'productOA':
         this.menuItems.next(this.productOAMenu);
         break;
-      case 'supervision':
-        this.menuItems.next(this.supervisionMenu);
+      case 'supervisionRMS':
+        this.menuItems.next(this.supervisionRMSMenu);
         break;
-      case 'deep-learning':
-        this.menuItems.next(this.deepLearningMenu);
+      case 'imagesAI':
+        this.menuItems.next(this.imagesAIMenu);
         break;
-      case 'audit':
-        this.menuItems.next(this.auditMenu);
+      case 'image-server':
+        this.menuItems.next(this.imageServerMenu);
         break;
-      case 'spatial-planning':
-        this.menuItems.next(this.spatialPlanningMenu);
+      case 'change-monitor':
+        this.menuItems.next(this.changeMonitorMenu);
         break;
       case 'portal':
         this.menuItems.next(this.portalMenu);
