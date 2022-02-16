@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 
 import Map from '@arcgis/core/Map';
 import MapView from '@arcgis/core/views/MapView';
@@ -8,7 +8,7 @@ import MapView from '@arcgis/core/views/MapView';
   templateUrl: './arcgis-map.component.html',
   styleUrls: ['./arcgis-map.component.scss'],
 })
-export class ArcgisMapComponent implements OnInit, OnDestroy {
+export class ArcgisMapComponent implements AfterViewInit, OnDestroy {
   @ViewChild('mapViewNode', { static: true }) private mapViewEl!: ElementRef;
   public view: any = null;
 
@@ -27,7 +27,7 @@ export class ArcgisMapComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit(): any {
+  ngAfterViewInit(): void {
     // Initialize MapView and return an instance of MapView
     this.initializeMap();
   }

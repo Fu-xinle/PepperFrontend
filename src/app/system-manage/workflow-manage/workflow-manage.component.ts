@@ -2,7 +2,7 @@ import { Component, OnDestroy, ViewChild, TemplateRef, OnInit } from '@angular/c
 import { FormGroup, FormBuilder } from '@angular/forms';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { RowNode, GridApi, GridReadyEvent, GetQuickFilterTextParams, ILoadingOverlayComp, INoRowsOverlayComp } from 'ag-grid-community';
+import { RowNode, GridApi, GridReadyEvent, GetQuickFilterTextParams } from 'ag-grid-community';
 import { ToastrService } from 'ngx-toastr';
 import { forkJoin, Subscription, Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
@@ -68,7 +68,7 @@ export class WorkflowManageComponent implements OnInit, OnDestroy {
       suppressMenu: true,
       field: 'guid',
       initialWidth: 180,
-      cellRenderer: 'workflowCrudOperationComponent',
+      cellRenderer: WorkflowCrudOperationComponent,
       getQuickFilterText: (_params: GetQuickFilterTextParams) => '',
     },
   ];
@@ -76,33 +76,14 @@ export class WorkflowManageComponent implements OnInit, OnDestroy {
   /**Ag-Grid表格的加载显示和空数据显示,自定义重载相关变量 */
   public gridApi!: GridApi;
   public context = { componentParent: this };
-  public frameworkComponents:
-    | {
-        [p: string]: {
-          new (): any;
-        };
-      }
-    | any;
-  public loadingOverlayComponent:
-    | {
-        new (): ILoadingOverlayComp;
-      }
-    | string;
-  public loadingOverlayComponentParams:
-    | {
-        loadingMessage: string;
-      }
-    | any;
-  public noRowsOverlayComponent:
-    | {
-        new (): INoRowsOverlayComp;
-      }
-    | string;
-  public noRowsOverlayComponentParams:
-    | {
-        noRowsMessageFunc: () => string;
-      }
-    | any;
+  public loadingOverlayComponent: any = AppLoadingOverlayComponent;
+  public loadingOverlayComponentParams: any = {
+    loadingMessage: '加载中...',
+  };
+  public noRowsOverlayComponent: any = AppNorowsOverlayComponent;
+  public noRowsOverlayComponentParams: any = {
+    noRowsMessageFunc: () => '暂无数据',
+  };
 
   /**Ag-Grid表格,树结构数据显示 */
   public autoGroupColumnDef;
@@ -240,21 +221,6 @@ export class WorkflowManageComponent implements OnInit, OnDestroy {
         );
       }
     }
-
-    /**Ag-Grid表格的加载显示和空数据显示,自定义重载*/
-    this.frameworkComponents = {
-      workflowCrudOperationComponent: WorkflowCrudOperationComponent,
-      customLoadingOverlay: AppLoadingOverlayComponent,
-      customNoRowsOverlay: AppNorowsOverlayComponent,
-    };
-    this.loadingOverlayComponent = 'customLoadingOverlay';
-    this.loadingOverlayComponentParams = {
-      loadingMessage: '加载中...',
-    };
-    this.noRowsOverlayComponent = 'customNoRowsOverlay';
-    this.noRowsOverlayComponentParams = {
-      noRowsMessageFunc: () => '暂无数据',
-    };
 
     /**从服务器获取已有业务工作流、表单、流程，显示在Ag-Grid表格中 */
     this.subscriptions.push(

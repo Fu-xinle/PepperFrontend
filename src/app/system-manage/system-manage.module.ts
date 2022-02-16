@@ -86,7 +86,7 @@ import { WorkflowManageComponent } from './workflow-manage/workflow-manage.compo
     NgSelectModule,
     SharedModule,
     SystemManageRoutingModule,
-    AgGridModule.withComponents([]),
+    AgGridModule,
     NgxTippyModule,
   ],
   providers: [

@@ -1,13 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import {
-  GridApi,
-  ServerSideStoreType,
-  GridReadyEvent,
-  ICellRenderer,
-  INoRowsOverlayComp,
-  IServerSideGetRowsParams,
-} from 'ag-grid-community';
+import { GridApi, ServerSideStoreType, GridReadyEvent, IServerSideGetRowsParams } from 'ag-grid-community';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 
@@ -65,33 +58,14 @@ export class UserLogComponent implements OnInit, OnDestroy {
   /**Ag-Grid表格的加载显示和空数据显示,自定义重载相关变量 */
   public gridApi!: GridApi;
   public context = { componentParent: this };
-  public frameworkComponents:
-    | {
-        [p: string]: {
-          new (): any;
-        };
-      }
-    | any;
-  public loadingOverlayComponent:
-    | {
-        new (): ICellRenderer;
-      }
-    | string;
-  public loadingOverlayComponentParams:
-    | {
-        loadingMessage: string;
-      }
-    | any;
-  public noRowsOverlayComponent:
-    | {
-        new (): INoRowsOverlayComp;
-      }
-    | string;
-  public noRowsOverlayComponentParams:
-    | {
-        noRowsMessageFunc: () => string;
-      }
-    | any;
+  public loadingOverlayComponent: any = AppLoadingOverlayComponent;
+  public loadingOverlayComponentParams: any = {
+    loadingMessage: '加载中...',
+  };
+  public noRowsOverlayComponent: any = AppNorowsOverlayComponent;
+  public noRowsOverlayComponentParams: any = {
+    noRowsMessageFunc: () => '暂无数据',
+  };
 
   public serverSideStoreType: ServerSideStoreType = 'partial';
 
@@ -102,21 +76,7 @@ export class UserLogComponent implements OnInit, OnDestroy {
 
   private subscription: Subscription = new Subscription();
 
-  constructor(private logManageService: LogManageService, private toastr: ToastrService) {
-    /**Ag-Grid表格的加载显示和空数据显示,自定义重载*/
-    this.frameworkComponents = {
-      customLoadingOverlay: AppLoadingOverlayComponent,
-      customNoRowsOverlay: AppNorowsOverlayComponent,
-    };
-    this.loadingOverlayComponent = 'customLoadingOverlay';
-    this.loadingOverlayComponentParams = {
-      loadingMessage: '加载中...',
-    };
-    this.noRowsOverlayComponent = 'customNoRowsOverlay';
-    this.noRowsOverlayComponentParams = {
-      noRowsMessageFunc: () => '暂无数据',
-    };
-  }
+  constructor(private logManageService: LogManageService, private toastr: ToastrService) {}
 
   ngOnInit() {
     /**实现搜索框防抖功能 */
