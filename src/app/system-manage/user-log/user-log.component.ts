@@ -52,7 +52,7 @@ export class UserLogComponent implements OnInit, OnDestroy {
       suppressMenu: true,
       initialWidth: 250,
       sortable: true,
-      sort: 'desc',
+      sort: 'desc' as const,
       unSortIcon: true,
       icons: {
         sortAscending: '<i class="icon-Up" style="font-weight: bold;"></i>',

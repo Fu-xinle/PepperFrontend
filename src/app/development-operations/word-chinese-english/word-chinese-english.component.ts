@@ -147,7 +147,7 @@ export class WordChineseEnglishComponent implements OnInit, OnDestroy {
       suppressMenu: true,
       sortable: true,
       unSortIcon: true,
-      sort: 'asc',
+      sort: 'asc' as const,
       icons: {
         sortAscending: '<i class="icon-Up" style="font-weight: bold;"></i>',
         sortDescending: '<i class="icon-Down" style="font-weight: bold;"></i>',
